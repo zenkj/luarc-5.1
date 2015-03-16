@@ -117,6 +117,9 @@ LUA_API void lua_xmove (lua_State *from, lua_State *to, int n) {
   from->top -= n;
   for (i = 0; i < n; i++) {
     setobj2s(to, to->top++, from->top + i);
+#if LUA_REFCOUNT
+    setnilvalue(from, from->top + i);
+#endif
   }
   lua_unlock(to);
 }
@@ -173,7 +176,7 @@ LUA_API void lua_settop (lua_State *L, int idx) {
     api_check(L, -(idx+1) <= (L->top - L->base));
 #if LUA_REFCOUNT
     while (++idx < 0)
-      setnilvalue(--L->top);
+      setnilvalue(L, --L->top);
 #else /* !LUA_REFCOUNT */
     L->top += idx+1;  /* `subtract' index (index is negative) */
 #endif
@@ -189,6 +192,9 @@ LUA_API void lua_remove (lua_State *L, int idx) {
   api_checkvalidindex(L, p);
   while (++p < L->top) setobjs2s(L, p-1, p);
   L->top--;
+#if LUA_REFCOUNT
+  luarc_subref(L, L->top);
+#endif /* LUA_REFCOUNT */
   lua_unlock(L);
 }
 
@@ -201,6 +207,9 @@ LUA_API void lua_insert (lua_State *L, int idx) {
   api_checkvalidindex(L, p);
   for (q = L->top; q>p; q--) setobjs2s(L, q, q-1);
   setobjs2s(L, p, L->top);
+#if LUA_REFCOUNT
+  setnilvalue(L, L->top);
+#endif /* LUA_REFCOUNT */
   lua_unlock(L);
 }
 
@@ -217,6 +226,10 @@ LUA_API void lua_replace (lua_State *L, int idx) {
   if (idx == LUA_ENVIRONINDEX) {
     Closure *func = curr_func(L);
     api_check(L, ttistable(L->top - 1)); 
+#if LUA_REFCOUNT
+    luarc_addtableref(hvalue(L->top - 1));
+    if (func->c.env) luarc_subtableref(L, func->c.env);
+#endif /* LUA_REFCOUNT */
     func->c.env = hvalue(L->top - 1);
     luaC_barrier(L, func, L->top - 1);
   }
@@ -226,6 +239,9 @@ LUA_API void lua_replace (lua_State *L, int idx) {
       luaC_barrier(L, curr_func(L), L->top - 1);
   }
   L->top--;
+#if LUA_REFCOUNT
+  setnilvalue(L, L->top);
+#endif /* LUA_REFCOUNT */
   lua_unlock(L);
 }
 
@@ -425,7 +441,11 @@ LUA_API const void *lua_topointer (lua_State *L, int idx) {
 
 LUA_API void lua_pushnil (lua_State *L) {
   lua_lock(L);
-  setnilvalue2n(L->top);
+#if LUA_REFCOUNT
+  setnilvalue(L, L->top);
+#else
+  setnilvalue(L->top);
+#endif
   api_incr_top(L);
   lua_unlock(L);
 }
@@ -496,8 +516,12 @@ LUA_API void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n) {
   cl = luaF_newCclosure(L, n, getcurrenv(L));
   cl->c.f = fn;
   L->top -= n;
-  while (n--)
+  while (n--) {
     setobj2n(L, &cl->c.upvalue[n], L->top+n);
+#if LUA_REFCOUNT
+    setnilvalue(L, L->top+n);
+#endif /* LUA_REFCOUNT */
+  }
   setclvalue(L, L->top, cl);
   lua_assert(iswhite(obj2gco(cl)));
   api_incr_top(L);
@@ -552,9 +576,12 @@ LUA_API void lua_getfield (lua_State *L, int idx, const char *k) {
   lua_lock(L);
   t = index2adr(L, idx);
   api_checkvalidindex(L, t);
-  setsvalue(L, &key, luaS_new(L, k));
+  setsvalue2n(L, &key, luaS_new(L, k));
   luaV_gettable(L, t, &key, L->top);
   api_incr_top(L);
+#if LUA_REFCOUNT
+  setnilvalue(L, &key);
+#endif /* LUA_REFCOUNT */
   lua_unlock(L);
 }
 
@@ -625,16 +652,20 @@ LUA_API void lua_getfenv (lua_State *L, int idx) {
   api_checkvalidindex(L, o);
   switch (ttype(o)) {
     case LUA_TFUNCTION:
-      sethvalue2n(L, L->top, clvalue(o)->c.env);
+      sethvalue(L, L->top, clvalue(o)->c.env);
       break;
     case LUA_TUSERDATA:
-      sethvalue2n(L, L->top, uvalue(o)->env);
+      sethvalue(L, L->top, uvalue(o)->env);
       break;
     case LUA_TTHREAD:
-      setobj2sn(L, L->top,  gt(thvalue(o)));
+      setobj2s(L, L->top,  gt(thvalue(o)));
       break;
     default:
-      setnilvalue2n(L->top);
+#if LUA_REFCOUNT
+      setnilvalue(L, L->top);
+#else
+      setnilvalue(L->top);
+#endif /* LUA_REFCOUNT */
       break;
   }
   api_incr_top(L);
@@ -655,6 +686,10 @@ LUA_API void lua_settable (lua_State *L, int idx) {
   api_checkvalidindex(L, t);
   luaV_settable(L, t, L->top - 2, L->top - 1);
   L->top -= 2;  /* pop index and value */
+#if LUA_REFCOUNT
+  setnilvalue(L, L->top);
+  setnilvalue(L, L->top + 1);
+#endif /* LUA_REFCOUNT */
   lua_unlock(L);
 }
 
@@ -666,9 +701,13 @@ LUA_API void lua_setfield (lua_State *L, int idx, const char *k) {
   api_checknelems(L, 1);
   t = index2adr(L, idx);
   api_checkvalidindex(L, t);
-  setsvalue(L, &key, luaS_new(L, k));
+  setsvalue2n(L, &key, luaS_new(L, k));
   luaV_settable(L, t, &key, L->top - 1);
   L->top--;  /* pop value */
+#if LUA_REFCOUNT
+  setnilvalue(L, &key);
+  setnilvalue(L, L->top);
+#endif /* LUA_REFCOUNT */
   lua_unlock(L);
 }
 
@@ -682,6 +721,10 @@ LUA_API void lua_rawset (lua_State *L, int idx) {
   setobj2t(L, luaH_set(L, hvalue(t), L->top-2), L->top-1);
   luaC_barriert(L, hvalue(t), L->top-1);
   L->top -= 2;
+#if LUA_REFCOUNT
+  setnilvalue(L, L->top);
+  setnilvalue(L, L->top + 1);
+#endif /* LUA_REFCOUNT */
   lua_unlock(L);
 }
 
@@ -695,6 +738,9 @@ LUA_API void lua_rawseti (lua_State *L, int idx, int n) {
   setobj2t(L, luaH_setnum(L, hvalue(o), n), L->top-1);
   luaC_barriert(L, hvalue(o), L->top-1);
   L->top--;
+#if LUA_REFCOUNT
+  setnilvalue(L, L->top);
+#endif /* LUA_REFCOUNT */
   lua_unlock(L);
 }
 
@@ -714,23 +760,41 @@ LUA_API int lua_setmetatable (lua_State *L, int objindex) {
   }
   switch (ttype(obj)) {
     case LUA_TTABLE: {
+#if LUA_REFCOUNT
+      if (hvalue(obj)->metatable)
+	luarc_subtableref(L, hvalue(obj)->metatable);
+#endif /* LUA_REFCOUNT */
       hvalue(obj)->metatable = mt;
       if (mt)
         luaC_objbarriert(L, hvalue(obj), mt);
       break;
     }
     case LUA_TUSERDATA: {
+#if LUA_REFCOUNT
+      if (uvalue(obj)->metatable)
+	luarc_subtableref(L, uvalue(obj)->metatable);
+#endif /* LUA_REFCOUNT */
       uvalue(obj)->metatable = mt;
       if (mt)
         luaC_objbarrier(L, rawuvalue(obj), mt);
       break;
     }
     default: {
+#if LUA_REFCOUNT
+      if (G(L)->mt[ttype(obj)])
+	luarc_subtableref(L, G(L)->mt[ttype(obj)]);
+#endif
       G(L)->mt[ttype(obj)] = mt;
       break;
     }
   }
   L->top--;
+#if LUA_REFCOUNT
+  /* Do not reduce refcount of metatable,
+  ** because does not add refcount when assign.
+  */
+  setnilvalue2n(L, L->top);
+#endif
   lua_unlock(L);
   return 1;
 }
@@ -746,13 +810,23 @@ LUA_API int lua_setfenv (lua_State *L, int idx) {
   api_check(L, ttistable(L->top - 1));
   switch (ttype(o)) {
     case LUA_TFUNCTION:
+#if LUA_REFCOUNT
+      luarc_subtableref(clvalue(o)->c.env);
+#endif
       clvalue(o)->c.env = hvalue(L->top - 1);
       break;
     case LUA_TUSERDATA:
+#if LUA_REFCOUNT
+      luarc_subtableref(uvalue(o)->env);
+#endif
       uvalue(o)->env = hvalue(L->top - 1);
       break;
     case LUA_TTHREAD:
       sethvalue(L, gt(thvalue(o)), hvalue(L->top - 1));
+#if LUA_REFCOUNT
+      /* sethvalue add refcount for L->top-1, reduce it */
+      luarc_subtableref(hvalue(L->top-1));
+#endif
       break;
     default:
       res = 0;
@@ -760,6 +834,12 @@ LUA_API int lua_setfenv (lua_State *L, int idx) {
   }
   if (res) luaC_objbarrier(L, gcvalue(o), hvalue(L->top - 1));
   L->top--;
+#if LUA_REFCOUNT
+  /* Do not reduce refcount of metatable,
+  ** because does not add refcount when assign.
+  */
+  setnilvalue2n(L, L->top);
+#endif
   lua_unlock(L);
   return res;
 }
@@ -985,8 +1065,12 @@ LUA_API int lua_next (lua_State *L, int idx) {
   if (more) {
     api_incr_top(L);
   }
-  else  /* no more elements */
+  else { /* no more elements */
     L->top -= 1;  /* remove key */
+#if LUA_REFCOUNT
+    setnilvalue(L, L->top);
+#endif
+  }
   lua_unlock(L);
   return more;
 }
@@ -999,6 +1083,14 @@ LUA_API void lua_concat (lua_State *L, int n) {
     luaC_checkGC(L);
     luaV_concat(L, n, cast_int(L->top - L->base) - 1);
     L->top -= (n-1);
+#if LUA_REFCOUNT
+    {
+      int i;
+      for (i=0; i<n-1; i++) {
+	setnilvalue(L, L->top+i);
+      }
+    }
+#endif /* LUA_REFCOUNT */
   }
   else if (n == 0) {  /* push empty string */
     setsvalue2s(L, L->top, luaS_newlstr(L, "", 0));
