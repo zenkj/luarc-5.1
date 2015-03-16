@@ -221,7 +221,7 @@ static StkId adjust_varargs (lua_State *L, Proto *p, int actual) {
     for (i=0; i<nvar; i++)  /* put extra arguments into `arg' table */
       setobj2n(L, luaH_setnum(L, htab, i+1), L->top - nvar + i);
     /* store counter in field `n' */
-    setnvalue(luaH_setstr(L, htab, luaS_newliteral(L, "n")), cast_num(nvar));
+    setnvalue2n(luaH_setstr(L, htab, luaS_newliteral(L, "n")), cast_num(nvar));
   }
 #endif
   /* move fixed parameters to final position */
@@ -498,8 +498,15 @@ static void f_parser (lua_State *L, void *ud) {
                                                              &p->buff, p->name);
   cl = luaF_newLclosure(L, tf->nups, hvalue(gt(L)));
   cl->l.p = tf;
-  for (i = 0; i < tf->nups; i++)  /* initialize eventual upvalues */
+#if LUA_REFCOUNT
+  luarc_addprotoref(tf);
+#endif
+  for (i = 0; i < tf->nups; i++) { /* initialize eventual upvalues */
     cl->l.upvals[i] = luaF_newupval(L);
+#if LUA_REFCOUNT
+    luarc_addupvalref(cl->l.upvals[i]);
+#endif
+  }
   setclvalue(L, L->top, cl);
   incr_top(L);
 }

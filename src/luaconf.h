@@ -757,7 +757,11 @@ union luai_Cast { double l_d; long l_l; };
 ** without modifying the main part of the file.
 */
 
+#ifndef LUA_REFCOUNT
+#define LUA_REFCOUNT 1
+#endif
 
 
 #endif
+
 

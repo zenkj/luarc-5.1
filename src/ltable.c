@@ -264,7 +264,7 @@ static void setarrayvector (lua_State *L, Table *t, int size) {
   int i;
   luaM_reallocvector(L, t->array, t->sizearray, size, TValue);
   for (i=t->sizearray; i<size; i++)
-     setnilvalue(&t->array[i]);
+     setnilvalue2n(&t->array[i]);
   t->sizearray = size;
 }
 
@@ -285,8 +285,8 @@ static void setnodevector (lua_State *L, Table *t, int size) {
     for (i=0; i<size; i++) {
       Node *n = gnode(t, i);
       gnext(n) = NULL;
-      setnilvalue(gkey(n));
-      setnilvalue(gval(n));
+      setnilvalue2n(gkey(n));
+      setnilvalue2n(gval(n));
     }
   }
   t->lsizenode = cast_byte(lsize);
@@ -511,7 +511,7 @@ TValue *luaH_setnum (lua_State *L, Table *t, int key) {
     return cast(TValue *, p);
   else {
     TValue k;
-    setnvalue(&k, cast_num(key));
+    setnvalue2n(&k, cast_num(key));
     return newkey(L, t, &k);
   }
 }

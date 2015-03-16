@@ -166,12 +166,17 @@ LUA_API void lua_settop (lua_State *L, int idx) {
   if (idx >= 0) {
     api_check(L, idx <= L->stack_last - L->base);
     while (L->top < L->base + idx)
-      setnilvalue(L->top++);
+      setnilvalue2n(L->top++);
     L->top = L->base + idx;
   }
   else {
     api_check(L, -(idx+1) <= (L->top - L->base));
+#if LUA_REFCOUNT
+    while (++idx < 0)
+      setnilvalue(--L->top);
+#else /* !LUA_REFCOUNT */
     L->top += idx+1;  /* `subtract' index (index is negative) */
+#endif
   }
   lua_unlock(L);
 }
@@ -420,7 +425,7 @@ LUA_API const void *lua_topointer (lua_State *L, int idx) {
 
 LUA_API void lua_pushnil (lua_State *L) {
   lua_lock(L);
-  setnilvalue(L->top);
+  setnilvalue2n(L->top);
   api_incr_top(L);
   lua_unlock(L);
 }
@@ -620,16 +625,16 @@ LUA_API void lua_getfenv (lua_State *L, int idx) {
   api_checkvalidindex(L, o);
   switch (ttype(o)) {
     case LUA_TFUNCTION:
-      sethvalue(L, L->top, clvalue(o)->c.env);
+      sethvalue2n(L, L->top, clvalue(o)->c.env);
       break;
     case LUA_TUSERDATA:
-      sethvalue(L, L->top, uvalue(o)->env);
+      sethvalue2n(L, L->top, uvalue(o)->env);
       break;
     case LUA_TTHREAD:
-      setobj2s(L, L->top,  gt(thvalue(o)));
+      setobj2sn(L, L->top,  gt(thvalue(o)));
       break;
     default:
-      setnilvalue(L->top);
+      setnilvalue2n(L->top);
       break;
   }
   api_incr_top(L);

@@ -98,7 +98,11 @@ typedef struct global_State {
 ** `per thread' state
 */
 struct lua_State {
+#if LUA_REFCOUNT
+  TraversableCommonHeader;
+#else
   CommonHeader;
+#endif
   lu_byte status;
   StkId top;  /* first free slot in the stack */
   StkId base;  /* base of current function */
@@ -121,7 +125,9 @@ struct lua_State {
   TValue l_gt;  /* table of globals */
   TValue env;  /* temporary place for environments */
   GCObject *openupval;  /* list of open upvalues in this stack */
+#if !LUA_REFCOUNT
   GCObject *gclist;
+#endif
   struct lua_longjmp *errorJmp;  /* current error recover point */
   ptrdiff_t errfunc;  /* current error handling function (stack index) */
 };
@@ -135,6 +141,9 @@ struct lua_State {
 */
 union GCObject {
   GCheader gch;
+#if LUA_REFCOUNT
+  TraversableGCheader tgch;
+#endif
   union TString ts;
   union Udata u;
   union Closure cl;

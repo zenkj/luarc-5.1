@@ -40,7 +40,17 @@ typedef union GCObject GCObject;
 ** Common Header for all collectable objects (in macro form, to be
 ** included in other objects)
 */
-#define CommonHeader	GCObject *next; lu_byte tt; lu_byte marked
+#if LUA_REFCOUNT
+#define CommonHeader	GCObject *next; GCObject *prev; \
+                        lu_byte tt; lu_byte marked; short ref
+
+#define TraversableCommonHeader \
+  CommonHeader; GCObject *gcnext; GCObject *gcprev
+
+#else /* !LUA_REFCOUNT */
+#define CommonHeader	GCObject *next; lu_byte tt; lu_byte marked 
+
+#endif /* LUA_REFCOUNT */
 
 
 /*
@@ -50,6 +60,15 @@ typedef struct GCheader {
   CommonHeader;
 } GCheader;
 
+#if LUA_REFCOUNT
+/*
+** Traversable GC Object Common header in struct form
+*/
+typedef struct TraversableGCheader {
+  TraversableCommonHeader;
+} TraversableGCheader;
+
+#endif
 
 
 
@@ -113,6 +132,164 @@ typedef struct lua_TValue {
   ((ttype(obj) == (obj)->value.gc->gch.tt) && !isdead(g, (obj)->value.gc)))
 
 
+#if LUA_REFCOUNT
+
+void luarc_releaseobj(lua_State *L, GCObject *obj);
+
+/* Internal RefCount manipulation macros */
+#define luarc_addobjref(obj) (obj->gch.ref++)
+
+#define luarc_addvalref(val) (val->value.gc->gch.ref++)
+
+#define luarc_subobjref(L,obj) \
+  { if (--obj->gch.ref <= 0) luarc_releaseobj(L,obj); }
+
+#define luarc_subvalref(L,val) \
+  { if (--val->value.gc->gch.ref <= 0) luarc_releaseobj(L,val->value.gc); }
+
+#define luarc_addref(val) { if (iscollectable(val)) luarc_addvalref(val); }
+
+#define luarc_subref(L,val) \
+  { if (iscollectable(val) && --val->value.gc->gch.ref <= 0) \
+      luarc_releaseobj(L,val->value.gc); }
+
+#define luarc_addstringref(obj) luarc_addobjref(cast(GCObject *, (obj)))
+#define luarc_addudataref(obj)  luarc_addobjref(cast(GCObject *, (obj)))
+#define luarc_addclosureref(obj)  luarc_addobjref(cast(GCObject *, (obj)))
+#define luarc_addtableref(obj)  luarc_addobjref(cast(GCObject *, (obj)))
+#define luarc_addprotoref(obj)  luarc_addobjref(cast(GCObject *, (obj)))
+#define luarc_addupvalref(obj)  luarc_addobjref(cast(GCObject *, (obj)))
+#define luarc_addthreadref(obj) luarc_addobjref(cast(GCObject *, (obj)))
+
+#define luarc_substringref(L,obj) \
+  { GCObject *i_o=cast(GCObject *, (obj)); luarc_subobjref(L, i_o); }
+
+#define luarc_subudataref(L,obj) \
+  { GCObject *i_o=cast(GCObject *, (obj)); luarc_subobjref(L, i_o); }
+
+#define luarc_subclosureref(L,obj) \
+  { GCObject *i_o=cast(GCObject *, (obj)); luarc_subobjref(L, i_o); }
+
+#define luarc_subtableref(L,obj) \
+  { GCObject *i_o=cast(GCObject *, (obj)); luarc_subobjref(L, i_o); }
+
+#define luarc_subprotoref(L,obj) \
+  { GCObject *i_o=cast(GCObject *, (obj)); luarc_subobjref(L, i_o); }
+
+#define luarc_subupvalref(L,obj) \
+  { GCObject *i_o=cast(GCObject *, (obj)); luarc_subobjref(L, i_o); }
+
+#define luarc_subthreadref(L,obj) \
+  { GCObject *i_o=cast(GCObject *, (obj)); luarc_subobjref(L, i_o); }
+
+
+/* Macros to set values */
+#define setnilvalue(L,obj) \
+  { TValue *i_v=(obj); luarc_subref(L,i_v); i_v->tt=LUA_TNIL; }
+
+#define setnvalue(L,obj,x) \
+  { TValue *i_v=(obj); luarc_subref(L,i_v); \
+    i_v->value.n=(x); i_v->tt=LUA_TNUMBER; }
+
+#define setpvalue(L,obj,x) \
+  { TValue *i_v=(obj); luarc_subref(L,i_v); \
+    i_v->value.p=(x); i_v->tt=LUA_TLIGHTUSERDATA; }
+
+#define setbvalue(L,obj,x) \
+  { TValue *i_v=(obj); luarc_subref(L,i_v); \
+    i_v->value.b=(x); i_v->tt=LUA_TBOOLEAN; }
+
+#define setsvalue(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); luarc_subref(L,i_v); \
+    i_v->value.gc=i_o; i_v->tt=LUA_TSTRING; \
+    checkliveness(G(L),i_v); }
+
+#define setuvalue(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); luarc_subref(L,i_v); \
+    i_v->value.gc=i_o; i_v->tt=LUA_TUSERDATA; \
+    checkliveness(G(L),i_v); }
+
+#define setthvalue(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); luarc_subref(L,i_v); \
+    i_v->value.gc=i_o; i_v->tt=LUA_TTHREAD; \
+    checkliveness(G(L),i_v); }
+
+#define setclvalue(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); luarc_subref(L,i_v); \
+    i_v->value.gc=i_o; i_v->tt=LUA_TFUNCTION; \
+    checkliveness(G(L),i_v); }
+
+#define sethvalue(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); luarc_subref(L,i_v); \
+    i_v->value.gc=i_o; i_v->tt=LUA_TTABLE; \
+    checkliveness(G(L),i_v); }
+
+#define setptvalue(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); luarc_subref(L,i_v); \
+    i_v->value.gc=i_o; i_v->tt=LUA_TPROTO; \
+    checkliveness(G(L),i_v); }
+
+#define setobj(L,obj1,obj2) \
+  { const TValue *o2=(obj2); TValue *o1=(obj1); \
+    luarc_addref(o2); luarc_subref(L,o1); \
+    o1->value = o2->value; o1->tt=o2->tt; \
+    checkliveness(G(L),o1); }
+
+/* to new object */
+#define setnilvalue2n(obj) ((obj)->tt=LUA_TNIL)
+
+#define setnvalue2n(obj,x) \
+  { TValue *i_o=(obj); i_o->value.n=(x); i_o->tt=LUA_TNUMBER; }
+
+#define setpvalue2n(obj,x) \
+  { TValue *i_o=(obj); i_o->value.p=(x); i_o->tt=LUA_TLIGHTUSERDATA; }
+
+#define setbvalue2n(obj,x) \
+  { TValue *i_o=(obj); i_o->value.b=(x); i_o->tt=LUA_TBOOLEAN; }
+
+#define setsvalue2n(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); i_v->value.gc=i_o; i_v->tt=LUA_TSTRING; \
+    checkliveness(G(L),i_v); }
+
+#define setuvalue2n(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); i_v->value.gc=i_o; i_v->tt=LUA_TUSERDATA; \
+    checkliveness(G(L),i_v); }
+
+#define setthvalue2n(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); i_v->value.gc=i_o; i_v->tt=LUA_TTHREAD; \
+    checkliveness(G(L),i_v); }
+
+#define setclvalue2n(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); i_v->value.gc=i_o; i_v->tt=LUA_TFUNCTION; \
+    checkliveness(G(L),i_v); }
+
+#define sethvalue2n(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); i_v->value.gc=i_o; i_v->tt=LUA_TTABLE; \
+    checkliveness(G(L),i_v); }
+
+#define setptvalue2n(L,obj,x) \
+  { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
+    luarc_addobjref(i_o); i_v->value.gc=i_o; i_v->tt=LUA_TPROTO; \
+    checkliveness(G(L),i_v); }
+
+#define setobj2n(L,obj1,obj2) \
+  { const TValue *o2=(obj2); TValue *o1=(obj1); \
+    o1->value = o2->value; o1->tt=o2->tt; \
+    luarc_addref(o2); checkliveness(G(L),o1); }
+
+#else /* !LUA_REFCOUNT */
+
 /* Macros to set values */
 #define setnilvalue(obj) ((obj)->tt=LUA_TNIL)
 
@@ -155,14 +332,25 @@ typedef struct lua_TValue {
     i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TPROTO; \
     checkliveness(G(L),i_o); }
 
-
-
-
 #define setobj(L,obj1,obj2) \
   { const TValue *o2=(obj2); TValue *o1=(obj1); \
     o1->value = o2->value; o1->tt=o2->tt; \
     checkliveness(G(L),o1); }
 
+/* to new object */
+#define setnilvalue2n	setnilvalue
+#define setnvalue2n	setnvalue
+#define setpvalue2n	setpvalue
+#define setbvalue2n	setbvalue
+#define setsvalue2n	setsvalue
+#define setuvalue2n	setuvalue
+#define setthvalue2n	setthvalue
+#define setclvalue2n	setclvalue
+#define sethvalue2n	sethvalue
+#define setptvalue2n	setptvalue
+#define setobj2n	setobj
+
+#endif /* LUA_REFCOUNT */
 
 /*
 ** different types of sets, according to destination
@@ -180,8 +368,14 @@ typedef struct lua_TValue {
 /* to table */
 #define setobj2t	setobj
 /* to new object */
-#define setobj2n	setobj
-#define setsvalue2n	setsvalue
+#define setobjs2sn	setobj2n
+#define setobj2sn	setobj2n
+#define setsvalue2sn	setsvalue2n
+#define sethvalue2sn	sethvalue2n
+#define setptvalue2sn	setptvalue2n
+#define setobjt2tn	setobj2n
+#define setobj2tn	setobj2n
+
 
 #define setttype(obj, tt) (ttype(obj) = (tt))
 
@@ -229,7 +423,11 @@ typedef union Udata {
 ** Function Prototypes
 */
 typedef struct Proto {
+#if LUA_REFCOUNT
+  TraversableCommonHeader;
+#else
   CommonHeader;
+#endif
   TValue *k;  /* constants used by the function */
   Instruction *code;
   struct Proto **p;  /* functions defined inside the function */
@@ -245,7 +443,9 @@ typedef struct Proto {
   int sizelocvars;
   int linedefined;
   int lastlinedefined;
+#if !LUA_REFCOUNT
   GCObject *gclist;
+#endif
   lu_byte nups;  /* number of upvalues */
   lu_byte numparams;
   lu_byte is_vararg;
@@ -288,9 +488,16 @@ typedef struct UpVal {
 ** Closures
 */
 
+#if LUA_REFCOUNT
+#define ClosureHeader \
+	TraversableCommonHeader; lu_byte isC; lu_byte nupvalues; \
+	struct Table *env
+
+#else /* !LUA_REFCOUNT */
 #define ClosureHeader \
 	CommonHeader; lu_byte isC; lu_byte nupvalues; GCObject *gclist; \
 	struct Table *env
+#endif
 
 typedef struct CClosure {
   ClosureHeader;
@@ -336,14 +543,20 @@ typedef struct Node {
 
 
 typedef struct Table {
+#if LUA_REFCOUNT
+  TraversableCommonHeader;
+#else
   CommonHeader;
+#endif
   lu_byte flags;  /* 1<<p means tagmethod(p) is not present */ 
   lu_byte lsizenode;  /* log2 of size of `node' array */
   struct Table *metatable;
   TValue *array;  /* array part */
   Node *node;
   Node *lastfree;  /* any free position is before this position */
+#if !LUA_REFCOUNT
   GCObject *gclist;
+#endif
   int sizearray;  /* size of `array' array */
 } Table;
 

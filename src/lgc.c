@@ -73,7 +73,7 @@ static void reallymarkobject (global_State *g, GCObject *o) {
     case LUA_TSTRING: {
       return;
     }
-    case LUA_TUSERDATA: {
+    case LUA_TUSERDATA: { /* udata has no gc ptr, can't add to gc list */
       Table *mt = gco2u(o)->metatable;
       gray2black(o);  /* udata are never gray */
       if (mt) markobject(g, mt);
@@ -81,12 +81,24 @@ static void reallymarkobject (global_State *g, GCObject *o) {
       return;
     }
     case LUA_TUPVAL: {
+      /* open upval is in g->uvhead list, closed in rootgc list */
       UpVal *uv = gco2uv(o);
       markvalue(g, uv->v);
       if (uv->v == &uv->u.value)  /* closed? */
         gray2black(o);  /* open upvalues are never black */
       return;
     }
+#if LUA_REFCOUNT
+    case LUA_TFUNCTION:
+    case LUA_TTABLE:
+    case LUA_TTHREAD:
+    case LUA_TPROTO: {
+      o->tgch.gcnext = g->gray;
+      o->tgch.gcprev = NULL;
+      if (g->gray) g->gray->tgch.gcprev = o;
+      g->gray = o;
+    }
+#else
     case LUA_TFUNCTION: {
       gco2cl(o)->c.gclist = g->gray;
       g->gray = o;
@@ -107,6 +119,7 @@ static void reallymarkobject (global_State *g, GCObject *o) {
       g->gray = o;
       break;
     }
+#endif
     default: lua_assert(0);
   }
 }
@@ -140,6 +153,13 @@ size_t luaC_separateudata (lua_State *L, int all) {
     else {  /* must call its gc method */
       deadmem += sizeudata(gco2u(curr));
       markfinalized(gco2u(curr));
+#if LUA_REFCOUNT
+      if (curr->tgch.next)
+	curr->tgch.next->tgch.prev = curr->tgch.prev;
+      /* udata with FINALIZEDBIT set will not be freed by refcount, so
+      ** no need to assign curr->tgch.prev here.
+      */
+#endif
       *p = curr->gch.next;
       /* link `curr' at the end of `tmudata' list */
       if (g->tmudata == NULL)  /* list is empty? */
@@ -170,7 +190,13 @@ static int traversetable (global_State *g, Table *h) {
       h->marked &= ~(KEYWEAK | VALUEWEAK);  /* clear bits */
       h->marked |= cast_byte((weakkey << KEYWEAKBIT) |
                              (weakvalue << VALUEWEAKBIT));
+#if LUA_REFCOUNT
+      h->gcnext = g->weak;
+      lua_assert(h->gcprev == NULL); /* h is former gray list head */
+      if (g->weak) g->weak->tgch.gcprev = obj2gco(h);
+#else
       h->gclist = g->weak;  /* must be cleared after GC, ... */
+#endif
       g->weak = obj2gco(h);  /* ... so put in the appropriate list */
     }
   }
@@ -281,7 +307,12 @@ static l_mem propagatemark (global_State *g) {
   switch (o->gch.tt) {
     case LUA_TTABLE: {
       Table *h = gco2h(o);
+#if LUA_REFCOUNT
+      if (h->gcnext) h->gcnext->tgch.gcprev = NULL;
+      g->gray = h->gcnext;
+#else
       g->gray = h->gclist;
+#endif
       if (traversetable(g, h))  /* table is weak? */
         black2gray(o);  /* keep it gray */
       return sizeof(Table) + sizeof(TValue) * h->sizearray +
@@ -289,16 +320,29 @@ static l_mem propagatemark (global_State *g) {
     }
     case LUA_TFUNCTION: {
       Closure *cl = gco2cl(o);
+#if LUA_REFCOUNT
+      if (cl->gcnext) cl->gcnext->tgch.gcprev = NULL;
+      g->gray = cl->gcnext;
+#else
       g->gray = cl->c.gclist;
+#endif
       traverseclosure(g, cl);
       return (cl->c.isC) ? sizeCclosure(cl->c.nupvalues) :
                            sizeLclosure(cl->l.nupvalues);
     }
     case LUA_TTHREAD: {
       lua_State *th = gco2th(o);
+#if LUA_REFCOUNT
+      if (th->gcnext) th->gcnext->tgch.gcprev = NULL;
+      g->gray = th->gcnext;
+      if (g->grayagain) g->grayagain->tgch.gcprev = o;
+      th->gcnext = g->grayagain;
+      g->grayagain = o;
+#else
       g->gray = th->gclist;
       th->gclist = g->grayagain;
       g->grayagain = o;
+#endif
       black2gray(o);
       traversestack(g, th);
       return sizeof(lua_State) + sizeof(TValue) * th->stacksize +
@@ -306,7 +350,12 @@ static l_mem propagatemark (global_State *g) {
     }
     case LUA_TPROTO: {
       Proto *p = gco2p(o);
+#if LUA_REFCOUNT
+      if (p->gcnext) p->gcnext->tgch.gcprev = NULL;
+      g->gray = p->gcnext;
+#else
       g->gray = p->gclist;
+#endif
       traverseproto(g, p);
       return sizeof(Proto) + sizeof(Instruction) * p->sizecode +
                              sizeof(Proto *) * p->sizep +
@@ -418,6 +467,10 @@ static GCObject **sweeplist (lua_State *L, GCObject **p, lu_mem count) {
     }
     else {  /* must erase `curr' */
       lua_assert(isdead(g, curr) || deadmask == bitmask(SFIXEDBIT));
+#if LUA_REFCOUNT
+      if (curr->tgch.next)
+       	curr->tgch.next->tgch.prev = curr->tgch.prev;
+#endif
       *p = curr->gch.next;
       if (curr == g->rootgc)  /* is the first element of the list? */
         g->rootgc = curr->gch.next;  /* adjust first */
@@ -453,6 +506,11 @@ static void GCTM (lua_State *L) {
   else
     g->tmudata->gch.next = udata->uv.next;
   udata->uv.next = g->mainthread->next;  /* return it to `root' list */
+#if LUA_REFCOUNT
+  udata->uv.prev = g->mainthread;
+  if (g->mainthread->next)
+    g->mainthread->next->gch.prev = o;
+#endif
   g->mainthread->next = o;
   makewhite(g, o);
   tm = fasttm(L, udata->uv.metatable, TM_GC);
@@ -678,15 +736,31 @@ void luaC_barrierback (lua_State *L, Table *t) {
   lua_assert(isblack(o) && !isdead(g, o));
   lua_assert(g->gcstate != GCSfinalize && g->gcstate != GCSpause);
   black2gray(o);  /* make table gray (again) */
+#if LUA_REFCOUNT
+  t->gcnext = g->grayagain;
+  t->gcprev = NULL;
+  if (g->grayagain)
+    g->grayagain->tgch.gcprev = o
+  g->grayagain = o;
+#else
   t->gclist = g->grayagain;
   g->grayagain = o;
+#endif
 }
 
 
 void luaC_link (lua_State *L, GCObject *o, lu_byte tt) {
   global_State *g = G(L);
+#if LUA_REFCOUNT
+  o->gch.next = g->rootgc;
+  o->gch.prev = NULL;
+  if (g->rootgc)
+    g->rootgc->gch.prev = o;
+  g->rootgc = o;
+#else
   o->gch.next = g->rootgc;
   g->rootgc = o;
+#endif
   o->gch.marked = luaC_white(g);
   o->gch.tt = tt;
 }
@@ -695,8 +769,16 @@ void luaC_link (lua_State *L, GCObject *o, lu_byte tt) {
 void luaC_linkupval (lua_State *L, UpVal *uv) {
   global_State *g = G(L);
   GCObject *o = obj2gco(uv);
+#if LUA_REFCOUNT
+  o->gch.next = g->rootgc;
+  o->gch.prev = NULL;
+  if (g->rootgc)
+    g->rootgc->gch.prev = o;
+  g->rootgc = o;
+#else
   o->gch.next = g->rootgc;  /* link upvalue into `rootgc' list */
   g->rootgc = o;
+#endif
   if (isgray(o)) { 
     if (g->gcstate == GCSpropagate) {
       gray2black(o);  /* closed upvalues need barrier */
@@ -709,3 +791,74 @@ void luaC_linkupval (lua_State *L, UpVal *uv) {
   }
 }
 
+#if LUA_REFCOUNT
+void luaC_freeobj (lua_State *L, GCObject *obj) {
+  switch(obj->gch.tt) {
+    case LUA_TSTRING: {
+      GCObject *prev = obj->gch.prev;
+      stringtable *st = &G(L)->strt;
+      if (obj->gch.prev != NULL)
+	obj->gch.prev->gch.next = obj->gch.next;
+      else {
+	lua_assert(st->hash[lmod(gco2ts(obj)->hash, st->size)] == obj);
+	st->hash[lmod(gco2ts(obj)->hash, st->size)] = obj->gch.next;
+      }
+      if (obj->gch.next) obj->gch.next->gch.prev = obj->gch.prev;
+      st->nuse --;
+      luaM_freemem(L, o, sizestring(gco2ts(o)));
+      break;
+    }
+    case LUA_TUSERDATA: {
+      if (!isfinalized(gco2u(obj))) { /* do not free finalized udata */
+	markfinalized(gco2u(obj));
+	/* unlink userdata from rootgc */
+	if (obj->gch.next) obj->gch.next->gch.prev = obj->gch.prev;
+	lua_assert(obj->gch.prev);
+	obj->gch.prev->gch.next = obj->gch.next;
+
+	if (fasttm(L, gco2u(obj)->metatable, TM_GC) != NULL) {
+	  /* put userdata to the head of g->tmudata */
+	  if (g->tmudata == NULL) /* list is empty? */
+	    g->tmudata = obj->gch.next = obj;
+	  else {
+	    obj->gch.next = g->tmudata->gch.next;
+	    g->tmudata->gch.next = obj;
+	  }
+
+	  /* do not change g->tmudata to keep obj as the list head */
+	  GCTM(L); /* execute the gc tagmethod */
+
+	  /* obj is put back to rootgc by GCTM, unlink it */
+	  if (obj->gch.next) obj->gch.next->gch.prev = obj->gch.prev;
+	  lua_assert(obj->gch.prev == g->mainthread);
+	  obj->gch.prev->gch.next = obj->gch.next;
+	}
+
+	if (gco2u(o)->metatable)
+	  luarc_subtableref(L, gco2u(obj)->metatable);
+	luarc_subtableref(L, gco2u(obj)->env);
+
+	luaM_freemem(L, o, sizeudata(gco2u(o)));
+      }
+      break;
+    }
+    case LUA_TPROTO: {
+      break;
+    }
+    case LUA_TFUNCTION: {
+      break;
+    }
+    case LUA_TUPVAL: {
+      break;
+    }
+    case LUA_TTABLE: {
+      break;
+    }
+    case LUA_TTHREAD: {
+      break;
+    }
+    default: lua_assert(0);
+  }
+}
+
+#endif /* LUA_REFCOUNT */

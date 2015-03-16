@@ -22,6 +22,9 @@
 #include "lstring.h"
 #include "lvm.h"
 
+#if LUA_REFCOUNT
+#include "lgc.h"
+#endif
 
 
 const TValue luaO_nilobject_ = {{NULL}, LUA_TNIL};
@@ -212,3 +215,10 @@ void luaO_chunkid (char *out, const char *source, size_t bufflen) {
     }
   }
 }
+
+#if LUA_REFCOUNT
+void luarc_releaseobj(lua_State *L, GCObject *obj) {
+  if (!test2bits(obj->gch.marked, FIXEDBIT, SFIXEDBIT))
+    luaC_freeobj(L, obj);
+}
+#endif /* LUA_REFCOUNT */

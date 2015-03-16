@@ -50,9 +50,16 @@ static void stack_init (lua_State *L1, lua_State *L) {
   L1->stacksize = BASIC_STACK_SIZE + EXTRA_STACK;
   L1->top = L1->stack;
   L1->stack_last = L1->stack+(L1->stacksize - EXTRA_STACK)-1;
+#if LUA_REFCOUNT
+  {
+    TValue *v, *e = L1->stack + L1->stacksize;
+    for (v=L1->stack; v<e; v++)
+      setnilvalue2n(v);
+  }
+#endif 
   /* initialize first ci */
   L1->ci->func = L1->top;
-  setnilvalue(L1->top++);  /* `function' entry for this `ci' */
+  setnilvalue2n(L1->top++);  /* `function' entry for this `ci' */
   L1->base = L1->ci->base = L1->top;
   L1->ci->top = L1->top + LUA_MINSTACK;
 }
@@ -71,8 +78,8 @@ static void f_luaopen (lua_State *L, void *ud) {
   global_State *g = G(L);
   UNUSED(ud);
   stack_init(L, L);  /* init stack */
-  sethvalue(L, gt(L), luaH_new(L, 0, 2));  /* table of globals */
-  sethvalue(L, registry(L), luaH_new(L, 0, 2));  /* registry */
+  sethvalue2n(L, gt(L), luaH_new(L, 0, 2));  /* table of globals */
+  sethvalue2n(L, registry(L), luaH_new(L, 0, 2));  /* registry */
   luaS_resize(L, MINSTRTABSIZE);  /* initial size of string table */
   luaT_init(L);
   luaX_init(L);
@@ -98,7 +105,7 @@ static void preinit_state (lua_State *L, global_State *g) {
   L->base_ci = L->ci = NULL;
   L->savedpc = NULL;
   L->errfunc = 0;
-  setnilvalue(gt(L));
+  setnilvalue2n(gt(L));
 }
 
 
@@ -163,7 +170,7 @@ LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
   g->strt.size = 0;
   g->strt.nuse = 0;
   g->strt.hash = NULL;
-  setnilvalue(registry(L));
+  setnilvalue2n(registry(L));
   luaZ_initbuffer(L, &g->buff);
   g->panic = NULL;
   g->gcstate = GCSpause;
