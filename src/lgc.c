@@ -290,8 +290,13 @@ static void traversestack (global_State *g, lua_State *l) {
   }
   for (o = l->stack; o < l->top; o++)
     markvalue(g, o);
-  for (; o <= lim; o++)
+  for (; o <= lim; o++) {
+#if LUA_REFCOUNT
+    setnilvalue(l, o);
+#else /* !LUA_REFCOUNT */
     setnilvalue(o);
+#endif
+  }
   checkstacksizes(l, lim);
 }
 
@@ -321,8 +326,8 @@ static l_mem propagatemark (global_State *g) {
     case LUA_TFUNCTION: {
       Closure *cl = gco2cl(o);
 #if LUA_REFCOUNT
-      if (cl->gcnext) cl->gcnext->tgch.gcprev = NULL;
-      g->gray = cl->gcnext;
+      if (cl->c.gcnext) cl->c.gcnext->tgch.gcprev = NULL;
+      g->gray = cl->c.gcnext;
 #else
       g->gray = cl->c.gclist;
 #endif
@@ -397,7 +402,11 @@ static int iscleared (const TValue *o, int iskey) {
 /*
 ** clear collected entries from weaktables
 */
+#if LUA_REFCOUNT
+static void cleartable (lua_State *L, GCObject *l) {
+#else
 static void cleartable (GCObject *l) {
+#endif
   while (l) {
     Table *h = gco2h(l);
     int i = h->sizearray;
@@ -406,8 +415,13 @@ static void cleartable (GCObject *l) {
     if (testbit(h->marked, VALUEWEAKBIT)) {
       while (i--) {
         TValue *o = &h->array[i];
-        if (iscleared(o, 0))  /* value was collected? */
+        if (iscleared(o, 0)) { /* value was collected? */
+#if LUA_REFCOUNT
+          setnilvalue(L, o);  /* remove value */
+#else /* !LUA_REFCOUNT */
           setnilvalue(o);  /* remove value */
+#endif
+	}
       }
     }
     i = sizenode(h);
@@ -415,11 +429,19 @@ static void cleartable (GCObject *l) {
       Node *n = gnode(h, i);
       if (!ttisnil(gval(n)) &&  /* non-empty entry? */
           (iscleared(key2tval(n), 1) || iscleared(gval(n), 0))) {
+#if LUA_REFCOUNT
+        setnilvalue(L, gval(n));  /* remove value ... */
+#else
         setnilvalue(gval(n));  /* remove value ... */
+#endif
         removeentry(n);  /* remove entry from table */
       }
     }
+#if LUA_REFCOUNT
+    l = h->gcnext;
+#else
     l = h->gclist;
+#endif
   }
 }
 
@@ -507,7 +529,7 @@ static void GCTM (lua_State *L) {
     g->tmudata->gch.next = udata->uv.next;
   udata->uv.next = g->mainthread->next;  /* return it to `root' list */
 #if LUA_REFCOUNT
-  udata->uv.prev = g->mainthread;
+  udata->uv.prev = obj2gco(g->mainthread);
   if (g->mainthread->next)
     g->mainthread->next->gch.prev = o;
 #endif
@@ -601,7 +623,11 @@ static void atomic (lua_State *L) {
   udsize = luaC_separateudata(L, 0);  /* separate userdata to be finalized */
   marktmu(g);  /* mark `preserved' userdata */
   udsize += propagateall(g);  /* remark, to propagate `preserveness' */
+#if LUA_REFCOUNT
+  cleartable(L, g->weak);  /* remove collected objects from weak tables */
+#else
   cleartable(g->weak);  /* remove collected objects from weak tables */
+#endif
   /* flip current white */
   g->currentwhite = cast_byte(otherwhite(g));
   g->sweepstrgc = 0;
@@ -740,7 +766,7 @@ void luaC_barrierback (lua_State *L, Table *t) {
   t->gcnext = g->grayagain;
   t->gcprev = NULL;
   if (g->grayagain)
-    g->grayagain->tgch.gcprev = o
+    g->grayagain->tgch.gcprev = o;
   g->grayagain = o;
 #else
   t->gclist = g->grayagain;
@@ -795,27 +821,26 @@ void luaC_linkupval (lua_State *L, UpVal *uv) {
 #if LUA_REFCOUNT
 static void luarc_freestring (lua_State *L, TString *s) {
   GCObject *obj = cast(GCObject *, s);
-  GCObject *prev = obj->gch.prev;
   stringtable *st = &G(L)->strt;
   if (obj->gch.prev != NULL)
     obj->gch.prev->gch.next = obj->gch.next;
   else {
     lua_assert(st->hash[lmod(s->hash, st->size)] == obj);
-    st->hash[lmod(s->hash, st->size)] = obj->gch.next;
+    st->hash[lmod(s->tsv.hash, st->size)] = obj->gch.next;
   }
   if (obj->gch.next) obj->gch.next->gch.prev = obj->gch.prev;
   st->nuse --;
-  luaM_freemem(L, obj, sizestring(s));
+  luaM_freemem(L, obj, sizestring(gco2ts(obj)));
 }
 
 
 static void luarc_freeudata (lua_State *L, Udata *ud) {
   GCObject *obj = cast(GCObject *, ud);
-  if (isfinalized(ud)) return; /* do not free finalized udata */
+  if (isfinalized(gco2u(obj))) return; /* do not free finalized udata */
 
   /* FINALIZEDBIT is not set, udata must be in rootgc list */
 
-  markfinalized(ud);
+  markfinalized(gco2u(obj));
 
   /* Unlink userdata from rootgc */
   if (obj->gch.next) obj->gch.next->gch.prev = obj->gch.prev;
@@ -823,13 +848,13 @@ static void luarc_freeudata (lua_State *L, Udata *ud) {
   obj->gch.prev->gch.next = obj->gch.next;
 
   /* Execute GC tagmethod */
-  if (fasttm(L, ud->metatable, TM_GC) != NULL) {
+  if (fasttm(L, ud->uv.metatable, TM_GC) != NULL) {
     /* put userdata to the head(not tail) of g->tmudata */
-    if (g->tmudata == NULL) /* list is empty? */
-      g->tmudata = obj->gch.next = obj;
+    if (G(L)->tmudata == NULL) /* list is empty? */
+      G(L)->tmudata = obj->gch.next = obj;
     else {
-      obj->gch.next = g->tmudata->gch.next;
-      g->tmudata->gch.next = obj;
+      obj->gch.next = G(L)->tmudata->gch.next;
+      G(L)->tmudata->gch.next = obj;
       /* do not change g->tmudata to keep obj as the list head */
     }
 
@@ -842,16 +867,16 @@ static void luarc_freeudata (lua_State *L, Udata *ud) {
   }
 
   /* Adjust g->sweepgc in sweep state */
-  if (G(L)->gcstate == GCSsweep && G(L)->sweepgc == &ud->next) {
-    if (ud->prev) G(L)->sweepgc = &ud->prev->gch.next;
+  if (G(L)->gcstate == GCSsweep && G(L)->sweepgc == &ud->uv.next) {
+    if (ud->uv.prev) G(L)->sweepgc = &ud->uv.prev->gch.next;
     else G(L)->sweepgc = &G(L)->rootgc;
   }
 
-  if (ud->metatable)
-    luarc_subtableref(L, ud->metatable);
-  luarc_subtableref(L, ud->env);
+  if (ud->uv.metatable)
+    luarc_subtableref(L, ud->uv.metatable);
+  luarc_subtableref(L, ud->uv.env);
 
-  luaM_freemem(L, obj, sizeudata(ud));
+  luaM_freemem(L, obj, sizeudata(&ud->uv));
 }
 
 
@@ -890,7 +915,7 @@ static void luarc_freeproto (lua_State *L, Proto *f) {
   /* Reduce refcount of members */
   if (f->source) luarc_substringref(L, f->source);
   for (i=0; i<f->sizek; i++)
-    luarc_subref(g, &f->k[i]);
+    luarc_subref(L, &f->k[i]);
   for (i=0; i<f->sizeupvalues; i++) {
     if (f->upvalues[i])
       luarc_substringref(L, f->upvalues[i]);
@@ -915,28 +940,28 @@ static void luarc_freeclosure (lua_State *L, Closure *cl) {
   /* Closure is in rootgc list, possibly in gray list */
 
   /* Unlink from rootgc list */
-  if (cl->next != NULL) cl->next->gch.prev = cl->prev;
+  if (cl->c.next != NULL) cl->c.next->gch.prev = cl->c.prev;
   
-  if (cl->prev != NULL) cl->prev->gch.next = cl->next;
+  if (cl->c.prev != NULL) cl->c.prev->gch.next = cl->c.next;
   else {
     lua_assert(G(L)->rootgc == obj);
-    G(L)->rootgc = cl->next;
+    G(L)->rootgc = cl->c.next;
   }
 
   /* Unlink from g->gray list in mark state */
   if (G(L)->gcstate == GCSpropagate && isgray(obj)) {
-    if (cl->gcnext) cl->gcnext->tgch.gcprev = cl->gcprev;
+    if (cl->c.gcnext) cl->c.gcnext->tgch.gcprev = cl->c.gcprev;
 
-    if (cl->gcprev) cl->gcprev->tgch.gcnext = cl->gcnext;
+    if (cl->c.gcprev) cl->c.gcprev->tgch.gcnext = cl->c.gcnext;
     else {
       lua_assert(G(L)->gray == obj);
-      G(L)->gray = cl->gcnext;
+      G(L)->gray = cl->c.gcnext;
     }
   }
 
   /* Adjust g->sweepgc in GC sweep state */
-  if (G(L)->gcstate == GCSsweep && G(L)->sweepgc == &cl->next) {
-    if (cl->prev != NULL) G(L)->sweepgc = &cl->prev->gch.next;
+  if (G(L)->gcstate == GCSsweep && G(L)->sweepgc == &cl->c.next) {
+    if (cl->c.prev != NULL) G(L)->sweepgc = &cl->c.prev->gch.next;
     else G(L)->sweepgc = &G(L)->rootgc;
   }
 
@@ -956,8 +981,7 @@ static void luarc_freeclosure (lua_State *L, Closure *cl) {
 }
 
 
-static void luarc_freeupval (lua_State *L, Upval *uv) {
-  GCObject *obj = cast(GCObject *, uv);
+static void luarc_freeupval (lua_State *L, UpVal *uv) {
 
   /* Open upval is in L->openupval list, closed upval is in g->rootgc list
   ** open upval may be used immediately, even when its refcount is 0.
@@ -972,7 +996,7 @@ static void luarc_freeupval (lua_State *L, Upval *uv) {
 
   if (uv->prev) uv->prev->gch.next = uv->next;
   else {
-    lua_assert(G(L)->rootgc == obj);
+    lua_assert(G(L)->rootgc == obj2gco(uv));
     G(L)->rootgc = uv->next;
   }
 
@@ -1036,7 +1060,7 @@ static void luarc_freetable (lua_State *L, Table *t) {
     if (ttisnil(gval(n))) removeentry(n);
     else {
       lua_assert(!ttisnil(gkey(n)));
-      luarc_subref(L, gkey(n));
+      luarc_subref(L, key2tval(n));
       luarc_subref(L, gval(n));
     }
   }
@@ -1097,10 +1121,10 @@ static void luarc_freethread (lua_State *L, lua_State *th) {
 void luaC_freeobj (lua_State *L, GCObject *obj) {
   switch(obj->gch.tt) {
     case LUA_TSTRING:
-      luarc_freestring(L, gco2ts(obj));
+      luarc_freestring(L, rawgco2ts(obj));
       break;
     case LUA_TUSERDATA:
-      luarc_freeudata(L, gco2u(obj));
+      luarc_freeudata(L, rawgco2u(obj));
       break;
     case LUA_TPROTO:
       luarc_freeproto(L, gco2p(obj));

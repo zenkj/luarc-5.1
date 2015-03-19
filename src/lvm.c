@@ -409,6 +409,18 @@ static void Arith (lua_State *L, StkId ra, const TValue *rb,
 #define Protect(x)	{ L->savedpc = pc; {x;}; base = L->base; }
 
 
+#if LUA_REFCOUNT
+#define arith_op(op,tm) { \
+        TValue *rb = RKB(i); \
+        TValue *rc = RKC(i); \
+        if (ttisnumber(rb) && ttisnumber(rc)) { \
+          lua_Number nb = nvalue(rb), nc = nvalue(rc); \
+          setnvalue(L, ra, op(nb, nc)); \
+        } \
+        else \
+          Protect(Arith(L, ra, rb, rc, tm)); \
+      }
+#else
 #define arith_op(op,tm) { \
         TValue *rb = RKB(i); \
         TValue *rc = RKC(i); \
@@ -419,7 +431,7 @@ static void Arith (lua_State *L, StkId ra, const TValue *rb,
         else \
           Protect(Arith(L, ra, rb, rc, tm)); \
       }
-
+#endif
 
 
 void luaV_execute (lua_State *L, int nexeccalls) {
@@ -737,8 +749,13 @@ void luaV_execute (lua_State *L, int nexeccalls) {
         if (luai_numlt(0, step) ? luai_numle(idx, limit)
                                 : luai_numle(limit, idx)) {
           dojump(L, pc, GETARG_sBx(i));  /* jump back */
+#if LUA_REFCOUNT
+          setnvalue(L, ra, idx);  /* update internal index... */
+          setnvalue(L, ra+3, idx);  /* ...and external index */
+#else
           setnvalue(ra, idx);  /* update internal index... */
           setnvalue(ra+3, idx);  /* ...and external index */
+#endif
         }
         continue;
       }
@@ -754,6 +771,7 @@ void luaV_execute (lua_State *L, int nexeccalls) {
           luaG_runerror(L, LUA_QL("for") " limit must be a number");
         else if (!tonumber(L, pstep, ra+2))
           luaG_runerror(L, LUA_QL("for") " step must be a number");
+        setnvalue(L, ra, luai_numsub(nvalue(ra), nvalue(pstep)));
 #else /* !LUA_REFCOUNT */
         if (!tonumber(init, ra))
           luaG_runerror(L, LUA_QL("for") " initial value must be a number");
@@ -761,8 +779,8 @@ void luaV_execute (lua_State *L, int nexeccalls) {
           luaG_runerror(L, LUA_QL("for") " limit must be a number");
         else if (!tonumber(pstep, ra+2))
           luaG_runerror(L, LUA_QL("for") " step must be a number");
-#endif
         setnvalue(ra, luai_numsub(nvalue(ra), nvalue(pstep)));
+#endif
         dojump(L, pc, GETARG_sBx(i));
         continue;
       }
@@ -850,7 +868,11 @@ void luaV_execute (lua_State *L, int nexeccalls) {
             setobjs2s(L, ra + j, ci->base - n + j);
           }
           else {
+#if LUA_REFCOUNT
+            setnilvalue(L, ra + j);
+#else
             setnilvalue(ra + j);
+#endif
           }
         }
         continue;

@@ -134,12 +134,20 @@ const char *luaO_pushvfstring (lua_State *L, const char *fmt, va_list argp) {
         break;
       }
       case 'd': {
+#if LUA_REFCOUNT
+        setnvalue(L, L->top, cast_num(va_arg(argp, int)));
+#else
         setnvalue(L->top, cast_num(va_arg(argp, int)));
+#endif
         incr_top(L);
         break;
       }
       case 'f': {
+#if LUA_REFCOUNT
+        setnvalue(L, L->top, cast_num(va_arg(argp, l_uacNumber)));
+#else
         setnvalue(L->top, cast_num(va_arg(argp, l_uacNumber)));
+#endif
         incr_top(L);
         break;
       }

@@ -219,8 +219,13 @@ static StkId adjust_varargs (lua_State *L, Proto *p, int actual) {
   int nfixargs = p->numparams;
   Table *htab = NULL;
   StkId base, fixed;
-  for (; actual < nfixargs; ++actual)
+  for (; actual < nfixargs; ++actual) {
+#if LUA_REFCOUNT
+    setnilvalue(L, L->top++);
+#else /* !LUA_REFCOUNT */
     setnilvalue(L->top++);
+#endif
+  }
 #if defined(LUA_COMPAT_VARARG)
   if (p->is_vararg & VARARG_NEEDSARG) { /* compat. with old-style vararg? */
     int nvar = actual - nfixargs;  /* number of extra arguments */
@@ -238,7 +243,11 @@ static StkId adjust_varargs (lua_State *L, Proto *p, int actual) {
   base = L->top;  /* final position of first argument */
   for (i=0; i<nfixargs; i++) {
     setobjs2s(L, L->top++, fixed+i);
+#if LUA_REFCOUNT
+    setnilvalue(L, fixed+i);
+#else /* !LUA_REFCOUNT */
     setnilvalue(fixed+i);
+#endif
   }
   /* add `arg' parameter */
   if (htab) {
@@ -302,8 +311,13 @@ int luaD_precall (lua_State *L, StkId func, int nresults) {
     L->savedpc = p->code;  /* starting point */
     ci->tailcalls = 0;
     ci->nresults = nresults;
-    for (st = L->top; st < ci->top; st++)
+    for (st = L->top; st < ci->top; st++) {
+#if LUA_REFCOUNT
+      setnilvalue(L, st);
+#else /* !LUA_REFCOUNT */
       setnilvalue(st);
+#endif
+    }
     L->top = ci->top;
     if (L->hookmask & LUA_MASKCALL) {
       L->savedpc++;  /* hooks assume 'pc' is already incremented */
@@ -362,11 +376,16 @@ int luaD_poscall (lua_State *L, StkId firstResult) {
   /* move results to correct place */
   for (i = wanted; i != 0 && firstResult < L->top; i--)
     setobjs2s(L, res++, firstResult++);
-  while (i-- > 0)
-    setnilvalue(res++);
+  while (i-- > 0) {
 #if LUA_REFCOUNT
-  while (res < L->top)
+    setnilvalue(L, res++);
+#else /* !LUA_REFCOUNT */
     setnilvalue(res++);
+#endif
+  }
+#if LUA_REFCOUNT
+  for (i=0; res+i<L->top; i++)
+    setnilvalue(L, res+i);
 #endif /* LUA_REFCOUNT */
   L->top = res;
   return (wanted - LUA_MULTRET);  /* 0 iff wanted == LUA_MULTRET */

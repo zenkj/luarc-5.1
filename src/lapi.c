@@ -281,7 +281,11 @@ LUA_API int lua_iscfunction (lua_State *L, int idx) {
 LUA_API int lua_isnumber (lua_State *L, int idx) {
   TValue n;
   const TValue *o = index2adr(L, idx);
+#if LUA_REFCOUNT
+  return tonumber(L, o, &n);
+#else /* !LUA_REFCOUNT */
   return tonumber(o, &n);
+#endif
 }
 
 
@@ -461,7 +465,11 @@ LUA_API void lua_pushnil (lua_State *L) {
 
 LUA_API void lua_pushnumber (lua_State *L, lua_Number n) {
   lua_lock(L);
+#if LUA_REFCOUNT
+  setnvalue(L, L->top, n);
+#else /* !LUA_REFCOUNT */
   setnvalue(L->top, n);
+#endif
   api_incr_top(L);
   lua_unlock(L);
 }
@@ -469,7 +477,11 @@ LUA_API void lua_pushnumber (lua_State *L, lua_Number n) {
 
 LUA_API void lua_pushinteger (lua_State *L, lua_Integer n) {
   lua_lock(L);
+#if LUA_REFCOUNT
+  setnvalue(L, L->top, cast_num(n));
+#else /* !LUA_REFCOUNT */
   setnvalue(L->top, cast_num(n));
+#endif
   api_incr_top(L);
   lua_unlock(L);
 }
@@ -539,7 +551,11 @@ LUA_API void lua_pushcclosure (lua_State *L, lua_CFunction fn, int n) {
 
 LUA_API void lua_pushboolean (lua_State *L, int b) {
   lua_lock(L);
+#if LUA_REFCOUNT
+  setbvalue(L, L->top, (b != 0));  /* ensure that true is 1 */
+#else /* !LUA_REFCOUNT */
   setbvalue(L->top, (b != 0));  /* ensure that true is 1 */
+#endif
   api_incr_top(L);
   lua_unlock(L);
 }
@@ -547,7 +563,11 @@ LUA_API void lua_pushboolean (lua_State *L, int b) {
 
 LUA_API void lua_pushlightuserdata (lua_State *L, void *p) {
   lua_lock(L);
+#if LUA_REFCOUNT
+  setpvalue(L, L->top, p);
+#else /* !LUA_REFCOUNT */
   setpvalue(L->top, p);
+#endif
   api_incr_top(L);
   lua_unlock(L);
 }
@@ -801,7 +821,7 @@ LUA_API int lua_setmetatable (lua_State *L, int objindex) {
   /* Do not reduce refcount of metatable,
   ** because does not add refcount when assign.
   */
-  setnilvalue2n(L, L->top);
+  setnilvalue2n(L->top);
 #endif
   lua_unlock(L);
   return 1;
@@ -819,13 +839,13 @@ LUA_API int lua_setfenv (lua_State *L, int idx) {
   switch (ttype(o)) {
     case LUA_TFUNCTION:
 #if LUA_REFCOUNT
-      luarc_subtableref(clvalue(o)->c.env);
+      luarc_subtableref(L, clvalue(o)->c.env);
 #endif
       clvalue(o)->c.env = hvalue(L->top - 1);
       break;
     case LUA_TUSERDATA:
 #if LUA_REFCOUNT
-      luarc_subtableref(uvalue(o)->env);
+      luarc_subtableref(L, uvalue(o)->env);
 #endif
       uvalue(o)->env = hvalue(L->top - 1);
       break;
@@ -833,7 +853,7 @@ LUA_API int lua_setfenv (lua_State *L, int idx) {
       sethvalue(L, gt(thvalue(o)), hvalue(L->top - 1));
 #if LUA_REFCOUNT
       /* sethvalue add refcount for L->top-1, reduce it */
-      luarc_subtableref(hvalue(L->top-1));
+      luarc_subtableref(L, hvalue(L->top-1));
 #endif
       break;
     default:
@@ -846,7 +866,7 @@ LUA_API int lua_setfenv (lua_State *L, int idx) {
   /* Do not reduce refcount of metatable,
   ** because does not add refcount when assign.
   */
-  setnilvalue2n(L, L->top);
+  setnilvalue2n(L->top);
 #endif
   lua_unlock(L);
   return res;
@@ -934,7 +954,11 @@ static void f_Ccall (lua_State *L, void *ud) {
   cl->c.f = c->func;
   setclvalue(L, L->top, cl);  /* push function */
   api_incr_top(L);
+#if LUA_REFCOUNT
+  setpvalue(L, L->top, c->ud);  /* push only argument */
+#else /* !LUA_REFCOUNT */
   setpvalue(L->top, c->ud);  /* push only argument */
+#endif
   api_incr_top(L);
   luaD_call(L, L->top - 2, 0);
 }

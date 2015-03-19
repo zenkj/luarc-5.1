@@ -163,7 +163,11 @@ int luaH_next (lua_State *L, Table *t, StkId key) {
   int i = findindex(L, t, key);  /* find original element */
   for (i++; i < t->sizearray; i++) {  /* try first array part */
     if (!ttisnil(&t->array[i])) {  /* a non-nil value? */
+#if LUA_REFCOUNT
+      setnvalue(L, key, cast_num(i+1));
+#else
       setnvalue(key, cast_num(i+1));
+#endif
       setobj2s(L, key+1, &t->array[i]);
       return 1;
     }
@@ -310,7 +314,7 @@ static void resize (lua_State *L, Table *t, int nasize, int nhsize) {
       if (!ttisnil(&t->array[i])) {
         setobjt2t(L, luaH_setnum(L, t, i+1), &t->array[i]);
 #if LUA_REFCOUNT
-	setnilvalue(&t->array[i]);
+	setnilvalue(L, &t->array[i]);
 #endif /* LUA_REFCOUNT */
       }
     }
@@ -323,8 +327,8 @@ static void resize (lua_State *L, Table *t, int nasize, int nhsize) {
     if (!ttisnil(gval(old)))
       setobjt2t(L, luaH_set(L, t, key2tval(old)), gval(old));
 #if LUA_REFCOUNT
-    setnilvalue(key2tval(old));
-    setnilvalue(gval(old));
+    setnilvalue(L, key2tval(old));
+    setnilvalue(L, gval(old));
 #endif /* LUA_REFCOUNT */
   }
   if (nold != dummynode)
@@ -440,7 +444,7 @@ static TValue *newkey (lua_State *L, Table *t, const TValue *key) {
   }
 #if LUA_REFCOUNT
   luarc_addref(key);
-  luarc_subref(key2tval(mp));
+  luarc_subref(L, key2tval(mp));
 #endif /* LUA_REFCOUNT */
   gkey(mp)->value = key->value; gkey(mp)->tt = key->tt;
   luaC_barriert(L, t, key);
@@ -542,7 +546,10 @@ TValue *luaH_setstr (lua_State *L, Table *t, TString *key) {
   if (p != luaO_nilobject)
     return cast(TValue *, p);
   else {
-    TValue k, *v;
+    TValue k;
+#if LUA_REFCOUNT
+    TValue *v;
+#endif
     setsvalue2n(L, &k, key);
 #if LUA_REFCOUNT
     v = newkey(L, t, &k);

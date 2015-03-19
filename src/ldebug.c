@@ -176,14 +176,23 @@ static void info_tailcall (lua_Debug *ar) {
 
 static void collectvalidlines (lua_State *L, Closure *f) {
   if (f == NULL || f->c.isC) {
+#if LUA_REFCOUNT
+    setnilvalue(L, L->top);
+#else /* !LUA_REFCOUNT */
     setnilvalue(L->top);
+#endif
   }
   else {
     Table *t = luaH_new(L, 0, 0);
     int *lineinfo = f->l.p->lineinfo;
     int i;
-    for (i=0; i<f->l.p->sizelineinfo; i++)
+    for (i=0; i<f->l.p->sizelineinfo; i++) {
+#if LUA_REFCOUNT
+      setbvalue(L, luaH_setnum(L, t, lineinfo[i]), 1);
+#else /* !LUA_REFCOUNT */
       setbvalue(luaH_setnum(L, t, lineinfo[i]), 1);
+#endif
+    }
     sethvalue(L, L->top, t); 
   }
   incr_top(L);
@@ -248,7 +257,13 @@ LUA_API int lua_getinfo (lua_State *L, const char *what, lua_Debug *ar) {
   }
   status = auxgetinfo(L, what, ar, f, ci);
   if (strchr(what, 'f')) {
-    if (f == NULL) setnilvalue(L->top);
+    if (f == NULL) {
+#if LUA_REFCOUNT
+    setnilvalue(L, L->top);
+#else /* !LUA_REFCOUNT */
+    setnilvalue(L->top);
+#endif
+    }
     else setclvalue(L, L->top, f);
     incr_top(L);
   }

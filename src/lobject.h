@@ -147,11 +147,14 @@ void luarc_releaseobj(lua_State *L, GCObject *obj);
 #define luarc_subvalref(L,val) \
   { if (--val->value.gc->gch.ref <= 0) luarc_releaseobj(L,val->value.gc); }
 
-#define luarc_addref(val) { if (iscollectable(val)) luarc_addvalref(val); }
+#define luarc_addref(val) \
+  { TValue *i_v=(TValue *)(val); \
+    if (iscollectable(i_v)) luarc_addvalref(i_v); }
 
 #define luarc_subref(L,val) \
-  { if (iscollectable(val) && --val->value.gc->gch.ref <= 0) \
-      luarc_releaseobj(L,val->value.gc); }
+  { TValue *i_v=(TValue *)(val); \
+    if (iscollectable(i_v) && --i_v->value.gc->gch.ref <= 0) \
+      luarc_releaseobj(L,i_v->value.gc); }
 
 #define luarc_addstringref(obj) luarc_addobjref(cast(GCObject *, (obj)))
 #define luarc_addudataref(obj)  luarc_addobjref(cast(GCObject *, (obj)))
@@ -236,7 +239,7 @@ void luarc_releaseobj(lua_State *L, GCObject *obj);
     checkliveness(G(L),i_v); }
 
 #define setobj(L,obj1,obj2) \
-  { const TValue *o2=(obj2); TValue *o1=(obj1); \
+  { TValue *o2=(TValue *)(obj2); TValue *o1=(obj1); \
     luarc_addref(o2); luarc_subref(L,o1); \
     o1->value = o2->value; o1->tt=o2->tt; \
     checkliveness(G(L),o1); }
@@ -284,7 +287,7 @@ void luarc_releaseobj(lua_State *L, GCObject *obj);
     checkliveness(G(L),i_v); }
 
 #define setobj2n(L,obj1,obj2) \
-  { const TValue *o2=(obj2); TValue *o1=(obj1); \
+  { TValue *o2=(TValue *)(obj2); TValue *o1=(obj1); \
     o1->value = o2->value; o1->tt=o2->tt; \
     luarc_addref(o2); checkliveness(G(L),o1); }
 
