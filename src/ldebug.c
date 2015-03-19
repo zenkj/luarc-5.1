@@ -587,7 +587,12 @@ void luaG_concaterror (lua_State *L, StkId p1, StkId p2) {
 
 void luaG_aritherror (lua_State *L, const TValue *p1, const TValue *p2) {
   TValue temp;
+#if LUA_REFCOUNT
+  setnilvalue2n(&temp);
+  if (luaV_tonumber(L, p1, &temp) == NULL)
+#else /* !LUA_REFCOUNT */
   if (luaV_tonumber(p1, &temp) == NULL)
+#endif
     p2 = p1;  /* first operand is wrong */
   luaG_typeerror(L, p2, "perform arithmetic on");
 }

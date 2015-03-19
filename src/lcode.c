@@ -239,8 +239,11 @@ static int addk (FuncState *fs, TValue *k, TValue *v) {
     setnvalue(idx, cast_num(fs->nk));
     luaM_growvector(L, f->k, fs->nk, f->sizek, TValue,
                     MAXARG_Bx, "constant table overflow");
-    while (oldsize < f->sizek) setnilvalue(&f->k[oldsize++]);
+    while (oldsize < f->sizek) setnilvalue2n(&f->k[oldsize++]);
     setobj(L, &f->k[fs->nk], v);
+#if LUA_REFCOUNT
+    luarc_addref(v);
+#endif /* LUA_REFCOUNT */
     luaC_barrier(L, f, v);
     return fs->nk++;
   }
@@ -249,31 +252,56 @@ static int addk (FuncState *fs, TValue *k, TValue *v) {
 
 int luaK_stringK (FuncState *fs, TString *s) {
   TValue o;
+#if LUA_REFCOUNT
+  int n;
+  setsvalue2n(fs->L, &o, s);
+  n = addk(fs, &o, &o);
+  setnilvalue(fs->L, &o);
+  return n;
+#else /* !LUA_REFCOUNT */
   setsvalue(fs->L, &o, s);
   return addk(fs, &o, &o);
+#endif
 }
 
 
 int luaK_numberK (FuncState *fs, lua_Number r) {
   TValue o;
+#if LUA_REFCOUNT
+  setnvalue2n(&o, r);
+#else /* !LUA_REFCOUNT */
   setnvalue(&o, r);
+#endif
   return addk(fs, &o, &o);
 }
 
 
 static int boolK (FuncState *fs, int b) {
   TValue o;
+#if LUA_REFCOUNT
+  setbvalue2n(&o, b);
+#else /* !LUA_REFCOUNT */
   setbvalue(&o, b);
+#endif
   return addk(fs, &o, &o);
 }
 
 
 static int nilK (FuncState *fs) {
   TValue k, v;
+#if LUA_REFCOUNT
+  int n;
+  setnilvalue2n(&v);
+  sethvalue2n(fs->L, &k, fs->h);
+  n = addk(fs, &k, &v);
+  setnilvalue(fs->L, &k);
+  return n;
+#else /* !LUA_REFCOUNT */
   setnilvalue(&v);
   /* cannot use nil as key; instead use table itself to represent nil */
   sethvalue(fs->L, &k, fs->h);
   return addk(fs, &k, &v);
+#endif
 }
 
 

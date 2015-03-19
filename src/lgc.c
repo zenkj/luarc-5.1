@@ -958,6 +958,7 @@ static void luarc_freeclosure (lua_State *L, Closure *cl) {
 
 static void luarc_freeupval (lua_State *L, Upval *uv) {
   GCObject *obj = cast(GCObject *, uv);
+
   /* Open upval is in L->openupval list, closed upval is in g->rootgc list
   ** open upval may be used immediately, even when its refcount is 0.
   ** So only closed upval is freed.

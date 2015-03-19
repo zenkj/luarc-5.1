@@ -126,6 +126,9 @@ static void close_state (lua_State *L) {
 lua_State *luaE_newthread (lua_State *L) {
   lua_State *L1 = tostate(luaM_malloc(L, state_size(lua_State)));
   luaC_link(L, obj2gco(L1), LUA_TTHREAD);
+#if LUA_REFCOUNT
+  L1->ref = 0;
+#endif /* LUA_REFCOUNT */
   preinit_state(L1, G(L));
   stack_init(L1, L);  /* init stack */
   setobj2n(L, gt(L1), gt(L));  /* share table of globals */

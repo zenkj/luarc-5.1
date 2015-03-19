@@ -63,6 +63,11 @@ static TString *newlstr (lua_State *L, const char *str, size_t l,
   ((char *)(ts+1))[l] = '\0';  /* ending 0 */
   tb = &G(L)->strt;
   h = lmod(h, tb->size);
+#if LUA_REFCOUNT
+  ts->tsv.ref = 0;
+  if (tb->hash[h]) tb->hash[h]->gch.prev = obj2gco(ts);
+  ts->tsv.prev = NULL;
+#endif /* LUA_REFCOUNT */
   ts->tsv.next = tb->hash[h];  /* chain new entry */
   tb->hash[h] = obj2gco(ts);
   tb->nuse++;
@@ -104,6 +109,13 @@ Udata *luaS_newudata (lua_State *L, size_t s, Table *e) {
   u->uv.metatable = NULL;
   u->uv.env = e;
   /* chain it on udata list (after main thread) */
+#if LUA_REFCOUNT
+  u->uv.ref = 0;
+  luarc_addtableref(e);
+  if (G(L)->mainthread->next)
+    G(L)->mainthread->next->gch.prev = obj2gco(u);
+  u->uv.prev = obj2gco(G(L)->mainthread);
+#endif /* LUA_REFCOUNT */
   u->uv.next = G(L)->mainthread->next;
   G(L)->mainthread->next = obj2gco(u);
   return u;

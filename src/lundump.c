@@ -103,7 +103,7 @@ static void LoadConstants(LoadState* S, Proto* f)
  n=LoadInt(S);
  f->k=luaM_newvector(S->L,n,TValue);
  f->sizek=n;
- for (i=0; i<n; i++) setnilvalue(&f->k[i]);
+ for (i=0; i<n; i++) setnilvalue2n(&f->k[i]);
  for (i=0; i<n; i++)
  {
   TValue* o=&f->k[i];
@@ -111,13 +111,13 @@ static void LoadConstants(LoadState* S, Proto* f)
   switch (t)
   {
    case LUA_TNIL:
-   	setnilvalue(o);
+   	setnilvalue2n(o);
 	break;
    case LUA_TBOOLEAN:
-   	setbvalue(o,LoadChar(S)!=0);
+   	setbvalue2n(o,LoadChar(S)!=0);
 	break;
    case LUA_TNUMBER:
-	setnvalue(o,LoadNumber(S));
+	setnvalue2n(o,LoadNumber(S));
 	break;
    case LUA_TSTRING:
 	setsvalue2n(S->L,o,LoadString(S));
@@ -131,7 +131,12 @@ static void LoadConstants(LoadState* S, Proto* f)
  f->p=luaM_newvector(S->L,n,Proto*);
  f->sizep=n;
  for (i=0; i<n; i++) f->p[i]=NULL;
- for (i=0; i<n; i++) f->p[i]=LoadFunction(S,f->source);
+ for (i=0; i<n; i++) {
+   f->p[i]=LoadFunction(S,f->source);
+#if LUA_REFCOUNT
+   /* f->p[i]->ref = 1 now, no need to add again */
+#endif /* LUA_REFCOUNT */
+ }
 }
 
 static void LoadDebug(LoadState* S, Proto* f)
@@ -148,6 +153,9 @@ static void LoadDebug(LoadState* S, Proto* f)
  for (i=0; i<n; i++)
  {
   f->locvars[i].varname=LoadString(S);
+#if LUA_REFCOUNT
+  luarc_addstringref(f->locvars[i].varname);
+#endif /* LUA_REFCOUNT */
   f->locvars[i].startpc=LoadInt(S);
   f->locvars[i].endpc=LoadInt(S);
  }
@@ -155,7 +163,12 @@ static void LoadDebug(LoadState* S, Proto* f)
  f->upvalues=luaM_newvector(S->L,n,TString*);
  f->sizeupvalues=n;
  for (i=0; i<n; i++) f->upvalues[i]=NULL;
- for (i=0; i<n; i++) f->upvalues[i]=LoadString(S);
+ for (i=0; i<n; i++) {
+   f->upvalues[i]=LoadString(S);
+#if LUA_REFCOUNT
+   luarc_addstringref(f->upvalues[i]);
+#endif /* LUA_REFCOUNT */
+ }
 }
 
 static Proto* LoadFunction(LoadState* S, TString* p)
@@ -165,6 +178,9 @@ static Proto* LoadFunction(LoadState* S, TString* p)
  f=luaF_newproto(S->L);
  setptvalue2s(S->L,S->L->top,f); incr_top(S->L);
  f->source=LoadString(S); if (f->source==NULL) f->source=p;
+#if LUA_REFCOUNT
+ luarc_addstringref(f->source);
+#endif /* LUA_REFCOUNT */
  f->linedefined=LoadInt(S);
  f->lastlinedefined=LoadInt(S);
  f->nups=LoadByte(S);
@@ -176,6 +192,11 @@ static Proto* LoadFunction(LoadState* S, TString* p)
  LoadDebug(S,f);
  IF (!luaG_checkcode(f), "bad code");
  S->L->top--;
+#if LUA_REFCOUNT
+ /* do not reduce refcount, or proto will be deleted immediately */
+ setnilvalue2n(S->L->top);
+ /* now f->ref = 1 */
+#endif
  S->L->nCcalls--;
  return f;
 }

@@ -307,8 +307,12 @@ static void resize (lua_State *L, Table *t, int nasize, int nhsize) {
     t->sizearray = nasize;
     /* re-insert elements from vanishing slice */
     for (i=nasize; i<oldasize; i++) {
-      if (!ttisnil(&t->array[i]))
+      if (!ttisnil(&t->array[i])) {
         setobjt2t(L, luaH_setnum(L, t, i+1), &t->array[i]);
+#if LUA_REFCOUNT
+	setnilvalue(&t->array[i]);
+#endif /* LUA_REFCOUNT */
+      }
     }
     /* shrink array */
     luaM_reallocvector(L, t->array, oldasize, nasize, TValue);
@@ -318,6 +322,10 @@ static void resize (lua_State *L, Table *t, int nasize, int nhsize) {
     Node *old = nold+i;
     if (!ttisnil(gval(old)))
       setobjt2t(L, luaH_set(L, t, key2tval(old)), gval(old));
+#if LUA_REFCOUNT
+    setnilvalue(key2tval(old));
+    setnilvalue(gval(old));
+#endif /* LUA_REFCOUNT */
   }
   if (nold != dummynode)
     luaM_freearray(L, nold, twoto(oldhsize), Node);  /* free old array */
@@ -358,6 +366,9 @@ static void rehash (lua_State *L, Table *t, const TValue *ek) {
 Table *luaH_new (lua_State *L, int narray, int nhash) {
   Table *t = luaM_new(L, Table);
   luaC_link(L, obj2gco(t), LUA_TTABLE);
+#if LUA_REFCOUNT
+  t->ref = 0;
+#endif /* LUA_REFCOUNT */
   t->metatable = NULL;
   t->flags = cast_byte(~0);
   /* temporary values (kept only if some malloc fails) */
@@ -413,7 +424,12 @@ static TValue *newkey (lua_State *L, Table *t, const TValue *key) {
       gnext(othern) = n;  /* redo the chain with `n' in place of `mp' */
       *n = *mp;  /* copy colliding node into free pos. (mp->next also goes) */
       gnext(mp) = NULL;  /* now `mp' is free */
+#if LUA_REFCOUNT
+      setnilvalue2n(gval(mp));
+      setnilvalue2n(key2tval(mp));
+#else /* !LUA_REFCOUNT */
       setnilvalue(gval(mp));
+#endif
     }
     else {  /* colliding node is in its own main position */
       /* new node will go into free position */
@@ -422,6 +438,10 @@ static TValue *newkey (lua_State *L, Table *t, const TValue *key) {
       mp = n;
     }
   }
+#if LUA_REFCOUNT
+  luarc_addref(key);
+  luarc_subref(key2tval(mp));
+#endif /* LUA_REFCOUNT */
   gkey(mp)->value = key->value; gkey(mp)->tt = key->tt;
   luaC_barriert(L, t, key);
   lua_assert(ttisnil(gval(mp)));
@@ -522,9 +542,15 @@ TValue *luaH_setstr (lua_State *L, Table *t, TString *key) {
   if (p != luaO_nilobject)
     return cast(TValue *, p);
   else {
-    TValue k;
-    setsvalue(L, &k, key);
+    TValue k, *v;
+    setsvalue2n(L, &k, key);
+#if LUA_REFCOUNT
+    v = newkey(L, t, &k);
+    setnilvalue(L, &k);
+    return v;
+#else /* !LUA_REFCOUNT */
     return newkey(L, t, &k);
+#endif
   }
 }
 

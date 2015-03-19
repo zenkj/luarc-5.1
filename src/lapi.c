@@ -334,7 +334,11 @@ LUA_API int lua_lessthan (lua_State *L, int index1, int index2) {
 LUA_API lua_Number lua_tonumber (lua_State *L, int idx) {
   TValue n;
   const TValue *o = index2adr(L, idx);
+#if LUA_REFCOUNT
+  if (tonumber(L, o, &n))
+#else /* !LUA_REFCOUNT */
   if (tonumber(o, &n))
+#endif
     return nvalue(o);
   else
     return 0;
@@ -344,7 +348,11 @@ LUA_API lua_Number lua_tonumber (lua_State *L, int idx) {
 LUA_API lua_Integer lua_tointeger (lua_State *L, int idx) {
   TValue n;
   const TValue *o = index2adr(L, idx);
+#if LUA_REFCOUNT
+  if (tonumber(L, o, &n)) {
+#else /* !LUA_REFCOUNT */
   if (tonumber(o, &n)) {
+#endif
     lua_Integer res;
     lua_Number num = nvalue(o);
     lua_number2integer(res, num);

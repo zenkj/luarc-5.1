@@ -141,8 +141,17 @@ static void correctstack (lua_State *L, TValue *oldstack) {
 void luaD_reallocstack (lua_State *L, int newsize) {
   TValue *oldstack = L->stack;
   int realsize = newsize + 1 + EXTRA_STACK;
+#if LUA_REFCOUNT
+  TValue *p;
+  for (p=L->stack+realsize; p<L->stack+L->stacksize; p++)
+    setnilvalue(L, p);
+#endif /* LUA_REFCOUNT */
   lua_assert(L->stack_last - L->stack == L->stacksize - EXTRA_STACK - 1);
   luaM_reallocvector(L, L->stack, L->stacksize, realsize, TValue);
+#if LUA_REFCOUNT
+  for (p=L->stack+L->stacksize; p<L->stack+realsize; p++)
+    setnilvalue2n(p);
+#endif /* LUA_REFCOUNT */
   L->stacksize = realsize;
   L->stack_last = L->stack+newsize;
   correctstack(L, oldstack);
@@ -355,6 +364,10 @@ int luaD_poscall (lua_State *L, StkId firstResult) {
     setobjs2s(L, res++, firstResult++);
   while (i-- > 0)
     setnilvalue(res++);
+#if LUA_REFCOUNT
+  while (res < L->top)
+    setnilvalue(res++);
+#endif /* LUA_REFCOUNT */
   L->top = res;
   return (wanted - LUA_MULTRET);  /* 0 iff wanted == LUA_MULTRET */
 }
@@ -464,6 +477,13 @@ int luaD_pcall (lua_State *L, Pfunc func, void *u,
   if (status != 0) {  /* an error occurred? */
     StkId oldtop = restorestack(L, old_top);
     luaF_close(L, oldtop);  /* close eventual pending closures */
+#if LUA_REFCOUNT
+    {
+      StkId p;
+      for (p=oldtop; p<L->top; p++)
+	setnilvalue(L, p);
+    }
+#endif /* LUA_REFCOUNT */
     luaD_seterrorobj(L, status, oldtop);
     L->nCcalls = oldnCcalls;
     L->ci = restoreci(L, old_ci);
@@ -499,7 +519,8 @@ static void f_parser (lua_State *L, void *ud) {
   cl = luaF_newLclosure(L, tf->nups, hvalue(gt(L)));
   cl->l.p = tf;
 #if LUA_REFCOUNT
-  luarc_addprotoref(tf);
+  /* tf->ref == 1 already */
+  /* luarc_addprotoref(tf); */
 #endif
   for (i = 0; i < tf->nups; i++) { /* initialize eventual upvalues */
     cl->l.upvals[i] = luaF_newupval(L);

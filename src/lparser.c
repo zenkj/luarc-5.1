@@ -148,6 +148,9 @@ static int registerlocalvar (LexState *ls, TString *varname) {
                   LocVar, SHRT_MAX, "too many local variables");
   while (oldsize < f->sizelocvars) f->locvars[oldsize++].varname = NULL;
   f->locvars[fs->nlocvars].varname = varname;
+#if LUA_REFCOUNT
+  luarc_addstringref(varname);
+#endif /* LUA_REFCOUNT */
   luaC_objbarrier(ls->L, f, varname);
   return fs->nlocvars++;
 }
@@ -196,6 +199,9 @@ static int indexupvalue (FuncState *fs, TString *name, expdesc *v) {
                   TString *, MAX_INT, "");
   while (oldsize < f->sizeupvalues) f->upvalues[oldsize++] = NULL;
   f->upvalues[f->nups] = name;
+#if LUA_REFCOUNT
+  luarc_addstringref(name);
+#endif /* LUA_REFCOUNT */
   luaC_objbarrier(fs->L, f, name);
   lua_assert(v->k == VLOCAL || v->k == VUPVAL);
   fs->upvalues[f->nups].k = cast_byte(v->k);
@@ -316,6 +322,10 @@ static void pushclosure (LexState *ls, FuncState *func, expdesc *v) {
                   MAXARG_Bx, "constant table overflow");
   while (oldsize < f->sizep) f->p[oldsize++] = NULL;
   f->p[fs->np++] = func->f;
+#if LUA_REFCOUNT
+  /* func->f->ref is 1 now, no need to add again */
+  /* luarc_addprotoref(func->f); */
+#endif /* LUA_REFCOUNT */
   luaC_objbarrier(ls->L, f, func->f);
   init_exp(v, VRELOCABLE, luaK_codeABx(fs, OP_CLOSURE, 0, fs->np-1));
   for (i=0; i<func->f->nups; i++) {
@@ -343,6 +353,9 @@ static void open_func (LexState *ls, FuncState *fs) {
   fs->nactvar = 0;
   fs->bl = NULL;
   f->source = ls->source;
+#if LUA_REFCOUNT
+  luarc_addstringref(f->source);
+#endif /* LUA_REFCOUNT */
   f->maxstacksize = 2;  /* registers 0/1 are always valid */
   fs->h = luaH_new(L, 0, 0);
   /* anchor table of constants and prototype (to avoid being collected) */
@@ -375,6 +388,12 @@ static void close_func (LexState *ls) {
   lua_assert(fs->bl == NULL);
   ls->fs = fs->prev;
   L->top -= 2;  /* remove table and prototype from the stack */
+#if LUA_REFCOUNT
+  luarc_addprotoref(f); /* To avoid f->ref = 0 and proto deleted */
+  setnilvalue(L, L->top);
+  setnilvalue(L, L->top+1);
+  /* now h->ref == 0 and f->ref == 1 */
+#endif /* LUA_REFCOUNT */
   /* last token read was anchored in defunct function; must reanchor it */
   if (fs) anchor_token(ls);
 }

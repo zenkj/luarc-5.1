@@ -26,6 +26,10 @@ Closure *luaF_newCclosure (lua_State *L, int nelems, Table *e) {
   c->c.isC = 1;
   c->c.env = e;
   c->c.nupvalues = cast_byte(nelems);
+#if LUA_REFCOUNT
+  c->c.ref = 0;
+  if (e) luarc_addtableref(e);
+#endif /* LUA_REFCOUNT */
   return c;
 }
 
@@ -37,6 +41,10 @@ Closure *luaF_newLclosure (lua_State *L, int nelems, Table *e) {
   c->l.env = e;
   c->l.nupvalues = cast_byte(nelems);
   while (nelems--) c->l.upvals[nelems] = NULL;
+#if LUA_REFCOUNT
+  c->l.ref = 0;
+  if (e) luarc_addtableref(e);
+#endif /* LUA_REFCOUNT */
   return c;
 }
 
@@ -46,6 +54,9 @@ UpVal *luaF_newupval (lua_State *L) {
   luaC_link(L, obj2gco(uv), LUA_TUPVAL);
   uv->v = &uv->u.value;
   setnilvalue2n(uv->v);
+#if LUA_REFCOUNT
+  uv->ref = 0;
+#endif
   return uv;
 }
 
@@ -69,6 +80,9 @@ UpVal *luaF_findupval (lua_State *L, StkId level) {
   uv->marked = luaC_white(g);
   uv->v = level;  /* current value lives in the stack */
   uv->next = *pp;  /* chain it in the proper position */
+#if LUA_REFCOUNT
+  uv->ref = 0;
+#endif /* LUA_REFCOUNT */
   *pp = obj2gco(uv);
   uv->u.l.prev = &g->uvhead;  /* double link it in `uvhead' list */
   uv->u.l.next = g->uvhead.u.l.next;
@@ -104,7 +118,7 @@ void luaF_close (lua_State *L, StkId level) {
       luaF_freeupval(L, uv);  /* free upvalue */
     else {
       unlinkupval(uv);
-      setobj(L, &uv->u.value, uv->v);
+      setobj2n(L, &uv->u.value, uv->v);
       uv->v = &uv->u.value;  /* now current value lives here */
       luaC_linkupval(L, uv);  /* link upvalue into `gcroot' list */
     }
@@ -115,6 +129,9 @@ void luaF_close (lua_State *L, StkId level) {
 Proto *luaF_newproto (lua_State *L) {
   Proto *f = luaM_new(L, Proto);
   luaC_link(L, obj2gco(f), LUA_TPROTO);
+#if LUA_REFCOUNT
+  f->ref = 0;
+#endif /* LUA_REFCOUNT */
   f->k = NULL;
   f->sizek = 0;
   f->p = NULL;

@@ -288,6 +288,53 @@ void luarc_releaseobj(lua_State *L, GCObject *obj);
     o1->value = o2->value; o1->tt=o2->tt; \
     luarc_addref(o2); checkliveness(G(L),o1); }
 
+/* no ref count version of set function */
+#define setnilvaluenrc(obj) ((obj)->tt=LUA_TNIL)
+
+#define setnvaluenrc(obj,x) \
+  { TValue *i_o=(obj); i_o->value.n=(x); i_o->tt=LUA_TNUMBER; }
+
+#define setpvaluenrc(obj,x) \
+  { TValue *i_o=(obj); i_o->value.p=(x); i_o->tt=LUA_TLIGHTUSERDATA; }
+
+#define setbvaluenrc(obj,x) \
+  { TValue *i_o=(obj); i_o->value.b=(x); i_o->tt=LUA_TBOOLEAN; }
+
+#define setsvaluenrc(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TSTRING; \
+    checkliveness(G(L),i_o); }
+
+#define setuvaluenrc(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TUSERDATA; \
+    checkliveness(G(L),i_o); }
+
+#define setthvaluenrc(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTHREAD; \
+    checkliveness(G(L),i_o); }
+
+#define setclvaluenrc(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TFUNCTION; \
+    checkliveness(G(L),i_o); }
+
+#define sethvaluenrc(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TTABLE; \
+    checkliveness(G(L),i_o); }
+
+#define setptvaluenrc(L,obj,x) \
+  { TValue *i_o=(obj); \
+    i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TPROTO; \
+    checkliveness(G(L),i_o); }
+
+#define setobjnrc(L,obj1,obj2) \
+  { const TValue *o2=(obj2); TValue *o1=(obj1); \
+    o1->value = o2->value; o1->tt=o2->tt; \
+    checkliveness(G(L),o1); }
+
 #else /* !LUA_REFCOUNT */
 
 /* Macros to set values */
@@ -350,6 +397,18 @@ void luarc_releaseobj(lua_State *L, GCObject *obj);
 #define setptvalue2n	setptvalue
 #define setobj2n	setobj
 
+/* no ref count version */
+#define setnilvaluenrc	setnilvalue
+#define setnvaluenrc	setnvalue
+#define setpvaluenrc	setpvalue
+#define setbvaluenrc	setbvalue
+#define setsvaluenrc	setsvalue
+#define setuvaluenrc	setuvalue
+#define setthvaluenrc	setthvalue
+#define setclvaluenrc	setclvalue
+#define sethvaluenrc	sethvalue
+#define setptvaluenrc	setptvalue
+#define setobjnrc	setobj
 #endif /* LUA_REFCOUNT */
 
 /*
