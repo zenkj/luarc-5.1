@@ -326,13 +326,17 @@ static void resize (lua_State *L, Table *t, int nasize, int nhsize) {
     Node *old = nold+i;
     if (!ttisnil(gval(old)))
       setobjt2t(L, luaH_set(L, t, key2tval(old)), gval(old));
-#if LUA_REFCOUNT
-    setnilvalue(L, key2tval(old));
-    setnilvalue(L, gval(old));
-#endif /* LUA_REFCOUNT */
   }
-  if (nold != dummynode)
+  if (nold != dummynode) {
+#if LUA_REFCOUNT
+    for (i=twoto(oldhsize)-1; i>=0; i--) {
+      Node *old = nold+i;
+      setnilvalue(L, key2tval(old));
+      setnilvalue(L, gval(old));
+    }
+#endif /* LUA_REFCOUNT */
     luaM_freearray(L, nold, twoto(oldhsize), Node);  /* free old array */
+  }
 }
 
 

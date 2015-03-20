@@ -148,13 +148,13 @@ void luarc_releaseobj(lua_State *L, GCObject *obj);
   { if (--val->value.gc->gch.ref <= 0) luarc_releaseobj(L,val->value.gc); }
 
 #define luarc_addref(val) \
-  { TValue *i_v=(TValue *)(val); \
-    if (iscollectable(i_v)) luarc_addvalref(i_v); }
+  { TValue *v1=(TValue *)(val); \
+    if (iscollectable(v1)) luarc_addvalref(v1); }
 
 #define luarc_subref(L,val) \
-  { TValue *i_v=(TValue *)(val); \
-    if (iscollectable(i_v) && --i_v->value.gc->gch.ref <= 0) \
-      luarc_releaseobj(L,i_v->value.gc); }
+  { TValue *v1=(TValue *)(val); \
+    if (iscollectable(v1) && --v1->value.gc->gch.ref <= 0) \
+      luarc_releaseobj(L,v1->value.gc); }
 
 #define luarc_addstringref(obj) luarc_addobjref(cast(GCObject *, (obj)))
 #define luarc_addudataref(obj)  luarc_addobjref(cast(GCObject *, (obj)))

@@ -193,7 +193,7 @@ LUA_API void lua_remove (lua_State *L, int idx) {
   while (++p < L->top) setobjs2s(L, p-1, p);
   L->top--;
 #if LUA_REFCOUNT
-  luarc_subref(L, L->top);
+  setnilvalue(L, L->top);
 #endif /* LUA_REFCOUNT */
   lua_unlock(L);
 }

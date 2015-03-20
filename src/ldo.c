@@ -495,15 +495,18 @@ int luaD_pcall (lua_State *L, Pfunc func, void *u,
   status = luaD_rawrunprotected(L, func, u);
   if (status != 0) {  /* an error occurred? */
     StkId oldtop = restorestack(L, old_top);
-    luaF_close(L, oldtop);  /* close eventual pending closures */
 #if LUA_REFCOUNT
-    {
-      StkId p;
-      for (p=oldtop; p<L->top; p++)
-	setnilvalue(L, p);
-    }
+    StkId newtop = L->top;
 #endif /* LUA_REFCOUNT */
+    luaF_close(L, oldtop);  /* close eventual pending closures */
     luaD_seterrorobj(L, status, oldtop);
+#if LUA_REFCOUNT
+    /* L->top is adjusted in luaD_seterrorobj, and former L->top
+    ** may be used in this function, so setnilvalue after it
+    */
+    while (newtop-- > L->top)
+      setnilvalue(L, newtop);
+#endif
     L->nCcalls = oldnCcalls;
     L->ci = restoreci(L, old_ci);
     L->base = L->ci->base;
