@@ -845,7 +845,7 @@ void luaV_execute (lua_State *L, int nexeccalls) {
             ncl->l.upvals[j] = luaF_findupval(L, base + GETARG_B(*pc));
           }
 #if LUA_REFCOUNT
-	  luarc_addref(ncl->l.upvals[j]);
+	  luarc_addupvalref(ncl->l.upvals[j]);
 #endif /* LUA_REFCOUNT */
         }
         setclvalue(L, ra, ncl);

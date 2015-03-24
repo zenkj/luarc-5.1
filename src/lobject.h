@@ -41,8 +41,8 @@ typedef union GCObject GCObject;
 ** included in other objects)
 */
 #if LUA_REFCOUNT
-#define CommonHeader	GCObject *next; GCObject *prev; \
-                        lu_byte tt; lu_byte marked; short ref
+#define CommonHeader	GCObject *next; GCObject *prev; long ref; \
+                        lu_byte tt; lu_byte marked
 
 #define TraversableCommonHeader \
   CommonHeader; GCObject *gcnext; GCObject *gcprev

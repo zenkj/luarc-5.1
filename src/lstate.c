@@ -106,6 +106,9 @@ static void preinit_state (lua_State *L, global_State *g) {
   L->savedpc = NULL;
   L->errfunc = 0;
   setnilvalue2n(gt(L));
+#if LUA_REFCOUNT
+  setnilvalue2n(&L->env);
+#endif
 }
 
 

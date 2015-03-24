@@ -37,6 +37,10 @@ void luaS_resize (lua_State *L, int newsize) {
       int h1 = lmod(h, newsize);  /* new position */
       lua_assert(cast_int(h%newsize) == lmod(h, newsize));
       p->gch.next = newhash[h1];  /* chain it */
+#if LUA_REFCOUNT
+      p->gch.prev = NULL;
+      if (newhash[h1] != NULL) newhash[h1]->gch.prev = p;
+#endif 
       newhash[h1] = p;
       p = next;
     }

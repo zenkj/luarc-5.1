@@ -97,6 +97,7 @@ static void reallymarkobject (global_State *g, GCObject *o) {
       o->tgch.gcprev = NULL;
       if (g->gray) g->gray->tgch.gcprev = o;
       g->gray = o;
+      break;
     }
 #else
     case LUA_TFUNCTION: {
@@ -825,7 +826,7 @@ static void luarc_freestring (lua_State *L, TString *s) {
   if (obj->gch.prev != NULL)
     obj->gch.prev->gch.next = obj->gch.next;
   else {
-    lua_assert(st->hash[lmod(s->hash, st->size)] == obj);
+    lua_assert(st->hash[lmod(s->tsv.hash, st->size)] == obj);
     st->hash[lmod(s->tsv.hash, st->size)] = obj->gch.next;
   }
   if (obj->gch.next) obj->gch.next->gch.prev = obj->gch.prev;
@@ -862,7 +863,7 @@ static void luarc_freeudata (lua_State *L, Udata *ud) {
 
     /* obj is put back to rootgc by GCTM, unlink it */
     if (obj->gch.next) obj->gch.next->gch.prev = obj->gch.prev;
-    lua_assert(obj->gch.prev == g->mainthread);
+    lua_assert(obj->gch.prev == obj2gco(G(L)->mainthread));
     obj->gch.prev->gch.next = obj->gch.next;
   }
 
