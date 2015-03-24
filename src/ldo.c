@@ -142,8 +142,10 @@ void luaD_reallocstack (lua_State *L, int newsize) {
   TValue *oldstack = L->stack;
   int realsize = newsize + 1 + EXTRA_STACK;
 #if LUA_REFCOUNT
+  /* do not reduce refcount for objects beyond L->top
+   * they may be released by GC */
   TValue *p;
-  for (p=L->stack+realsize; p<L->stack+L->stacksize; p++)
+  for (p=L->stack+realsize; p<L->top; p++)
     setnilvalue(L, p);
 #endif /* LUA_REFCOUNT */
   lua_assert(L->stack_last - L->stack == L->stacksize - EXTRA_STACK - 1);
@@ -221,7 +223,9 @@ static StkId adjust_varargs (lua_State *L, Proto *p, int actual) {
   StkId base, fixed;
   for (; actual < nfixargs; ++actual) {
 #if LUA_REFCOUNT
-    setnilvalue(L, L->top++);
+    /* do not release objects beond L->top, they may released
+     * by GC */
+    setnilvalue2n(L->top++);
 #else /* !LUA_REFCOUNT */
     setnilvalue(L->top++);
 #endif
@@ -313,7 +317,8 @@ int luaD_precall (lua_State *L, StkId func, int nresults) {
     ci->nresults = nresults;
     for (st = L->top; st < ci->top; st++) {
 #if LUA_REFCOUNT
-      setnilvalue(L, st);
+      /* values beyond L->top may be released by GC */
+      setnilvalue2n(st);
 #else /* !LUA_REFCOUNT */
       setnilvalue(st);
 #endif
