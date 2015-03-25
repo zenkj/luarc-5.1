@@ -42,7 +42,16 @@ const char lua_ident[] =
 
 #define api_checkvalidindex(L, i)	api_check(L, (i) != luaO_nilobject)
 
+#if LUA_REFCOUNT
+
+#define api_incr_top(L) \
+  {api_check(L, L->top < L->ci->top && ttisnil(L->top+1)); L->top++;}
+
+#else /* !LUA_REFCOUNT */
+
 #define api_incr_top(L)   {api_check(L, L->top < L->ci->top); L->top++;}
+
+#endif
 
 
 
@@ -168,8 +177,14 @@ LUA_API void lua_settop (lua_State *L, int idx) {
   lua_lock(L);
   if (idx >= 0) {
     api_check(L, idx <= L->stack_last - L->base);
+#if LUA_REFCOUNT
+    checkrangeisnil(L->top, L->base+idx);
+    while (L->top > L->base + idx)
+      setnilvalue(L, --L->top);
+#else
     while (L->top < L->base + idx)
       setnilvalue2n(L->top++);
+#endif
     L->top = L->base + idx;
   }
   else {
@@ -282,6 +297,7 @@ LUA_API int lua_isnumber (lua_State *L, int idx) {
   TValue n;
   const TValue *o = index2adr(L, idx);
 #if LUA_REFCOUNT
+  setnilvalue2n(&n);
   return tonumber(L, o, &n);
 #else /* !LUA_REFCOUNT */
   return tonumber(o, &n);
@@ -339,6 +355,7 @@ LUA_API lua_Number lua_tonumber (lua_State *L, int idx) {
   TValue n;
   const TValue *o = index2adr(L, idx);
 #if LUA_REFCOUNT
+  setnilvalue2n(&n);
   if (tonumber(L, o, &n))
 #else /* !LUA_REFCOUNT */
   if (tonumber(o, &n))
@@ -353,6 +370,7 @@ LUA_API lua_Integer lua_tointeger (lua_State *L, int idx) {
   TValue n;
   const TValue *o = index2adr(L, idx);
 #if LUA_REFCOUNT
+  setnilvalue2n(&n);
   if (tonumber(L, o, &n)) {
 #else /* !LUA_REFCOUNT */
   if (tonumber(o, &n)) {

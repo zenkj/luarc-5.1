@@ -224,8 +224,18 @@ void luaO_chunkid (char *out, const char *source, size_t bufflen) {
   }
 }
 
+
 #if LUA_REFCOUNT
-void luarc_releaseobj(lua_State *L, GCObject *obj) {
+int rangeisnil (const TValue *begin, const TValue *end) {
+  const TValue *p;
+  for (p=begin; p<end; p++) {
+    if (!ttisnil(p))
+      return 0;
+  }
+  return 1;
+}
+
+void luarc_releaseobj (lua_State *L, GCObject *obj) {
   if (!test2bits(obj->gch.marked, FIXEDBIT, SFIXEDBIT))
     luaC_freeobj(L, obj);
 }

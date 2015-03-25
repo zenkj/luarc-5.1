@@ -49,6 +49,9 @@ struct lua_longjmp {
 
 
 void luaD_seterrorobj (lua_State *L, int errcode, StkId oldtop) {
+#if LUA_REFCOUNT
+  StkId p;
+#endif
   switch (errcode) {
     case LUA_ERRMEM: {
       setsvalue2s(L, oldtop, luaS_newliteral(L, MEMERRMSG));
@@ -64,6 +67,10 @@ void luaD_seterrorobj (lua_State *L, int errcode, StkId oldtop) {
       break;
     }
   }
+#if LUA_REFCOUNT
+  for (p=oldtop+1; p<L->top; p++)
+    setnilvalue(L, p);
+#endif
   L->top = oldtop + 1;
 }
 
@@ -194,6 +201,9 @@ void luaD_callhook (lua_State *L, int event, int line) {
   if (hook && L->allowhook) {
     ptrdiff_t top = savestack(L, L->top);
     ptrdiff_t ci_top = savestack(L, L->ci->top);
+#if LUA_REFCOUNT
+    StkId tmp;
+#endif
     lua_Debug ar;
     ar.event = event;
     ar.currentline = line;
@@ -211,6 +221,11 @@ void luaD_callhook (lua_State *L, int event, int line) {
     lua_assert(!L->allowhook);
     L->allowhook = 1;
     L->ci->top = restorestack(L, ci_top);
+#if LUA_REFCOUNT
+    tmp = restorestack(L, top);
+    while (tmp < L->top)
+      setnilvalue(L, tmp++);
+#endif
     L->top = restorestack(L, top);
   }
 }
@@ -221,15 +236,16 @@ static StkId adjust_varargs (lua_State *L, Proto *p, int actual) {
   int nfixargs = p->numparams;
   Table *htab = NULL;
   StkId base, fixed;
-  for (; actual < nfixargs; ++actual) {
 #if LUA_REFCOUNT
-    /* do not release objects beond L->top, they may released
-     * by GC */
-    setnilvalue2n(L->top++);
-#else /* !LUA_REFCOUNT */
-    setnilvalue(L->top++);
-#endif
+  if (actual < nfixargs) {
+    checkrangeisnil(L->top, L->top + nfixargs - actual);
+    L->top += nfixargs - actual;
   }
+#else /* !LUA_REFCOUNT */
+  for (; actual < nfixargs; ++actual) {
+    setnilvalue(L->top++);
+  }
+#endif
 #if defined(LUA_COMPAT_VARARG)
   if (p->is_vararg & VARARG_NEEDSARG) { /* compat. with old-style vararg? */
     int nvar = actual - nfixargs;  /* number of extra arguments */
@@ -299,8 +315,13 @@ int luaD_precall (lua_State *L, StkId func, int nresults) {
     func = restorestack(L, funcr);
     if (!p->is_vararg) {  /* no varargs? */
       base = func + 1;
+#if LUA_REFCOUNT
+      while (L->top > base + p->numparams)
+	setnilvalue(L, --L->top);
+#else /* !LUA_REFCOUNT */
       if (L->top > base + p->numparams)
         L->top = base + p->numparams;
+#endif
     }
     else {  /* vararg function */
       int nargs = cast_int(L->top - func) - 1;
@@ -315,14 +336,15 @@ int luaD_precall (lua_State *L, StkId func, int nresults) {
     L->savedpc = p->code;  /* starting point */
     ci->tailcalls = 0;
     ci->nresults = nresults;
-    for (st = L->top; st < ci->top; st++) {
 #if LUA_REFCOUNT
-      /* values beyond L->top may be released by GC */
-      setnilvalue2n(st);
+    checkrangeisnil(L->top, ci->top);
+    for (st=ci->top; st<L->top; st++)
+      setnilvalue(L, st);
 #else /* !LUA_REFCOUNT */
+    for (st = L->top; st < ci->top; st++) {
       setnilvalue(st);
-#endif
     }
+#endif
     L->top = ci->top;
     if (L->hookmask & LUA_MASKCALL) {
       L->savedpc++;  /* hooks assume 'pc' is already incremented */
@@ -432,8 +454,15 @@ static void resume (lua_State *L, void *ud) {
       /* finish interrupted execution of `OP_CALL' */
       lua_assert(GET_OPCODE(*((ci-1)->savedpc - 1)) == OP_CALL ||
                  GET_OPCODE(*((ci-1)->savedpc - 1)) == OP_TAILCALL);
-      if (luaD_poscall(L, firstArg))  /* complete it... */
+      if (luaD_poscall(L, firstArg))  {/* complete it... */
+#if LUA_REFCOUNT
+	StkId tmp;
+	checkrangeisnil(L->top, L->ci->top);
+	for (tmp=L->ci->top; tmp<L->top; tmp++)
+	  setnilvalue(L, tmp);
+#endif
         L->top = L->ci->top;  /* and correct top if not multiple results */
+      }
     }
     else  /* yielded inside a hook: just continue its execution */
       L->base = L->ci->base;
@@ -443,6 +472,11 @@ static void resume (lua_State *L, void *ud) {
 
 
 static int resume_error (lua_State *L, const char *msg) {
+#if LUA_REFCOUNT
+  StkId p;
+  for (p=L->ci->base; p<L->top; p++)
+    setnilvalue(L, p);
+#endif
   L->top = L->ci->base;
   setsvalue2s(L, L->top, luaS_new(L, msg));
   incr_top(L);
@@ -500,18 +534,8 @@ int luaD_pcall (lua_State *L, Pfunc func, void *u,
   status = luaD_rawrunprotected(L, func, u);
   if (status != 0) {  /* an error occurred? */
     StkId oldtop = restorestack(L, old_top);
-#if LUA_REFCOUNT
-    StkId newtop = L->top;
-#endif /* LUA_REFCOUNT */
     luaF_close(L, oldtop);  /* close eventual pending closures */
     luaD_seterrorobj(L, status, oldtop);
-#if LUA_REFCOUNT
-    /* L->top is adjusted in luaD_seterrorobj, and former L->top
-    ** may be used in this function, so setnilvalue after it
-    */
-    while (newtop-- > L->top)
-      setnilvalue(L, newtop);
-#endif
     L->nCcalls = oldnCcalls;
     L->ci = restoreci(L, old_ci);
     L->base = L->ci->base;

@@ -673,7 +673,14 @@ void luaV_execute (lua_State *L, int nexeccalls) {
       case OP_CALL: {
         int b = GETARG_B(i);
         int nresults = GETARG_C(i) - 1;
-        if (b != 0) L->top = ra+b;  /* else previous instruction set top */
+        if (b != 0) {  /* else previous instruction set top */
+#if LUA_REFCOUNT
+	  StkId p;
+	  for (p=ra+b; p<L->top; p++)
+	    setnilvalue(L, p);
+#endif
+	  L->top = ra+b;
+	}
         L->savedpc = pc;
         switch (luaD_precall(L, ra, nresults)) {
           case PCRLUA: {
@@ -682,7 +689,13 @@ void luaV_execute (lua_State *L, int nexeccalls) {
           }
           case PCRC: {
             /* it was a C function (`precall' called it); adjust results */
-            if (nresults >= 0) L->top = L->ci->top;
+            if (nresults >= 0) {
+#if LUA_REFCOUNT
+	      while (L->top > L->ci->top)
+		setnilvalue(L, --L->top);
+#endif
+	      L->top = L->ci->top;
+	    }
             base = L->base;
             continue;
           }
@@ -693,7 +706,13 @@ void luaV_execute (lua_State *L, int nexeccalls) {
       }
       case OP_TAILCALL: {
         int b = GETARG_B(i);
-        if (b != 0) L->top = ra+b;  /* else previous instruction set top */
+        if (b != 0) {  /* else previous instruction set top */
+#if LUA_REFCOUNT
+	  while (L->top > ra+b)
+	    setnilvalue(L, --L->top);
+#endif
+	  L->top = ra+b;
+	}
         L->savedpc = pc;
         lua_assert(GETARG_C(i) - 1 == LUA_MULTRET);
         switch (luaD_precall(L, ra, LUA_MULTRET)) {
@@ -707,10 +726,12 @@ void luaV_execute (lua_State *L, int nexeccalls) {
             L->base = ci->base = ci->func + ((ci+1)->base - pfunc);
             for (aux = 0; pfunc+aux < L->top; aux++) { /* move frame down */
               setobjs2s(L, func+aux, pfunc+aux);
-#if LUA_REFCOUNT
-	      setnilvalue(L, pfunc+aux);
-#endif /* LUA_REFCOUNT */
 	    }
+#if LUA_REFCOUNT
+	    while (L->top > func+aux)
+	      setnilvalue(L, --L->top);
+#endif /* LUA_REFCOUNT */
+
             ci->top = L->top = func+aux;  /* correct top */
             lua_assert(L->top == L->base + clvalue(func)->l.p->maxstacksize);
             ci->savedpc = L->savedpc;
@@ -729,14 +750,27 @@ void luaV_execute (lua_State *L, int nexeccalls) {
       }
       case OP_RETURN: {
         int b = GETARG_B(i);
-        if (b != 0) L->top = ra+b-1;
+        if (b != 0) {
+#if LUA_REFCOUNT
+	  while (L->top > ra+b-1)
+	    setnilvalue(L, --L->top);
+#endif
+	  L->top = ra+b-1;
+	}
         if (L->openupval) luaF_close(L, base);
         L->savedpc = pc;
         b = luaD_poscall(L, ra);
         if (--nexeccalls == 0)  /* was previous function running `here'? */
           return;  /* no: return */
         else {  /* yes: continue its execution */
-          if (b) L->top = L->ci->top;
+          if (b) {
+#if LUA_REFCOUNT
+	    checkrangeisnil(L->top, L->ci->top);
+	    while (L->top > L->ci->top)
+	      setnilvalue(L, --L->top);
+#endif
+	    L->top = L->ci->top;
+	  }
           lua_assert(isLua(L->ci));
           lua_assert(GET_OPCODE(*((L->ci)->savedpc - 1)) == OP_CALL);
           goto reentry;
@@ -789,8 +823,17 @@ void luaV_execute (lua_State *L, int nexeccalls) {
         setobjs2s(L, cb+2, ra+2);
         setobjs2s(L, cb+1, ra+1);
         setobjs2s(L, cb, ra);
+#if LUA_REFCOUNT
+	while (L->top > cb+3)
+	  setnilvalue(L, --L->top);
+#endif
         L->top = cb+3;  /* func. + 2 args (state and index) */
         Protect(luaD_call(L, cb, GETARG_C(i)));
+#if LUA_REFCOUNT
+	checkrangeisnil(L->top, L->ci->top);
+	while (L->top > L->ci->top)
+	  setnilvalue(L, --L->top);
+#endif
         L->top = L->ci->top;
         cb = RA(i) + 3;  /* previous call may change the stack */
         if (!ttisnil(cb)) {  /* continue loop? */
@@ -807,6 +850,11 @@ void luaV_execute (lua_State *L, int nexeccalls) {
         Table *h;
         if (n == 0) {
           n = cast_int(L->top - ra) - 1;
+#if LUA_REFCOUNT
+	  checkrangeisnil(L->top, L->ci->top);
+	  while (L->top > L->ci->top)
+	    setnilvalue(L, --L->top);
+#endif
           L->top = L->ci->top;
         }
         if (c == 0) c = cast_int(*pc++);
@@ -861,6 +909,11 @@ void luaV_execute (lua_State *L, int nexeccalls) {
           Protect(luaD_checkstack(L, n));
           ra = RA(i);  /* previous call may change the stack */
           b = n;
+#if LUA_REFCOUNT
+	  checkrangeisnil(L->top, ra+n);
+	  while (L->top > ra+n)
+	    setnilvalue(L, --L->top);
+#endif
           L->top = ra + n;
         }
         for (j = 0; j < b; j++) {

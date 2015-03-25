@@ -134,7 +134,11 @@ typedef struct lua_TValue {
 
 #if LUA_REFCOUNT
 
-void luarc_releaseobj(lua_State *L, GCObject *obj);
+int rangeisnil (const TValue *begin, const TValue *end);
+
+#define checkrangeisnil(begin, end) lua_assert(rangeisnil((begin), (end)))
+
+void luarc_releaseobj (lua_State *L, GCObject *obj);
 
 /* Internal RefCount manipulation macros */
 #define luarc_addobjref(obj) (obj->gch.ref++)
