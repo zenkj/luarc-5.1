@@ -123,13 +123,20 @@ LUA_API void lua_xmove (lua_State *from, lua_State *to, int n) {
   api_checknelems(from, n);
   api_check(from, G(from) == G(to));
   api_check(from, to->ci->top - to->top >= n);
-  from->top -= n;
-  for (i = 0; i < n; i++) {
-    setobj2s(to, to->top++, from->top + i);
 #if LUA_REFCOUNT
-    setnilvalue(from, from->top + i);
-#endif
+  {
+    StkId tmp = from->top - n;
+    for (i=0; i<n; i++) {
+      setobj2s(to, to->top++, tmp+i);
+      setnilvalue(from, tmp+i);
+    }
+    from->top = tmp;
   }
+#else /* !LUA_REFCOUNT */
+  from->top -= n;
+  for (i = 0; i < n; i++)
+    setobj2s(to, to->top++, from->top + i);
+#endif
   lua_unlock(to);
 }
 

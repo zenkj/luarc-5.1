@@ -191,16 +191,24 @@ void luarc_releaseobj (lua_State *L, GCObject *obj);
 
 
 /* Macros to set values */
+
+/* Set nil to obj first, then subref.
+ * Subref may cause object release and GCTM execution
+ * which in turn may access this object.
+ */
 #define setnilvalue(L,obj) \
-  { TValue *i_v=(obj); luarc_subref(L,i_v); i_v->tt=LUA_TNIL; }
+  { TValue *i_v=(obj); TValue dup=*i_v; \
+    i_v->tt=LUA_TNIL; luarc_subref(L,&dup); }
 
 #define setnvalue(L,obj,x) \
-  { TValue *i_v=(obj); luarc_subref(L,i_v); \
-    i_v->value.n=(x); i_v->tt=LUA_TNUMBER; }
+  { TValue *i_v=(obj); TValue dup=*i_v; \
+    i_v->value.n=(x); i_v->tt=LUA_TNUMBER; \
+    luarc_subref(L,&dup); }
 
 #define setpvalue(L,obj,x) \
-  { TValue *i_v=(obj); luarc_subref(L,i_v); \
-    i_v->value.p=(x); i_v->tt=LUA_TLIGHTUSERDATA; }
+  { TValue *i_v=(obj); TValue dup=*i_v; \
+    i_v->value.p=(x); i_v->tt=LUA_TLIGHTUSERDATA; \
+    luarc_subref(L,&dup); }
 
 #define setbvalue(L,obj,x) \
   { TValue *i_v=(obj); luarc_subref(L,i_v); \
