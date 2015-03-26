@@ -1,0 +1,352 @@
+
+begin to test lua51 binarytrees.lua-2.lua 16
+==================================
+try to get the pid of lua51 process...
+Got! lua51 pid= 2331
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  4.5 46620  62184
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  4.5 46620  62184
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  4.5 46620  62184
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  4.6 46884  62316
+  PID %CPU %MEM   RSS    VSZ
+ 2331  101  4.6 46884  62316
+  PID %CPU %MEM   RSS    VSZ
+ 2331  101  4.6 46884  62316
+  PID %CPU %MEM   RSS    VSZ
+ 2331  101  4.6 46884  62316
+  PID %CPU %MEM   RSS    VSZ
+ 2331  101  4.6 46884  62448
+  PID %CPU %MEM   RSS    VSZ
+ 2331  101  4.6 46884  62448
+  PID %CPU %MEM   RSS    VSZ
+ 2331  101  4.6 46884  62448
+  PID %CPU %MEM   RSS    VSZ
+ 2331  101  4.6 46884  62448
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  4.6 47148  62580
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  4.6 47676  63240
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  4.6 47676  63240
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  4.6 47676  63240
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  4.8 49524  64956
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  5.0 50844  66276
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  5.0 50844  66276
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  5.0 51108  66672
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  5.0 51108  66672
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  5.9 60876  76440
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  5.9 60876  76440
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  6.0 61140  76572
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  6.0 61140  76572
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  6.5 66420  82116
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  9.7 99156 114720
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  9.7 99156 114720
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100  9.8 100212 115644
+  PID %CPU %MEM   RSS    VSZ
+ 2331  100 11.0 112092 127656
+29.28user 0.08system 0:29.76elapsed 98%CPU (0avgtext+0avgdata 112532maxresident)k
+0inputs+8outputs (0major+27633minor)pagefaults 0swaps
+./run.sh: 29: kill: No such process
+
+
+begin to test luarc51 binarytrees.lua-2.lua 16
+==================================
+try to get the pid of luarc51 process...
+Got! luarc51 pid= 2399
+  PID %CPU %MEM   RSS    VSZ
+ 2399  100  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399  100  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399  100  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399  100  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399  100  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399  100  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399  100  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399 89.6  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399 90.8  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399 91.7  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399 92.4  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399 93.0  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399 93.6  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399 94.1  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399 94.5  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399 94.8  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399 95.2  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2399 95.5  4.2 42904  58640
+19.02user 0.02system 0:19.31elapsed 98%CPU (0avgtext+0avgdata 43432maxresident)k
+0inputs+0outputs (0major+10367minor)pagefaults 0swaps
+./run.sh: 29: kill: No such process
+
+
+begin to test lua51 binarytrees.lua-3.lua 16
+==================================
+try to get the pid of lua51 process...
+Got! lua51 pid= 2445
+  PID %CPU %MEM   RSS    VSZ
+ 2445  101  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  101  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  101  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  101  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  101  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  4.1 41880  57696
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  4.1 42600  58224
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  4.1 42600  58224
+  PID %CPU %MEM   RSS    VSZ
+ 2445  101  4.1 42600  58224
+  PID %CPU %MEM   RSS    VSZ
+ 2445  101  5.0 51312  66804
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  6.4 65832  81324
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  6.4 65832  81324
+  PID %CPU %MEM   RSS    VSZ
+ 2445  100  6.4 65832  81324
+20.78user 0.08system 0:21.20elapsed 98%CPU (0avgtext+0avgdata 66156maxresident)k
+0inputs+8outputs (0major+16052minor)pagefaults 0swaps
+./run.sh: 29: kill: No such process
+
+
+begin to test luarc51 binarytrees.lua-3.lua 16
+==================================
+try to get the pid of luarc51 process...
+Got! luarc51 pid= 2496
+  PID %CPU %MEM   RSS    VSZ
+ 2496  101  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496  101  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496  101  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496  101  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496  101  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496  101  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496  101  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496 89.6  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496 90.8  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496 91.7  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496 92.4  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496 93.0  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496 93.6  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496 94.2  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496 94.5  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496 94.9  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496 95.2  4.2 42904  58640
+  PID %CPU %MEM   RSS    VSZ
+ 2496 95.5  4.2 42904  58640
+18.57user 0.05system 0:18.87elapsed 98%CPU (0avgtext+0avgdata 43484maxresident)k
+0inputs+0outputs (0major+10368minor)pagefaults 0swaps
+./run.sh: 29: kill: No such process
+
+
+begin to test lua51 fannkuchredux.lua 10
+==================================
+try to get the pid of lua51 process...
+Got! lua51 pid= 2542
+  PID %CPU %MEM   RSS    VSZ
+ 2542  101  0.1  1952  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2542  101  0.1  1952  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2542  101  0.1  1952  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2542  101  0.1  1952  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2542  100  0.1  1952  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2542  100  0.1  1952  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2542  100  0.1  1952  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2542  100  0.1  1952  17696
+8.91user 0.00system 0:09.04elapsed 98%CPU (0avgtext+0avgdata 2252maxresident)k
+0inputs+0outputs (0major+123minor)pagefaults 0swaps
+./run.sh: 29: kill: No such process
+
+
+begin to test luarc51 fannkuchredux.lua 10
+==================================
+try to get the pid of luarc51 process...
+Got! luarc51 pid= 2570
+  PID %CPU %MEM   RSS    VSZ
+ 2570  101  0.1  2000  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2570  101  0.1  2000  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2570  101  0.1  2000  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2570  101  0.1  2000  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2570  101  0.1  2000  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2570  100  0.1  2000  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2570  100  0.1  2000  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2570  100  0.1  2000  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2570  100  0.1  2000  17716
+9.61user 0.00system 0:09.75elapsed 98%CPU (0avgtext+0avgdata 2300maxresident)k
+0inputs+8outputs (0major+124minor)pagefaults 0swaps
+./run.sh: 29: kill: No such process
+
+
+begin to test lua51 mandelbrot.lua 1500
+==================================
+try to get the pid of lua51 process...
+Got! lua51 pid= 2599
+  PID %CPU %MEM   RSS    VSZ
+ 2599  101  0.1  1972  17700
+  PID %CPU %MEM   RSS    VSZ
+ 2599  101  0.1  1972  17700
+  PID %CPU %MEM   RSS    VSZ
+ 2599  101  0.1  1972  17700
+  PID %CPU %MEM   RSS    VSZ
+ 2599  101  0.1  1972  17700
+  PID %CPU %MEM   RSS    VSZ
+ 2599  101  0.1  1972  17700
+  PID %CPU %MEM   RSS    VSZ
+ 2599  101  0.1  1972  17700
+6.65user 0.00system 0:06.75elapsed 98%CPU (0avgtext+0avgdata 2576maxresident)k
+0inputs+560outputs (0major+140minor)pagefaults 0swaps
+./run.sh: 29: kill: No such process
+
+
+begin to test luarc51 mandelbrot.lua 1500
+==================================
+try to get the pid of luarc51 process...
+Got! luarc51 pid= 2621
+  PID %CPU %MEM   RSS    VSZ
+ 2621  100  0.1  1996  17720
+  PID %CPU %MEM   RSS    VSZ
+ 2621  100  0.1  1996  17720
+  PID %CPU %MEM   RSS    VSZ
+ 2621  100  0.1  1996  17720
+  PID %CPU %MEM   RSS    VSZ
+ 2621  100  0.1  1996  17720
+  PID %CPU %MEM   RSS    VSZ
+ 2621  100  0.1  1996  17720
+  PID %CPU %MEM   RSS    VSZ
+ 2621  100  0.1  1996  17720
+6.85user 0.00system 0:06.96elapsed 98%CPU (0avgtext+0avgdata 2548maxresident)k
+0inputs+552outputs (0major+130minor)pagefaults 0swaps
+./run.sh: 29: kill: No such process
+
+
+begin to test lua51 spectralnorm.lua 1000
+==================================
+try to get the pid of lua51 process...
+Got! lua51 pid= 2644
+  PID %CPU %MEM   RSS    VSZ
+ 2644  101  0.1  2004  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2644  101  0.1  2004  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2644  101  0.1  2004  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2644  101  0.1  2004  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2644  101  0.1  2004  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2644  101  0.1  2004  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2644  101  0.1  2004  17696
+  PID %CPU %MEM   RSS    VSZ
+ 2644  101  0.1  2004  17696
+8.97user 0.00system 0:09.11elapsed 98%CPU (0avgtext+0avgdata 2332maxresident)k
+0inputs+0outputs (0major+136minor)pagefaults 0swaps
+./run.sh: 29: kill: No such process
+
+
+begin to test luarc51 spectralnorm.lua 1000
+==================================
+try to get the pid of luarc51 process...
+Got! luarc51 pid= 2670
+  PID %CPU %MEM   RSS    VSZ
+ 2670  101  0.1  1976  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2670  101  0.1  1976  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2670  101  0.1  1976  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2670  101  0.1  1976  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2670  101  0.1  1976  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2670  101  0.1  1976  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2670  101  0.1  1976  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2670  100  0.1  1976  17716
+  PID %CPU %MEM   RSS    VSZ
+ 2670  100  0.1  1976  17716
+9.61user 0.00system 0:09.74elapsed 98%CPU (0avgtext+0avgdata 2288maxresident)k
+0inputs+0outputs (0major+137minor)pagefaults 0swaps
+./run.sh: 29: kill: No such process
+
