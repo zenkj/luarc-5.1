@@ -291,13 +291,12 @@ static void traversestack (global_State *g, lua_State *l) {
   }
   for (o = l->stack; o < l->top; o++)
     markvalue(g, o);
-  for (; o <= lim; o++) {
 #if LUA_REFCOUNT
-    setnilvalue(l, o);
+  checkrangeisnil(o, lim);
 #else /* !LUA_REFCOUNT */
+  for (; o <= lim; o++)
     setnilvalue(o);
 #endif
-  }
   checkstacksizes(l, lim);
 }
 
@@ -542,9 +541,9 @@ static void GCTM (lua_State *L) {
     lu_mem oldt = g->GCthreshold;
     L->allowhook = 0;  /* stop debug hooks during GC tag method */
     g->GCthreshold = 2*g->totalbytes;  /* avoid GC steps */
-    setobj2s(L, L->top, tm);
-    setuvalue(L, L->top+1, udata);
     L->top += 2;
+    setobj2s(L, L->top-2, tm);
+    setuvalue(L, L->top-1, udata);
     luaD_call(L, L->top - 2, 0);
     L->allowhook = oldah;  /* restore hooks */
     g->GCthreshold = oldt;  /* restore threshold */

@@ -134,6 +134,9 @@ typedef struct lua_TValue {
 
 #if LUA_REFCOUNT
 
+/* begin is the first one to be check
+ * end is one beyond the last one to be check
+ */
 int rangeisnil (const TValue *begin, const TValue *end);
 
 #define checkrangeisnil(begin, end) lua_assert(rangeisnil((begin), (end)))
@@ -151,6 +154,7 @@ void luarc_releaseobj (lua_State *L, GCObject *obj);
 #define luarc_subvalref(L,val) \
   { if (--val->value.gc->gch.ref <= 0) luarc_releaseobj(L,val->value.gc); }
 
+/* do not use i_v as temporary local variable, which may be used outside */
 #define luarc_addref(val) \
   { TValue *v1=(TValue *)(val); \
     if (iscollectable(v1)) luarc_addvalref(v1); }
@@ -192,9 +196,9 @@ void luarc_releaseobj (lua_State *L, GCObject *obj);
 
 /* Macros to set values */
 
-/* Set nil to obj first, then subref.
+/* Set nil to obj first, then subref it.
  * Subref may cause object release and GCTM execution
- * which in turn may access this object.
+ * which in turn may check this tvalue.
  */
 #define setnilvalue(L,obj) \
   { TValue *i_v=(obj); TValue dup=*i_v; \
@@ -211,49 +215,50 @@ void luarc_releaseobj (lua_State *L, GCObject *obj);
     luarc_subref(L,&dup); }
 
 #define setbvalue(L,obj,x) \
-  { TValue *i_v=(obj); luarc_subref(L,i_v); \
-    i_v->value.b=(x); i_v->tt=LUA_TBOOLEAN; }
+  { TValue *i_v=(obj); TValue dup=*i_v; \
+    i_v->value.b=(x); i_v->tt=LUA_TBOOLEAN; \
+    luarc_subref(L,&dup); }
 
 #define setsvalue(L,obj,x) \
   { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
-    luarc_addobjref(i_o); luarc_subref(L,i_v); \
-    i_v->value.gc=i_o; i_v->tt=LUA_TSTRING; \
+    TValue dup=*i_v; i_v->value.gc=i_o; i_v->tt=LUA_TSTRING; \
+    luarc_addobjref(i_o); luarc_subref(L,&dup); \
     checkliveness(G(L),i_v); }
 
 #define setuvalue(L,obj,x) \
   { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
-    luarc_addobjref(i_o); luarc_subref(L,i_v); \
-    i_v->value.gc=i_o; i_v->tt=LUA_TUSERDATA; \
+    TValue dup=*i_v; i_v->value.gc=i_o; i_v->tt=LUA_TUSERDATA; \
+    luarc_addobjref(i_o); luarc_subref(L,&dup); \
     checkliveness(G(L),i_v); }
 
 #define setthvalue(L,obj,x) \
   { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
-    luarc_addobjref(i_o); luarc_subref(L,i_v); \
-    i_v->value.gc=i_o; i_v->tt=LUA_TTHREAD; \
+    TValue dup=*i_v; i_v->value.gc=i_o; i_v->tt=LUA_TTHREAD; \
+    luarc_addobjref(i_o); luarc_subref(L,&dup); \
     checkliveness(G(L),i_v); }
 
 #define setclvalue(L,obj,x) \
   { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
-    luarc_addobjref(i_o); luarc_subref(L,i_v); \
-    i_v->value.gc=i_o; i_v->tt=LUA_TFUNCTION; \
+    TValue dup=*i_v; i_v->value.gc=i_o; i_v->tt=LUA_TFUNCTION; \
+    luarc_addobjref(i_o); luarc_subref(L,&dup); \
     checkliveness(G(L),i_v); }
 
 #define sethvalue(L,obj,x) \
   { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
-    luarc_addobjref(i_o); luarc_subref(L,i_v); \
-    i_v->value.gc=i_o; i_v->tt=LUA_TTABLE; \
+    TValue dup=*i_v; i_v->value.gc=i_o; i_v->tt=LUA_TTABLE; \
+    luarc_addobjref(i_o); luarc_subref(L,&dup); \
     checkliveness(G(L),i_v); }
 
 #define setptvalue(L,obj,x) \
   { TValue *i_v=(obj); GCObject *i_o=cast(GCObject *, (x)); \
-    luarc_addobjref(i_o); luarc_subref(L,i_v); \
-    i_v->value.gc=i_o; i_v->tt=LUA_TPROTO; \
+    TValue dup=*i_v; i_v->value.gc=i_o; i_v->tt=LUA_TPROTO; \
+    luarc_addobjref(i_o); luarc_subref(L,&dup); \
     checkliveness(G(L),i_v); }
 
 #define setobj(L,obj1,obj2) \
   { TValue *o2=(TValue *)(obj2); TValue *o1=(obj1); \
-    luarc_addref(o2); luarc_subref(L,o1); \
-    o1->value = o2->value; o1->tt=o2->tt; \
+    TValue dup=*o1; o1->value = o2->value; o1->tt=o2->tt; \
+    luarc_addref(o2); luarc_subref(L,&dup); \
     checkliveness(G(L),o1); }
 
 /* to new object */
@@ -303,7 +308,7 @@ void luarc_releaseobj (lua_State *L, GCObject *obj);
     o1->value = o2->value; o1->tt=o2->tt; \
     luarc_addref(o2); checkliveness(G(L),o1); }
 
-/* no ref count version of set function */
+/* no ref count version of set function, sometimes these are useful */
 #define setnilvaluenrc(obj) ((obj)->tt=LUA_TNIL)
 
 #define setnvaluenrc(obj,x) \

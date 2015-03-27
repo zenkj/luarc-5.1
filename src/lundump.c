@@ -191,12 +191,12 @@ static Proto* LoadFunction(LoadState* S, TString* p)
  LoadConstants(S,f);
  LoadDebug(S,f);
  IF (!luaG_checkcode(f), "bad code");
- S->L->top--;
 #if LUA_REFCOUNT
  /* do not reduce refcount, or proto will be deleted immediately */
- setnilvalue2n(S->L->top);
+ setnilvalue2n(S->L->top-1);
  /* now f->ref = 1 */
 #endif
+ S->L->top--;
  S->L->nCcalls--;
  return f;
 }

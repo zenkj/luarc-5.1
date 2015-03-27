@@ -49,9 +49,6 @@ struct lua_longjmp {
 
 
 void luaD_seterrorobj (lua_State *L, int errcode, StkId oldtop) {
-#if LUA_REFCOUNT
-  StkId p;
-#endif
   switch (errcode) {
     case LUA_ERRMEM: {
       setsvalue2s(L, oldtop, luaS_newliteral(L, MEMERRMSG));
@@ -68,8 +65,11 @@ void luaD_seterrorobj (lua_State *L, int errcode, StkId oldtop) {
     }
   }
 #if LUA_REFCOUNT
-  for (p=oldtop+1; p<L->top; p++)
-    setnilvalue(L, p);
+  {
+    StkId p;
+    for (p=oldtop+1; p<L->top; p++)
+      setnilvalue(L, p);
+  }
 #endif
   L->top = oldtop + 1;
 }
@@ -149,11 +149,10 @@ void luaD_reallocstack (lua_State *L, int newsize) {
   TValue *oldstack = L->stack;
   int realsize = newsize + 1 + EXTRA_STACK;
 #if LUA_REFCOUNT
-  /* do not reduce refcount for objects beyond L->top
-   * they may be released by GC */
   TValue *p;
   for (p=L->stack+realsize; p<L->top; p++)
     setnilvalue(L, p);
+  checkrangeisnil(L->top, L->stack+L->stacksize);
 #endif /* LUA_REFCOUNT */
   lua_assert(L->stack_last - L->stack == L->stacksize - EXTRA_STACK - 1);
   luaM_reallocvector(L, L->stack, L->stacksize, realsize, TValue);
@@ -201,9 +200,6 @@ void luaD_callhook (lua_State *L, int event, int line) {
   if (hook && L->allowhook) {
     ptrdiff_t top = savestack(L, L->top);
     ptrdiff_t ci_top = savestack(L, L->ci->top);
-#if LUA_REFCOUNT
-    StkId tmp;
-#endif
     lua_Debug ar;
     ar.event = event;
     ar.currentline = line;
@@ -222,9 +218,11 @@ void luaD_callhook (lua_State *L, int event, int line) {
     L->allowhook = 1;
     L->ci->top = restorestack(L, ci_top);
 #if LUA_REFCOUNT
-    tmp = restorestack(L, top);
-    while (tmp < L->top)
-      setnilvalue(L, tmp++);
+    {
+      StkId tmp = restorestack(L, top);
+      while (tmp < L->top)
+	setnilvalue(L, tmp++);
+    }
 #endif
     L->top = restorestack(L, top);
   }

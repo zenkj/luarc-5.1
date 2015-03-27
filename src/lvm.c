@@ -87,30 +87,49 @@ static void traceexec (lua_State *L, const Instruction *pc) {
 static void callTMres (lua_State *L, StkId res, const TValue *f,
                         const TValue *p1, const TValue *p2) {
   ptrdiff_t result = savestack(L, res);
+#if LUA_REFCOUNT
+  luaD_checkstack(L, 3);
+  L->top += 3;
+  setobj2s(L, L->top-3, f);  /* push function */
+  setobj2s(L, L->top-2, p1);  /* 1st argument */
+  setobj2s(L, L->top-1, p2);  /* 2nd argument */
+#else /* !LUA_REFCOUNT */
   setobj2s(L, L->top, f);  /* push function */
   setobj2s(L, L->top+1, p1);  /* 1st argument */
   setobj2s(L, L->top+2, p2);  /* 2nd argument */
   luaD_checkstack(L, 3);
   L->top += 3;
+#endif
   luaD_call(L, L->top - 3, 1);
   res = restorestack(L, result);
+#if LUA_REFCOUNT
+  setobjs2s(L, res, L->top-1);
+  setnilvalue(L, --L->top);
+#else /* !LUA_REFCOUNT */
   L->top--;
   setobjs2s(L, res, L->top);
-#if LUA_REFCOUNT
-  setnilvalue(L, L->top);
-#endif /* LUA_REFCOUNT */
+#endif
 }
 
 
 
 static void callTM (lua_State *L, const TValue *f, const TValue *p1,
                     const TValue *p2, const TValue *p3) {
+#if LUA_REFCOUNT
+  luaD_checkstack(L, 4);
+  L->top += 4;
+  setobj2s(L, L->top-4, f);  /* push function */
+  setobj2s(L, L->top-3, p1);  /* 1st argument */
+  setobj2s(L, L->top-2, p2);  /* 2nd argument */
+  setobj2s(L, L->top-1, p3);  /* 3th argument */
+#else
   setobj2s(L, L->top, f);  /* push function */
   setobj2s(L, L->top+1, p1);  /* 1st argument */
   setobj2s(L, L->top+2, p2);  /* 2nd argument */
   setobj2s(L, L->top+3, p3);  /* 3th argument */
   luaD_checkstack(L, 4);
   L->top += 4;
+#endif
   luaD_call(L, L->top - 4, 0);
 }
 
@@ -691,8 +710,9 @@ void luaV_execute (lua_State *L, int nexeccalls) {
             /* it was a C function (`precall' called it); adjust results */
             if (nresults >= 0) {
 #if LUA_REFCOUNT
-	      while (L->top > L->ci->top)
-		setnilvalue(L, --L->top);
+	      StkId p;
+	      for (p=L->ci->top; p<L->top; p++)
+		setnilvalue(L, p);
 #endif
 	      L->top = L->ci->top;
 	    }
@@ -708,8 +728,9 @@ void luaV_execute (lua_State *L, int nexeccalls) {
         int b = GETARG_B(i);
         if (b != 0) {  /* else previous instruction set top */
 #if LUA_REFCOUNT
-	  while (L->top > ra+b)
-	    setnilvalue(L, --L->top);
+	  StkId p;
+	  for (p=ra+b; p<L->top; p++)
+	    setnilvalue(L, p);
 #endif
 	  L->top = ra+b;
 	}

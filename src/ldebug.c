@@ -141,6 +141,9 @@ LUA_API const char *lua_setlocal (lua_State *L, const lua_Debug *ar, int n) {
   lua_lock(L);
   if (name)
       setobjs2s(L, ci->base + (n - 1), L->top - 1);
+#if LUA_REFCOUNT
+  setnilvalue(L, L->top-1);
+#endif
   L->top--;  /* pop value */
   lua_unlock(L);
   return name;
@@ -175,6 +178,9 @@ static void info_tailcall (lua_Debug *ar) {
 
 
 static void collectvalidlines (lua_State *L, Closure *f) {
+#if LUA_REFCOUNT
+  lua_assert(ttisnil(L->top));
+#endif
   if (f == NULL || f->c.isC) {
 #if LUA_REFCOUNT
     setnilvalue(L, L->top);
@@ -242,12 +248,20 @@ LUA_API int lua_getinfo (lua_State *L, const char *what, lua_Debug *ar) {
   int status;
   Closure *f = NULL;
   CallInfo *ci = NULL;
+#if LUA_REFCOUNT
+  int hasfunc = 0;
+#endif
   lua_lock(L);
   if (*what == '>') {
     StkId func = L->top - 1;
     luai_apicheck(L, ttisfunction(func));
     what++;  /* skip the '>' */
     f = clvalue(func);
+#if LUA_REFCOUNT
+    hasfunc = 1;
+    luarc_addclosureref(f);
+    setnilvalue(L, L->top-1);
+#endif
     L->top--;  /* pop function */
   }
   else if (ar->i_ci != 0) {  /* no tail call? */
@@ -269,6 +283,9 @@ LUA_API int lua_getinfo (lua_State *L, const char *what, lua_Debug *ar) {
   }
   if (strchr(what, 'L'))
     collectvalidlines(L, f);
+#if LUA_REFCOUNT
+  if (hasfunc) luarc_subclosureref(L, f);
+#endif
   lua_unlock(L);
   return status;
 }
@@ -639,6 +656,9 @@ void luaG_errormsg (lua_State *L) {
   if (L->errfunc != 0) {  /* is there an error handling function? */
     StkId errfunc = restorestack(L, L->errfunc);
     if (!ttisfunction(errfunc)) luaD_throw(L, LUA_ERRERR);
+#if LUA_REFCOUNT
+    lua_assert(ttisnil(L->top));
+#endif
     setobjs2s(L, L->top, L->top - 1);  /* move argument */
     setobjs2s(L, L->top - 1, errfunc);  /* push function */
     incr_top(L);

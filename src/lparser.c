@@ -387,13 +387,13 @@ static void close_func (LexState *ls) {
   lua_assert(luaG_checkcode(f));
   lua_assert(fs->bl == NULL);
   ls->fs = fs->prev;
-  L->top -= 2;  /* remove table and prototype from the stack */
 #if LUA_REFCOUNT
   luarc_addprotoref(f); /* To avoid f->ref = 0 and proto deleted */
-  setnilvalue(L, L->top);
-  setnilvalue(L, L->top+1);
+  setnilvalue(L, L->top-2);
+  setnilvalue(L, L->top-1);
   /* now h->ref == 0 and f->ref == 1 */
 #endif /* LUA_REFCOUNT */
+  L->top -= 2;  /* remove table and prototype from the stack */
   /* last token read was anchored in defunct function; must reanchor it */
   if (fs) anchor_token(ls);
 }
