@@ -1,2337 +1,647 @@
-==6669== Memcheck, a memory error detector
-==6669== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
-==6669== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
-==6669== Command: luarc51g mandelbrot.lua-6.lua
-==6669== 
+=======================================
+
+valgrind luarc51 binarytrees.lua-2.lua ...
+==31970== Memcheck, a memory error detector
+==31970== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==31970== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==31970== Command: luarc51 binarytrees.lua-2.lua
+==31970== 
+stretch tree of depth 7	 check: -1
+128	 trees of depth 4	 check: -128
+32	 trees of depth 6	 check: -32
+long lived tree of depth 6	 check: -1
+==31970== 
+==31970== HEAP SUMMARY:
+==31970==     in use at exit: 0 bytes in 0 blocks
+==31970==   total heap usage: 17,385 allocs, 17,385 frees, 1,137,617 bytes allocated
+==31970== 
+==31970== All heap blocks were freed -- no leaks are possible
+==31970== 
+==31970== For counts of detected and suppressed errors, rerun with: -v
+==31970== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 binarytrees.lua-3.lua ...
+==31974== Memcheck, a memory error detector
+==31974== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==31974== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==31974== Command: luarc51 binarytrees.lua-3.lua
+==31974== 
+stretch tree of depth 7	 check: -1
+128	 trees of depth 4	 check: -128
+32	 trees of depth 6	 check: -32
+long lived tree of depth 6	 check: -1
+==31974== 
+==31974== HEAP SUMMARY:
+==31974==     in use at exit: 0 bytes in 0 blocks
+==31974==   total heap usage: 17,386 allocs, 17,386 frees, 1,138,052 bytes allocated
+==31974== 
+==31974== All heap blocks were freed -- no leaks are possible
+==31974== 
+==31974== For counts of detected and suppressed errors, rerun with: -v
+==31974== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 fannkuchredux.lua 5 ...
+==31982== Memcheck, a memory error detector
+==31982== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==31982== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==31982== Command: luarc51 fannkuchredux.lua 5
+==31982== 
+11
+Pfannkuchen(5) = 7
+==31982== 
+==31982== HEAP SUMMARY:
+==31982==     in use at exit: 0 bytes in 0 blocks
+==31982==   total heap usage: 535 allocs, 535 frees, 57,208 bytes allocated
+==31982== 
+==31982== All heap blocks were freed -- no leaks are possible
+==31982== 
+==31982== For counts of detected and suppressed errors, rerun with: -v
+==31982== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 fasta.lua ...
+==31986== Memcheck, a memory error detector
+==31986== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==31986== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==31986== Command: luarc51 fasta.lua
+==31986== 
+>ONE Homo sapiens alu
+GGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGA
+TCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACT
+AAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAG
+GCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCG
+CCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAAGGCCGGGCGCGGT
+GGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGATCACCTGAGGTCA
+GGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAATACAAAAA
+TTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAG
+AATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCA
+GCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAAGGCCGGGCGCGGTGGCTCACGCCTGT
+AATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGACC
+AGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGCCGGGCGTG
+GTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACC
+CGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAG
+AGCGAGACTCCGTCTCAAAAAGGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTT
+TGGGAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACA
+TGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCT
+GTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGG
+TTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGT
+CTCAAAAAGGCCGGGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGG
+CGGGCGGATCACCTGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCG
+TCTCTACTAAAAATACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTA
+CTCGGGAGGCTGAGGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCG
+AGATCGCGCCACTGCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAAGGCCG
+GGCGCGGTGGCTCACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGATCACC
+TGAGGTCAGGAGTTCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAA
+TACAAAAATTAGCCGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGA
+GGCAGGAGAATCGCTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACT
+GCACTCCAGCCTGGGCGACAGAGCGAGACTCCGTCTCAAAAAGGCCGGGCGCGGTGGCTC
+ACGCCTGTAATCCCAGCACTTTGGGAGGCCGAGGCGGGCGGATCACCTGAGGTCAGGAGT
+TCGAGACCAGCCTGGCCAACATGGTGAAACCCCGTCTCTACTAAAAATACAAAAATTAGC
+CGGGCGTGGTGGCGCGCGCCTGTAATCCCAGCTACTCGGGAGGCTGAGGCAGGAGAATCG
+CTTGAACCCGGGAGGCGGAGGTTGCAGTGAGCCGAGATCGCGCCACTGCACTCCAGCCTG
+GGCGACAGAGCGAGACTCCG
+>TWO IUB ambiguity codes
+cttBtatcatatgctaKggNcataaaSatgtaaaDcDRtBggDtctttataattcBgtcg
+tactDtDagcctatttSVHtHttKtgtHMaSattgWaHKHttttagacatWatgtRgaaa
+NtactMcSMtYtcMgRtacttctWBacgaaatatagScDtttgaagacacatagtVgYgt
+cattHWtMMWcStgttaggKtSgaYaaccWStcgBttgcgaMttBYatcWtgacaYcaga
+gtaBDtRacttttcWatMttDBcatWtatcttactaBgaYtcttgttttttttYaaScYa
+HgtgttNtSatcMtcVaaaStccRcctDaataataStcYtRDSaMtDttgttSagtRRca
+tttHatSttMtWgtcgtatSSagactYaaattcaMtWatttaSgYttaRgKaRtccactt
+tattRggaMcDaWaWagttttgacatgttctacaaaRaatataataaMttcgDacgaSSt
+acaStYRctVaNMtMgtaggcKatcttttattaaaaagVWaHKYagtttttatttaacct
+tacgtVtcVaattVMBcttaMtttaStgacttagattWWacVtgWYagWVRctDattBYt
+gtttaagaagattattgacVatMaacattVctgtBSgaVtgWWggaKHaatKWcBScSWa
+accRVacacaaactaccScattRatatKVtactatatttHttaagtttSKtRtacaaagt
+RDttcaaaaWgcacatWaDgtDKacgaacaattacaRNWaatHtttStgttattaaMtgt
+tgDcgtMgcatBtgcttcgcgaDWgagctgcgaggggVtaaScNatttacttaatgacag
+cccccacatYScaMgtaggtYaNgttctgaMaacNaMRaacaaacaKctacatagYWctg
+ttWaaataaaataRattagHacacaagcgKatacBttRttaagtatttccgatctHSaat
+actcNttMaagtattMtgRtgaMgcataatHcMtaBSaRattagttgatHtMttaaKagg
+YtaaBataSaVatactWtataVWgKgttaaaacagtgcgRatatacatVtHRtVYataSa
+KtWaStVcNKHKttactatccctcatgWHatWaRcttactaggatctataDtDHBttata
+aaaHgtacVtagaYttYaKcctattcttcttaataNDaaggaaaDYgcggctaaWSctBa
+aNtgctggMBaKctaMVKagBaactaWaDaMaccYVtNtaHtVWtKgRtcaaNtYaNacg
+gtttNattgVtttctgtBaWgtaattcaagtcaVWtactNggattctttaYtaaagccgc
+tcttagHVggaYtgtNcDaVagctctctKgacgtatagYcctRYHDtgBattDaaDgccK
+tcHaaStttMcctagtattgcRgWBaVatHaaaataYtgtttagMDMRtaataaggatMt
+ttctWgtNtgtgaaaaMaatatRtttMtDgHHtgtcattttcWattRSHcVagaagtacg
+ggtaKVattKYagactNaatgtttgKMMgYNtcccgSKttctaStatatNVataYHgtNa
+BKRgNacaactgatttcctttaNcgatttctctataScaHtataRagtcRVttacDSDtt
+aRtSatacHgtSKacYagttMHtWataggatgactNtatSaNctataVtttRNKtgRacc
+tttYtatgttactttttcctttaaacatacaHactMacacggtWataMtBVacRaSaatc
+cgtaBVttccagccBcttaRKtgtgcctttttRtgtcagcRttKtaaacKtaaatctcac
+aattgcaNtSBaaccgggttattaaBcKatDagttactcttcattVtttHaaggctKKga
+tacatcBggScagtVcacattttgaHaDSgHatRMaHWggtatatRgccDttcgtatcga
+aacaHtaagttaRatgaVacttagattVKtaaYttaaatcaNatccRttRRaMScNaaaD
+gttVHWgtcHaaHgacVaWtgttScactaagSgttatcttagggDtaccagWattWtRtg
+ttHWHacgattBtgVcaYatcggttgagKcWtKKcaVtgaYgWctgYggVctgtHgaNcV
+taBtWaaYatcDRaaRtSctgaHaYRttagatMatgcatttNattaDttaattgttctaa
+ccctcccctagaWBtttHtBccttagaVaatMcBHagaVcWcagBVttcBtaYMccagat
+gaaaaHctctaacgttagNWRtcggattNatcRaNHttcagtKttttgWatWttcSaNgg
+gaWtactKKMaacatKatacNattgctWtatctaVgagctatgtRaHtYcWcttagccaa
+tYttWttaWSSttaHcaaaaagVacVgtaVaRMgattaVcDactttcHHggHRtgNcctt
+tYatcatKgctcctctatVcaaaaKaaaagtatatctgMtWtaaaacaStttMtcgactt
+taSatcgDataaactaaacaagtaaVctaggaSccaatMVtaaSKNVattttgHccatca
+cBVctgcaVatVttRtactgtVcaattHgtaaattaaattttYtatattaaRSgYtgBag
+aHSBDgtagcacRHtYcBgtcacttacactaYcgctWtattgSHtSatcataaatataHt
+cgtYaaMNgBaatttaRgaMaatatttBtttaaaHHKaatctgatWatYaacttMctctt
+ttVctagctDaaagtaVaKaKRtaacBgtatccaaccactHHaagaagaaggaNaaatBW
+attccgStaMSaMatBttgcatgRSacgttVVtaaDMtcSgVatWcaSatcttttVatag
+ttactttacgatcaccNtaDVgSRcgVcgtgaacgaNtaNatatagtHtMgtHcMtagaa
+attBgtataRaaaacaYKgtRccYtatgaagtaataKgtaaMttgaaRVatgcagaKStc
+tHNaaatctBBtcttaYaBWHgtVtgacagcaRcataWctcaBcYacYgatDgtDHccta
+>THREE Homo sapiens frequency
+aacacttcaccaggtatcgtgaaggctcaagattacccagagaacctttgcaatataaga
+atatgtatgcagcattaccctaagtaattatattctttttctgactcaaagtgacaagcc
+ctagtgtatattaaatcggtatatttgggaaattcctcaaactatcctaatcaggtagcc
+atgaaagtgatcaaaaaagttcgtacttataccatacatgaattctggccaagtaaaaaa
+tagattgcgcaaaattcgtaccttaagtctctcgccaagatattaggatcctattactca
+tatcgtgtttttctttattgccgccatccccggagtatctcacccatccttctcttaaag
+gcctaatattacctatgcaaataaacatatattgttgaaaattgagaacctgatcgtgat
+tcttatgtgtaccatatgtatagtaatcacgcgactatatagtgctttagtatcgcccgt
+gggtgagtgaatattctgggctagcgtgagatagtttcttgtcctaatatttttcagatc
+gaatagcttctatttttgtgtttattgacatatgtcgaaactccttactcagtgaaagtc
+atgaccagatccacgaacaatcttcggaatcagtctcgttttacggcggaatcttgagtc
+taacttatatcccgtcgcttactttctaacaccccttatgtatttttaaaattacgttta
+ttcgaacgtacttggcggaagcgttattttttgaagtaagttacattgggcagactcttg
+acattttcgatacgactttctttcatccatcacaggactcgttcgtattgatatcagaag
+ctcgtgatgattagttgtcttctttaccaatactttgaggcctattctgcgaaatttttg
+ttgccctgcgaacttcacataccaaggaacacctcgcaacatgccttcatatccatcgtt
+cattgtaattcttacacaatgaatcctaagtaattacatccctgcgtaaaagatggtagg
+ggcactgaggatatattaccaagcatttagttatgagtaatcagcaatgtttcttgtatt
+aagttctctaaaatagttacatcgtaatgttatctcgggttccgcgaataaacgagatag
+attcattatatatggccctaagcaaaaacctcctcgtattctgttggtaattagaatcac
+acaatacgggttgagatattaattatttgtagtacgaagagatataaaaagatgaacaat
+tactcaagtcaagatgtatacgggatttataataaaaatcgggtagagatctgctttgca
+attcagacgtgccactaaatcgtaatatgtcgcgttacatcagaaagggtaactattatt
+aattaataaagggcttaatcactacatattagatcttatccgatagtcttatctattcgt
+tgtatttttaagcggttctaattcagtcattatatcagtgctccgagttctttattattg
+ttttaaggatgacaaaatgcctcttgttataacgctgggagaagcagactaagagtcgga
+gcagttggtagaatgaggctgcaaaagacggtctcgacgaatggacagactttactaaac
+caatgaaagacagaagtagagcaaagtctgaagtggtatcagcttaattatgacaaccct
+taatacttccctttcgccgaatactggcgtggaaaggttttaaaagtcgaagtagttaga
+ggcatctctcgctcataaataggtagactactcgcaatccaatgtgactatgtaatactg
+ggaacatcagtccgcgatgcagcgtgtttatcaaccgtccccactcgcctggggagacat
+gagaccacccccgtggggattattagtccgcagtaatcgactcttgacaatccttttcga
+ttatgtcatagcaatttacgacagttcagcgaagtgactactcggcgaaatggtattact
+aaagcattcgaacccacatgaatgtgattcttggcaatttctaatccactaaagcttttc
+cgttgaatctggttgtagatatttatataagttcactaattaagatcacggtagtatatt
+gatagtgatgtctttgcaagaggttggccgaggaatttacggattctctattgatacaat
+ttgtctggcttataactcttaaggctgaaccaggcgtttttagacgacttgatcagctgt
+tagaatggtttggactccctctttcatgtcagtaacatttcagccgttattgttacgata
+tgcttgaacaatattgatctaccacacacccatagtatattttataggtcatgctgttac
+ctacgagcatggtattccacttcccattcaatgagtattcaacatcactagcctcagaga
+tgatgacccacctctaataacgtcacgttgcggccatgtgaaacctgaacttgagtagac
+gatatcaagcgctttaaattgcatataacatttgagggtaaagctaagcggatgctttat
+ataatcaatactcaataataagatttgattgcattttagagttatgacacgacatagttc
+actaacgagttactattcccagatctagactgaagtactgatcgagacgatccttacgtc
+gatgatcgttagttatcgacttaggtcgggtctctagcggtattggtacttaaccggaca
+ctatactaataacccatgatcaaagcataacagaatacagacgataatttcgccaacata
+tatgtacagaccccaagcatgagaagctcattgaaagctatcattgaagtcccgctcaca
+atgtgtcttttccagacggtttaactggttcccgggagtcctggagtttcgacttacata
+aatggaaacaatgtattttgctaatttatctatagcgtcatttggaccaatacagaatat
+tatgttgcctagtaatccactataacccgcaagtgctgatagaaaatttttagacgattt
+ataaatgccccaagtatccctcccgtgaatcctccgttatactaattagtattcgttcat
+acgtataccgcgcatatatgaacatttggcgataaggcgcgtgaattgttacgtgacaga
+gatagcagtttcttgtgatatggttaacagacgtacatgaagggaaactttatatctata
+gtgatgcttccgtagaaataccgccactggtctgccaatgatgaagtatgtagctttagg
+tttgtactatgaggctttcgtttgtttgcagagtataacagttgcgagtgaaaaaccgac
+gaatttatactaatacgctttcactattggctacaaaatagggaagagtttcaatcatga
+gagggagtatatggatgctttgtagctaaaggtagaacgtatgtatatgctgccgttcat
+tcttgaaagatacataagcgataagttacgacaattataagcaacatccctaccttcgta
+acgatttcactgttactgcgcttgaaatacactatggggctattggcggagagaagcaga
+tcgcgccgagcatatacgagacctataatgttgatgatagagaaggcgtctgaattgata
+catcgaagtacactttctttcgtagtatctctcgtcctctttctatctccggacacaaga
+attaagttatatatatagagtcttaccaatcatgttgaatcctgattctcagagttcttt
+ggcgggccttgtgatgactgagaaacaatgcaatattgctccaaatttcctaagcaaatt
+ctcggttatgttatgttatcagcaaagcgttacgttatgttatttaaatctggaatgacg
+gagcgaagttcttatgtcggtgtgggaataattcttttgaagacagcactccttaaataa
+tatcgctccgtgtttgtatttatcgaatgggtctgtaaccttgcacaagcaaatcggtgg
+tgtatatatcggataacaattaatacgatgttcatagtgacagtatactgatcgagtcct
+ctaaagtcaattacctcacttaacaatctcattgatgttgtgtcattcccggtatcgccc
+gtagtatgtgctctgattgaccgagtgtgaaccaaggaacatctactaatgcctttgtta
+ggtaagatctctctgaattccttcgtgccaacttaaaacattatcaaaatttcttctact
+tggattaactacttttacgagcatggcaaattcccctgtggaagacggttcattattatc
+ggaaaccttatagaaattgcgtgttgactgaaattagatttttattgtaagagttgcatc
+tttgcgattcctctggtctagcttccaatgaacagtcctcccttctattcgacatcgggt
+ccttcgtacatgtctttgcgatgtaataattaggttcggagtgtggccttaatgggtgca
+actaggaatacaacgcaaatttgctgacatgatagcaaatcggtatgccggcaccaaaac
+gtgctccttgcttagcttgtgaatgagactcagtagttaaataaatccatatctgcaatc
+gattccacaggtattgtccactatctttgaactactctaagagatacaagcttagctgag
+accgaggtgtatatgactacgctgatatctgtaaggtaccaatgcaggcaaagtatgcga
+gaagctaataccggctgtttccagctttataagattaaaatttggctgtcctggcggcct
+cagaattgttctatcgtaatcagttggttcattaattagctaagtacgaggtacaactta
+tctgtcccagaacagctccacaagtttttttacagccgaaacccctgtgtgaatcttaat
+atccaagcgcgttatctgattagagtttacaactcagtattttatcagtacgttttgttt
+ccaacattacccggtatgacaaaatgacgccacgtgtcgaataatggtctgaccaatgta
+ggaagtgaaaagataaatat
+==31986== 
+==31986== HEAP SUMMARY:
+==31986==     in use at exit: 0 bytes in 0 blocks
+==31986==   total heap usage: 989 allocs, 989 frees, 442,742 bytes allocated
+==31986== 
+==31986== All heap blocks were freed -- no leaks are possible
+==31986== 
+==31986== For counts of detected and suppressed errors, rerun with: -v
+==31986== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 knucleotide.lua-2.lua ...
+==31992== Memcheck, a memory error detector
+==31992== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==31992== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==31992== Command: luarc51 knucleotide.lua-2.lua
+==31992== 
+
+
+0	GGT
+0	GGTA
+0	GGTATT
+0	GGTATTTTAATT
+0	GGTATTTTAATTTATAGT
+==31992== 
+==31992== HEAP SUMMARY:
+==31992==     in use at exit: 0 bytes in 0 blocks
+==31992==   total heap usage: 809 allocs, 809 frees, 88,275 bytes allocated
+==31992== 
+==31992== All heap blocks were freed -- no leaks are possible
+==31992== 
+==31992== For counts of detected and suppressed errors, rerun with: -v
+==31992== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 mandelbrot.lua ...
+==31998== Memcheck, a memory error detector
+==31998== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==31998== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==31998== Command: luarc51 mandelbrot.lua
+==31998== 
 P4
 100 100
-==6669== Invalid read of size 1
-==6669==    at 0x411698: luarc_freetable (lgc.c:1057)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==  Address 0x5ef4231 is 49 bytes inside a block of size 96 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188DD: luaH_free (ltable.c:397)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x4116B8: luarc_freetable (lgc.c:1059)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==  Address 0x5ef4248 is 72 bytes inside a block of size 96 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188DD: luaH_free (ltable.c:397)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x41884A: luaH_free (ltable.c:394)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==  Address 0x5ef4248 is 72 bytes inside a block of size 96 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188DD: luaH_free (ltable.c:397)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 4
-==6669==    at 0x41889F: luaH_free (ltable.c:396)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==  Address 0x5ef4258 is 88 bytes inside a block of size 96 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188DD: luaH_free (ltable.c:397)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x4188AF: luaH_free (ltable.c:396)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==  Address 0x5ef4240 is 64 bytes inside a block of size 96 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188DD: luaH_free (ltable.c:397)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid free() / delete / delete[] / realloc()
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188C3: luaH_free (ltable.c:396)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==  Address 0x5ef4fb0 is 0 bytes inside a block of size 128 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188C3: luaH_free (ltable.c:396)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid free() / delete / delete[] / realloc()
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188DD: luaH_free (ltable.c:397)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==  Address 0x5ef4200 is 0 bytes inside a block of size 96 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188DD: luaH_free (ltable.c:397)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x411632: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4240 is 64 bytes inside a block of size 96 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188DD: luaH_free (ltable.c:397)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 4
-==6669==    at 0x41164B: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4fb8 is 8 bytes inside a block of size 128 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188C3: luaH_free (ltable.c:396)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x411657: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4fb0 is 0 bytes inside a block of size 128 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188C3: luaH_free (ltable.c:396)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x41165A: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4350 is 16 bytes inside a block of size 64 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x410C31: luarc_freeudata (lgc.c:880)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669== 
-==6669== Invalid write of size 8
-==6669==    at 0x411662: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4350 is 16 bytes inside a block of size 64 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x410C31: luarc_freeudata (lgc.c:880)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x411666: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4350 is 16 bytes inside a block of size 64 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x410C31: luarc_freeudata (lgc.c:880)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x411673: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4fb0 is 0 bytes inside a block of size 128 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188C3: luaH_free (ltable.c:396)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 1
-==6669==    at 0x412992: luarc_releaseobj (lobject.c:239)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4359 is 25 bytes inside a block of size 64 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x410C31: luarc_freeudata (lgc.c:880)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669== 
-==6669== Invalid read of size 1
-==6669==    at 0x411A5A: luaC_freeobj (lgc.c:1123)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4358 is 24 bytes inside a block of size 64 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x410C31: luarc_freeudata (lgc.c:880)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669== 
-==6669== Invalid read of size 1
-==6669==    at 0x4109DE: luarc_freeudata (lgc.c:840)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4359 is 25 bytes inside a block of size 64 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x410C31: luarc_freeudata (lgc.c:880)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x411632: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4240 is 64 bytes inside a block of size 96 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188DD: luaH_free (ltable.c:397)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 4
-==6669==    at 0x41164B: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4ff8 is 72 bytes inside a block of size 128 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188C3: luaH_free (ltable.c:396)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x411657: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4ff0 is 64 bytes inside a block of size 128 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188C3: luaH_free (ltable.c:396)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x41165A: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4e00 is 16 bytes inside a block of size 64 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x410C31: luarc_freeudata (lgc.c:880)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669== 
-==6669== Invalid write of size 8
-==6669==    at 0x411662: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4e00 is 16 bytes inside a block of size 64 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x410C31: luarc_freeudata (lgc.c:880)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x411666: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4e00 is 16 bytes inside a block of size 64 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x410C31: luarc_freeudata (lgc.c:880)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x411673: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4ff0 is 64 bytes inside a block of size 128 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188C3: luaH_free (ltable.c:396)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 1
-==6669==    at 0x411698: luarc_freetable (lgc.c:1057)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4231 is 49 bytes inside a block of size 96 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188DD: luaH_free (ltable.c:397)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-==6669== Invalid read of size 8
-==6669==    at 0x4116B8: luarc_freetable (lgc.c:1059)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669==    by 0x40CDD4: luaD_call (ldo.c:436)
-==6669==    by 0x408602: f_call (lapi.c:931)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4086AA: lua_pcall (lapi.c:952)
-==6669==    by 0x404542: docall (lua.c:102)
-==6669==    by 0x404D71: handle_script (lua.c:250)
-==6669==    by 0x4052E6: pmain (lua.c:362)
-==6669==    by 0x40C9BB: luaD_precall (ldo.c:369)
-==6669==    by 0x40CDBF: luaD_call (ldo.c:435)
-==6669==    by 0x408868: f_Ccall (lapi.c:981)
-==6669==    by 0x40B703: luaD_rawrunprotected (ldo.c:123)
-==6669==    by 0x40D363: luaD_pcall (ldo.c:534)
-==6669==    by 0x4088C2: lua_cpcall (lapi.c:991)
-==6669==    by 0x4053BE: main (lua.c:387)
-==6669==  Address 0x5ef4248 is 72 bytes inside a block of size 96 free'd
-==6669==    at 0x4C27D4E: free (vg_replace_malloc.c:427)
-==6669==    by 0x4214C0: l_alloc (lauxlib.c:631)
-==6669==    by 0x411C5F: luaM_realloc_ (lmem.c:79)
-==6669==    by 0x4188DD: luaH_free (ltable.c:397)
-==6669==    by 0x4117A8: luarc_freetable (lgc.c:1069)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x40FCE7: GCTM (lgc.c:545)
-==6669==    by 0x410AF2: luarc_freeudata (lgc.c:862)
-==6669==    by 0x411AA0: luaC_freeobj (lgc.c:1128)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x411684: luarc_freetable (lgc.c:1056)
-==6669==    by 0x411AF4: luaC_freeobj (lgc.c:1140)
-==6669==    by 0x4129B2: luarc_releaseobj (lobject.c:240)
-==6669==    by 0x41E6E7: luaV_execute (lvm.c:756)
-==6669== 
-                                                                                                             >            €           ÿà           ÿÀ           ÿÀ           ÿà          ÿÀ           À           ?€          @         kÿü         ÿÿÿ`       òÿÿÿÀ        ùÿÿÿèP      ÷ÿÿÿüð       ÿÿÿÿýð       ?ÿÿÿÿð       ÿÿÿÿÿà      ÿÿÿÿÿ€      ÿÿÿÿÿà      _ÿÿÿÿÿà      ?ÿÿÿÿÿè      ÿÿÿÿÿø      ÿÿÿÿÿø      ßÿÿÿÿÿú      ÿÿÿÿÿÿ€     ?ÿÿÿÿÿþ      ÿÿÿÿÿü    `ÿÿÿÿÿÿü   rU ÿÿÿÿÿÿþ   wüÿÿÿÿÿÿþ   ÿÿÿÿÿÿÿÿ   ÿÁÿÿÿÿÿÿü   ÿÿãÿÿÿÿÿÿþ  ÿÿáÿÿÿÿÿÿþ  ÿÿóÿÿÿÿÿÿÿ  ÿÿûÿÿÿÿÿÿü  ÿÿûÿÿÿÿÿÿü  ÿÿÿÿÿÿÿÿÿø  ÷ÿÿÿÿÿÿÿÿÿð ÿÿÿÿÿÿÿÿÿÿð ÿÿÿÿÿÿÿÿÿÿÀ ÿÿÿÿÿÿÿÿÿÿÿ  ÿÿÿÿÿÿÿÿÿÿÀ ÿÿÿÿÿÿÿÿÿÿð  ÷ÿÿÿÿÿÿÿÿÿð  ÿÿÿÿÿÿÿÿÿø  ÿÿûÿÿÿÿÿÿü  ÿÿûÿÿÿÿÿÿü  ÿÿóÿÿÿÿÿÿÿ  ÿÿáÿÿÿÿÿÿþ   ÿÿãÿÿÿÿÿÿþ   ÿÁÿÿÿÿÿÿü   ÿÿÿÿÿÿÿÿ   wüÿÿÿÿÿÿþ   rU ÿÿÿÿÿÿþ    `ÿÿÿÿÿÿü      ÿÿÿÿÿü      ?ÿÿÿÿÿþ      ÿÿÿÿÿÿ€     ßÿÿÿÿÿú      ÿÿÿÿÿø      ÿÿÿÿÿø      ?ÿÿÿÿÿè      _ÿÿÿÿÿà      ÿÿÿÿÿà      ÿÿÿÿÿ€       ÿÿÿÿÿà       ?ÿÿÿÿð       ÿÿÿÿýð      ÷ÿÿÿüð       ùÿÿÿèP      òÿÿÿÀ        ÿÿÿ`         kÿü          @          ?€           À          ÿÀ           ÿà           ÿÀ           ÿÀ           ÿà           €           >                                                                                             ==6669== 
-==6669== HEAP SUMMARY:
-==6669==     in use at exit: 0 bytes in 0 blocks
-==6669==   total heap usage: 543 allocs, 555 frees, 72,257 bytes allocated
-==6669== 
-==6669== All heap blocks were freed -- no leaks are possible
-==6669== 
-==6669== For counts of detected and suppressed errors, rerun with: -v
-==6669== ERROR SUMMARY: 192 errors from 26 contexts (suppressed: 4 from 4)
+                                                                                                             >            €           ÿà           ÿÀ           ÿÀ           ÿà          ÿÀ           À           ?€          @         kÿü         ÿÿÿ`       òÿÿÿÀ        ùÿÿÿèP      ÷ÿÿÿüð       ÿÿÿÿýð       ?ÿÿÿÿð       ÿÿÿÿÿà      ÿÿÿÿÿ€      ÿÿÿÿÿà      _ÿÿÿÿÿà      ?ÿÿÿÿÿè      ÿÿÿÿÿø      ÿÿÿÿÿø      ßÿÿÿÿÿú      ÿÿÿÿÿÿ€     ?ÿÿÿÿÿþ      ÿÿÿÿÿü    `ÿÿÿÿÿÿü   rU ÿÿÿÿÿÿþ   wüÿÿÿÿÿÿþ   ÿÿÿÿÿÿÿÿ   ÿÁÿÿÿÿÿÿü   ÿÿãÿÿÿÿÿÿþ  ÿÿáÿÿÿÿÿÿþ  ÿÿóÿÿÿÿÿÿÿ  ÿÿûÿÿÿÿÿÿü  ÿÿûÿÿÿÿÿÿü  ÿÿÿÿÿÿÿÿÿø  ÷ÿÿÿÿÿÿÿÿÿð ÿÿÿÿÿÿÿÿÿÿð ÿÿÿÿÿÿÿÿÿÿÀ ÿÿÿÿÿÿÿÿÿÿÿ  ÿÿÿÿÿÿÿÿÿÿÀ ÿÿÿÿÿÿÿÿÿÿð  ÷ÿÿÿÿÿÿÿÿÿð  ÿÿÿÿÿÿÿÿÿø  ÿÿûÿÿÿÿÿÿü  ÿÿûÿÿÿÿÿÿü  ÿÿóÿÿÿÿÿÿÿ  ÿÿáÿÿÿÿÿÿþ   ÿÿãÿÿÿÿÿÿþ   ÿÁÿÿÿÿÿÿü   ÿÿÿÿÿÿÿÿ   wüÿÿÿÿÿÿþ   rU ÿÿÿÿÿÿþ    `ÿÿÿÿÿÿü      ÿÿÿÿÿü      ?ÿÿÿÿÿþ      ÿÿÿÿÿÿ€     ßÿÿÿÿÿú      ÿÿÿÿÿø      ÿÿÿÿÿø      ?ÿÿÿÿÿè      _ÿÿÿÿÿà      ÿÿÿÿÿà      ÿÿÿÿÿ€       ÿÿÿÿÿà       ?ÿÿÿÿð       ÿÿÿÿýð      ÷ÿÿÿüð       ùÿÿÿèP      òÿÿÿÀ        ÿÿÿ`         kÿü          @          ?€           À          ÿÀ           ÿà           ÿÀ           ÿÀ           ÿà           €           >                                                                                             ==31998== 
+==31998== HEAP SUMMARY:
+==31998==     in use at exit: 0 bytes in 0 blocks
+==31998==   total heap usage: 602 allocs, 602 frees, 63,783 bytes allocated
+==31998== 
+==31998== All heap blocks were freed -- no leaks are possible
+==31998== 
+==31998== For counts of detected and suppressed errors, rerun with: -v
+==31998== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 mandelbrot.lua-2.lua ...
+==32002== Memcheck, a memory error detector
+==32002== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32002== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32002== Command: luarc51 mandelbrot.lua-2.lua
+==32002== 
+P4
+100 100
+                                                                                                             >            €           ÿà           ÿÀ           ÿÀ           ÿà          ÿÀ           À           ?€          @         kÿü         ÿÿÿ`       òÿÿÿÀ        ùÿÿÿèP      ÷ÿÿÿüð       ÿÿÿÿýð       ?ÿÿÿÿð       ÿÿÿÿÿà      ÿÿÿÿÿ€      ÿÿÿÿÿà      _ÿÿÿÿÿà      ?ÿÿÿÿÿè      ÿÿÿÿÿø      ÿÿÿÿÿø      ßÿÿÿÿÿú      ÿÿÿÿÿÿ€     ?ÿÿÿÿÿþ      ÿÿÿÿÿü    `ÿÿÿÿÿÿü   rU ÿÿÿÿÿÿþ   wüÿÿÿÿÿÿþ   ÿÿÿÿÿÿÿÿ   ÿÁÿÿÿÿÿÿü   ÿÿãÿÿÿÿÿÿþ  ÿÿáÿÿÿÿÿÿþ  ÿÿóÿÿÿÿÿÿÿ  ÿÿûÿÿÿÿÿÿü  ÿÿûÿÿÿÿÿÿü  ÿÿÿÿÿÿÿÿÿø  ÷ÿÿÿÿÿÿÿÿÿð ÿÿÿÿÿÿÿÿÿÿð ÿÿÿÿÿÿÿÿÿÿÀ ÿÿÿÿÿÿÿÿÿÿÿ  ÿÿÿÿÿÿÿÿÿÿÀ ÿÿÿÿÿÿÿÿÿÿð  ÷ÿÿÿÿÿÿÿÿÿð  ÿÿÿÿÿÿÿÿÿø  ÿÿûÿÿÿÿÿÿü  ÿÿûÿÿÿÿÿÿü  ÿÿóÿÿÿÿÿÿÿ  ÿÿáÿÿÿÿÿÿþ   ÿÿãÿÿÿÿÿÿþ   ÿÁÿÿÿÿÿÿü   ÿÿÿÿÿÿÿÿ   wüÿÿÿÿÿÿþ   rU ÿÿÿÿÿÿþ    `ÿÿÿÿÿÿü      ÿÿÿÿÿü      ?ÿÿÿÿÿþ      ÿÿÿÿÿÿ€     ßÿÿÿÿÿú      ÿÿÿÿÿø      ÿÿÿÿÿø      ?ÿÿÿÿÿè      _ÿÿÿÿÿà      ÿÿÿÿÿà      ÿÿÿÿÿ€       ÿÿÿÿÿà       ?ÿÿÿÿð       ÿÿÿÿýð      ÷ÿÿÿüð       ùÿÿÿèP      òÿÿÿÀ        ÿÿÿ`         kÿü          @          ?€           À          ÿÀ           ÿà           ÿÀ           ÿÀ           ÿà           €           >                                                                                             ==32002== 
+==32002== HEAP SUMMARY:
+==32002==     in use at exit: 0 bytes in 0 blocks
+==32002==   total heap usage: 1,799 allocs, 1,799 frees, 114,658 bytes allocated
+==32002== 
+==32002== All heap blocks were freed -- no leaks are possible
+==32002== 
+==32002== For counts of detected and suppressed errors, rerun with: -v
+==32002== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 mandelbrot.lua-6.lua ...
+==32008== Memcheck, a memory error detector
+==32008== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32008== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32008== Command: luarc51 mandelbrot.lua-6.lua
+==32008== 
+P4
+100 100
+                                                                                                             >            €           ÿà           ÿÀ           ÿÀ           ÿà          ÿÀ           À           ?€          @         kÿü         ÿÿÿ`       òÿÿÿÀ        ùÿÿÿèP      ÷ÿÿÿüð       ÿÿÿÿýð       ?ÿÿÿÿð       ÿÿÿÿÿà      ÿÿÿÿÿ€      ÿÿÿÿÿà      _ÿÿÿÿÿà      ?ÿÿÿÿÿè      ÿÿÿÿÿø      ÿÿÿÿÿø      ßÿÿÿÿÿú      ÿÿÿÿÿÿ€     ?ÿÿÿÿÿþ      ÿÿÿÿÿü    `ÿÿÿÿÿÿü   rU ÿÿÿÿÿÿþ   wüÿÿÿÿÿÿþ   ÿÿÿÿÿÿÿÿ   ÿÁÿÿÿÿÿÿü   ÿÿãÿÿÿÿÿÿþ  ÿÿáÿÿÿÿÿÿþ  ÿÿóÿÿÿÿÿÿÿ  ÿÿûÿÿÿÿÿÿü  ÿÿûÿÿÿÿÿÿü  ÿÿÿÿÿÿÿÿÿø  ÷ÿÿÿÿÿÿÿÿÿð ÿÿÿÿÿÿÿÿÿÿð ÿÿÿÿÿÿÿÿÿÿÀ ÿÿÿÿÿÿÿÿÿÿÿ  ÿÿÿÿÿÿÿÿÿÿÀ ÿÿÿÿÿÿÿÿÿÿð  ÷ÿÿÿÿÿÿÿÿÿð  ÿÿÿÿÿÿÿÿÿø  ÿÿûÿÿÿÿÿÿü  ÿÿûÿÿÿÿÿÿü  ÿÿóÿÿÿÿÿÿÿ  ÿÿáÿÿÿÿÿÿþ   ÿÿãÿÿÿÿÿÿþ   ÿÁÿÿÿÿÿÿü   ÿÿÿÿÿÿÿÿ   wüÿÿÿÿÿÿþ   rU ÿÿÿÿÿÿþ    `ÿÿÿÿÿÿü      ÿÿÿÿÿü      ?ÿÿÿÿÿþ      ÿÿÿÿÿÿ€     ßÿÿÿÿÿú      ÿÿÿÿÿø      ÿÿÿÿÿø      ?ÿÿÿÿÿè      _ÿÿÿÿÿà      ÿÿÿÿÿà      ÿÿÿÿÿ€       ÿÿÿÿÿà       ?ÿÿÿÿð       ÿÿÿÿýð      ÷ÿÿÿüð       ùÿÿÿèP      òÿÿÿÀ        ÿÿÿ`         kÿü          @          ?€           À          ÿÀ           ÿà           ÿÀ           ÿÀ           ÿà           €           >                                                                                             ==32008== 
+==32008== HEAP SUMMARY:
+==32008==     in use at exit: 0 bytes in 0 blocks
+==32008==   total heap usage: 543 allocs, 543 frees, 72,250 bytes allocated
+==32008== 
+==32008== All heap blocks were freed -- no leaks are possible
+==32008== 
+==32008== For counts of detected and suppressed errors, rerun with: -v
+==32008== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 meteor.lua ...
+==32026== Memcheck, a memory error detector
+==32026== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32026== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32026== Command: luarc51 meteor.lua
+==32026== 
+2098 solutions found
+
+0 0 0 0 1 
+ 2 2 2 0 1 
+2 6 6 1 1 
+ 2 6 1 5 5 
+8 6 5 5 5 
+ 8 6 3 3 3 
+4 8 8 9 3 
+ 4 4 8 9 3 
+4 7 4 7 9 
+ 7 7 7 9 9 
+
+9 9 9 9 8 
+ 9 6 6 8 5 
+6 6 8 8 5 
+ 6 8 2 5 5 
+7 7 7 2 5 
+ 7 4 7 2 0 
+1 4 2 2 0 
+ 1 4 4 0 3 
+1 4 0 0 3 
+ 1 1 3 3 3 
+
+==32026== 
+==32026== HEAP SUMMARY:
+==32026==     in use at exit: 0 bytes in 0 blocks
+==32026==   total heap usage: 10,031 allocs, 10,031 frees, 13,196,025 bytes allocated
+==32026== 
+==32026== All heap blocks were freed -- no leaks are possible
+==32026== 
+==32026== For counts of detected and suppressed errors, rerun with: -v
+==32026== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 meteor.lua-2.lua ...
+==32096== Memcheck, a memory error detector
+==32096== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32096== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32096== Command: luarc51 meteor.lua-2.lua
+==32096== 
+2098 solutions found
+
+0 0 0 0 1 
+ 2 2 2 0 1 
+2 6 6 1 1 
+ 2 6 1 5 5 
+8 6 5 5 5 
+ 8 6 3 3 3 
+4 8 8 9 3 
+ 4 4 8 9 3 
+4 7 4 7 9 
+ 7 7 7 9 9 
+
+9 9 9 9 8 
+ 9 6 6 8 5 
+6 6 8 8 5 
+ 6 8 2 5 5 
+7 7 7 2 5 
+ 7 4 7 2 0 
+1 4 2 2 0 
+ 1 4 4 0 3 
+1 4 0 0 3 
+ 1 1 3 3 3 
+
+==32096== 
+==32096== HEAP SUMMARY:
+==32096==     in use at exit: 0 bytes in 0 blocks
+==32096==   total heap usage: 9,874 allocs, 9,874 frees, 12,784,468 bytes allocated
+==32096== 
+==32096== All heap blocks were freed -- no leaks are possible
+==32096== 
+==32096== For counts of detected and suppressed errors, rerun with: -v
+==32096== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 meteor.lua-3.lua ...
+==32126== Memcheck, a memory error detector
+==32126== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32126== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32126== Command: luarc51 meteor.lua-3.lua
+==32126== 
+2098 solutions found
+
+0 0 0 0 1 
+ 2 2 2 0 1 
+2 6 6 1 1 
+ 2 6 1 5 5 
+8 6 5 5 5 
+ 8 6 3 3 3 
+4 8 8 9 3 
+ 4 4 8 9 3 
+4 7 4 7 9 
+ 7 7 7 9 9 
+
+9 9 9 9 8 
+ 9 6 6 8 5 
+6 6 8 8 5 
+ 6 8 2 5 5 
+7 7 7 2 5 
+ 7 4 7 2 0 
+1 4 2 2 0 
+ 1 4 4 0 3 
+1 4 0 0 3 
+ 1 1 3 3 3 
+
+==32126== 
+==32126== HEAP SUMMARY:
+==32126==     in use at exit: 0 bytes in 0 blocks
+==32126==   total heap usage: 9,881 allocs, 9,881 frees, 12,782,925 bytes allocated
+==32126== 
+==32126== All heap blocks were freed -- no leaks are possible
+==32126== 
+==32126== For counts of detected and suppressed errors, rerun with: -v
+==32126== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 meteor.lua-4.lua ...
+==32157== Memcheck, a memory error detector
+==32157== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32157== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32157== Command: luarc51 meteor.lua-4.lua
+==32157== 
+2098 solutions found
+
+0 0 0 0 1 
+ 2 2 2 0 1 
+2 6 6 1 1 
+ 2 6 1 5 5 
+8 6 5 5 5 
+ 8 6 3 3 3 
+4 8 8 9 3 
+ 4 4 8 9 3 
+4 7 4 7 9 
+ 7 7 7 9 9 
+
+9 9 9 9 8 
+ 9 6 6 8 5 
+6 6 8 8 5 
+ 6 8 2 5 5 
+7 7 7 2 5 
+ 7 4 7 2 0 
+1 4 2 2 0 
+ 1 4 4 0 3 
+1 4 0 0 3 
+ 1 1 3 3 3 
+
+==32157== 
+==32157== HEAP SUMMARY:
+==32157==     in use at exit: 0 bytes in 0 blocks
+==32157==   total heap usage: 10,861 allocs, 10,861 frees, 12,485,910 bytes allocated
+==32157== 
+==32157== All heap blocks were freed -- no leaks are possible
+==32157== 
+==32157== For counts of detected and suppressed errors, rerun with: -v
+==32157== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 nbody.lua ...
+==32179== Memcheck, a memory error detector
+==32179== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32179== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32179== Command: luarc51 nbody.lua
+==32179== 
+-0.169075164
+-0.169087605
+==32179== 
+==32179== HEAP SUMMARY:
+==32179==     in use at exit: 0 bytes in 0 blocks
+==32179==   total heap usage: 638 allocs, 638 frees, 91,530 bytes allocated
+==32179== 
+==32179== All heap blocks were freed -- no leaks are possible
+==32179== 
+==32179== For counts of detected and suppressed errors, rerun with: -v
+==32179== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 nbody.lua-2.lua ...
+==32183== Memcheck, a memory error detector
+==32183== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32183== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32183== Command: luarc51 nbody.lua-2.lua
+==32183== 
+-0.169075164
+-0.169087605
+==32183== 
+==32183== HEAP SUMMARY:
+==32183==     in use at exit: 0 bytes in 0 blocks
+==32183==   total heap usage: 638 allocs, 638 frees, 91,333 bytes allocated
+==32183== 
+==32183== All heap blocks were freed -- no leaks are possible
+==32183== 
+==32183== For counts of detected and suppressed errors, rerun with: -v
+==32183== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 nbody.lua-4.lua ...
+==32193== Memcheck, a memory error detector
+==32193== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32193== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32193== Command: luarc51 nbody.lua-4.lua
+==32193== 
+-0.169075164
+-0.169087605
+==32193== 
+==32193== HEAP SUMMARY:
+==32193==     in use at exit: 0 bytes in 0 blocks
+==32193==   total heap usage: 661 allocs, 661 frees, 95,517 bytes allocated
+==32193== 
+==32193== All heap blocks were freed -- no leaks are possible
+==32193== 
+==32193== For counts of detected and suppressed errors, rerun with: -v
+==32193== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 regexdna.lua ...
+==32197== Memcheck, a memory error detector
+==32197== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32197== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32197== Command: luarc51 regexdna.lua
+==32197== 
+agggtaaa|tttaccct 2
+[cgt]gggtaaa|tttaccc[acg] 0
+a[act]ggtaaa|tttacc[agt]t 0
+ag[act]gtaaa|tttac[agt]ct 0
+agg[act]taaa|ttta[agt]cct 0
+aggg[acg]aaa|ttt[cgt]ccct 0
+agggt[cgt]aa|tt[acg]accct 0
+agggta[cgt]a|t[acg]taccct 0
+agggtaa[cgt]|[acg]ttaccct 0
+
+1086
+1011
+1077
+==32197== 
+==32197== HEAP SUMMARY:
+==32197==     in use at exit: 0 bytes in 0 blocks
+==32197==   total heap usage: 688 allocs, 688 frees, 86,843 bytes allocated
+==32197== 
+==32197== All heap blocks were freed -- no leaks are possible
+==32197== 
+==32197== For counts of detected and suppressed errors, rerun with: -v
+==32197== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 regexdna.lua-2.lua ...
+==32201== Memcheck, a memory error detector
+==32201== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32201== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32201== Command: luarc51 regexdna.lua-2.lua
+==32201== 
+agggtaaa|tttaccct 2
+[cgt]gggtaaa|tttaccc[acg] 0
+a[act]ggtaaa|tttacc[agt]t 0
+ag[act]gtaaa|tttac[agt]ct 0
+agg[act]taaa|ttta[agt]cct 0
+aggg[acg]aaa|ttt[cgt]ccct 0
+agggt[cgt]aa|tt[acg]accct 0
+agggta[cgt]a|t[acg]taccct 0
+agggtaa[cgt]|[acg]ttaccct 0
+
+1831
+1683
+1755
+==32201== 
+==32201== HEAP SUMMARY:
+==32201==     in use at exit: 0 bytes in 0 blocks
+==32201==   total heap usage: 785 allocs, 785 frees, 102,558 bytes allocated
+==32201== 
+==32201== All heap blocks were freed -- no leaks are possible
+==32201== 
+==32201== For counts of detected and suppressed errors, rerun with: -v
+==32201== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 spectralnorm.lua ...
+==32207== Memcheck, a memory error detector
+==32207== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32207== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32207== Command: luarc51 spectralnorm.lua
+==32207== 
+1.274219991
+==32207== 
+==32207== HEAP SUMMARY:
+==32207==     in use at exit: 0 bytes in 0 blocks
+==32207==   total heap usage: 620 allocs, 620 frees, 78,531 bytes allocated
+==32207== 
+==32207== All heap blocks were freed -- no leaks are possible
+==32207== 
+==32207== For counts of detected and suppressed errors, rerun with: -v
+==32207== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)
+=======================================
+
+valgrind luarc51 threadring.lua-3.lua 1 ...
+==32217== Memcheck, a memory error detector
+==32217== Copyright (C) 2002-2011, and GNU GPL'd, by Julian Seward et al.
+==32217== Using Valgrind-3.7.0 and LibVEX; rerun with -h for copyright info
+==32217== Command: luarc51 threadring.lua-3.lua 1
+==32217== 
+2
+==32217== 
+==32217== HEAP SUMMARY:
+==32217==     in use at exit: 0 bytes in 0 blocks
+==32217==   total heap usage: 2,022 allocs, 2,022 frees, 700,703 bytes allocated
+==32217== 
+==32217== All heap blocks were freed -- no leaks are possible
+==32217== 
+==32217== For counts of detected and suppressed errors, rerun with: -v
+==32217== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 4 from 4)

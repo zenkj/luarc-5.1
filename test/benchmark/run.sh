@@ -78,18 +78,18 @@ run fannkuchredux.lua 10
 #0s/0s
 #run knucleotide.lua-2.lua
 #8s/9s
-run mandelbrot.lua 1500
+#run mandelbrot.lua 1500
 #13s/15s
-#run mandelbrot.lua 2000
+run mandelbrot.lua 2000
 #15s/16s
-#run mandelbrot.lua-2.lua 2000
-#15s/16s
-#run mandelbrot.lua-6.lua 2000
-#1s/1s (double-free coredump)
+run mandelbrot.lua-2.lua 2000
+#15s/16s (double-free -- ok)
+run mandelbrot.lua-6.lua 2000
+#1s/1s (double-free coredump -- ok)
 #run meteor.lua
-#1s/2s (double-free coredump)
+#1s/2s (double-free coredump -- ok)
 #run meteor.lua-2.lua
-#1s/2s (double-free coredump)
+#1s/2s (double-free coredump -- ok)
 #run meteor.lua-3.lua
 #1s/1s
 #run meteor.lua-4.lua
