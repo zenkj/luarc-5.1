@@ -993,6 +993,17 @@ LUA_API lua_Number lua_nanosecond (lua_State *L) {
 }
 #endif /* defined(LUA_USE_POSIX) */
 
+
+LUA_API void lua_enablelog (lua_State *L, int loglevel) {
+  if (loglevel >= 0 && loglevel <= 9)
+    G(L)->loglevel = loglevel;
+}
+
+
+LUA_API void lua_disablelog (lua_State *L) {
+  G(L)->loglevel = 0;
+}
+
 #endif /* LUA_PROFILE */
 
 

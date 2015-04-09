@@ -613,6 +613,7 @@ static void remarkupvals (global_State *g) {
 static void atomic (lua_State *L) {
   global_State *g = G(L);
   size_t udsize;  /* total size of userdata to be finalized */
+  lualog(L, 2, "gc atomic begin");
   /* remark occasional upvalues of (maybe) dead threads */
   remarkupvals(g);
   /* traverse objects cautch by write barrier and by 'remarkupvals' */
@@ -642,6 +643,7 @@ static void atomic (lua_State *L) {
   g->sweepgc = &g->rootgc;
   g->gcstate = GCSsweepstring;
   g->estimate = g->totalbytes - udsize;  /* first estimate */
+  lualog(L, 2, "gc atomic end");
 }
 
 
@@ -657,6 +659,7 @@ static l_mem singlestep (lua_State *L) {
       lua_Number t = lua_nanosecond(L);
       statloop1(&g->nogcperiod, t);
       statacc1(&g->gcperiod, t);
+      lualog(L, 1, "gc begin");
 #endif
       markroot(L);  /* start a new collection */
       return 0;
@@ -670,6 +673,7 @@ static l_mem singlestep (lua_State *L) {
       else {  /* no more `gray' objects */
         atomic(L);  /* finish mark phase */
 #if LUA_PROFILE
+	lualog(L, 3, "gc sweepstring begin");
 	statloop(&g->marksteps);
 #endif
         return 0;
@@ -684,6 +688,7 @@ static l_mem singlestep (lua_State *L) {
       if (g->sweepstrgc >= g->strt.size) { /* nothing more to sweep? */
         g->gcstate = GCSsweep;  /* end sweep-string phase */
 #if LUA_PROFILE
+	lualog(L, 3, "gc sweep begin");
 	statloop(&g->sweepstringsteps);
 #endif
       }
@@ -701,6 +706,7 @@ static l_mem singlestep (lua_State *L) {
         checkSizes(L);
         g->gcstate = GCSfinalize;  /* end sweep phase */
 #if LUA_PROFILE
+	lualog(L, 3, "gc finalize begin");
 	statloop(&g->sweepsteps);
 #endif
       }
@@ -725,6 +731,7 @@ static l_mem singlestep (lua_State *L) {
 	statloop1(&g->gcperiod, t);
 	statloop(&g->gcsteps);
 	statloop(&g->finalizesteps);
+	lualog(L, 1, "gc end");
 #endif
         g->gcstate = GCSpause;  /* end collection */
         g->gcdept = 0;
@@ -806,6 +813,7 @@ void luaC_barrierback (lua_State *L, Table *t) {
   GCObject *o = obj2gco(t);
   lua_assert(isblack(o) && !isdead(g, o));
   lua_assert(g->gcstate != GCSfinalize && g->gcstate != GCSpause);
+  lualog(L, 3, "barrier back");
   black2gray(o);  /* make table gray (again) */
 #if LUA_REFCOUNT
   t->gcnext = g->grayagain;

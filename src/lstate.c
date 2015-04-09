@@ -126,6 +126,7 @@ static void preinit_state (lua_State *L, global_State *g) {
 
 static void close_state (lua_State *L) {
   global_State *g = G(L);
+  lualog(L, 1, "lua closed");
   luaF_close(L, L->stack);  /* close all upvalues for this thread */
   luaC_freeall(L);  /* collect all objects */
   lua_assert(g->rootgc == obj2gco(L));
@@ -155,6 +156,7 @@ lua_State *luaE_newthread (lua_State *L) {
 #if LUA_PROFILE
   G(L)->threadcount++;
   G(L)->threadbytes += state_size(lua_State);
+  lualog(L, 1, "create thread");
 #endif
   return L1;
 }
@@ -168,6 +170,7 @@ void luaE_freethread (lua_State *L, lua_State *L1) {
 #if LUA_PROFILE
   G(L)->threadcount--;
   G(L)->threadbytes -= state_size(lua_State);
+  lualog(L, 1, "free thread");
 #endif
   luaM_freemem(L, fromstate(L1), state_size(lua_State));
 }
@@ -256,8 +259,11 @@ LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
   g->clockfreq = (lua_Number)0;
 #endif
   /* on Windows, lua_nanosecond needs g->clockfreq */
+  g->starttime = lua_nanosecond(L);
+  g->loglevel = 0;
   statacc1(&g->nogcperiod, lua_nanosecond(L));
 #endif
+  lualog(L, 1, "lua created");
   for (i=0; i<NUM_TAGS; i++) g->mt[i] = NULL;
   if (luaD_rawrunprotected(L, f_luaopen, NULL) != 0) {
     /* memory allocation error: free partial state */

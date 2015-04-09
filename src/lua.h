@@ -226,7 +226,8 @@ LUA_API void (lua_upvalinfo) (lua_State *L, lua_Objectinfo *oi);
 LUA_API void (lua_userdatainfo) (lua_State *L, lua_Objectinfo *oi);
 LUA_API void (lua_stringinfo) (lua_State *L, lua_Objectinfo *oi);
 LUA_API lua_Number (lua_nanosecond) (lua_State *L);
-
+LUA_API void (lua_enablelog) (lua_State *L, int loglevel);
+LUA_API void (lua_disablelog) (lua_State *L);
 #endif 
 
 

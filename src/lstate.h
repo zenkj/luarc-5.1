@@ -87,6 +87,30 @@ typedef struct statdata {
     p->min = p->min > acc ? acc : p->min; \
     p->avg = (p->avg*p->cnt+acc)/(p->cnt+1); \
     p->cnt++; p->acc = v1; }
+#include <stdio.h>
+#define lualog(L, level, msg, ...) \
+  { if ((level) <= G(L)->loglevel) \
+      fprintf(stderr, "%15.0lf ns - " msg "\n", \
+	(lua_nanosecond(L)-G(L)->starttime), ##__VA_ARGS__); }
+
+#else
+
+/*
+ * log level:
+ * 0 - no log
+ * 1 - lua begin
+ *     lua end
+ *     gc begin
+ *     gc end
+ * 2 - gc atomic begin
+ *     gc atomic end
+ * 3 - gc sweepstring begin
+ *     gc sweep begin
+ *     gc finalize begin
+ *     barrier back
+ */
+#define lualog(L, level, msg, ...) (void)
+
 #endif
 
 /*
@@ -146,7 +170,9 @@ typedef struct global_State {
   lua_Integer closeupvalcount;
   lua_Integer udatacount;
   lua_Integer stringcount;
-  lua_Number clockfreq; /* cycle per nanosecond */
+  lua_Number clockfreq; /* Cycles per nanosecond */
+  lua_Number starttime; /* start time in nanosecond */
+  int loglevel; /* profiling log level, 0: no log, 1-9: verbose level */
 #endif
 } global_State;
 

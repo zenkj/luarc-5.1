@@ -47,6 +47,9 @@ static void print_usage (void) {
   "  -l name  require library " LUA_QL("name") "\n"
   "  -i       enter interactive mode after executing " LUA_QL("script") "\n"
   "  -v       show version information\n"
+#if LUA_PROFILE
+  "  -x level set profiling log level(0-9, default 0)\n"
+#endif
   "  --       stop handling options\n"
   "  -        execute stdin and stop handling options\n"
   ,
@@ -258,7 +261,11 @@ static int handle_script (lua_State *L, char **argv, int n) {
 #define notail(x)	{if ((x)[2] != '\0') return -1;}
 
 
+#if LUA_PROFILE
+static int collectargs (char **argv, int *pi, int *pv, int *pe, int *px) {
+#else
 static int collectargs (char **argv, int *pi, int *pv, int *pe) {
+#endif
   int i;
   for (i = 1; argv[i] != NULL; i++) {
     if (argv[i][0] != '-')  /* not an option? */
@@ -284,6 +291,21 @@ static int collectargs (char **argv, int *pi, int *pv, int *pe) {
           if (argv[i] == NULL) return -1;
         }
         break;
+#if LUA_PROFILE
+      case 'x': {
+	const char *p = argv[i]+2;
+	int x;
+	if (argv[i][2] == '\0') {
+	  i++;
+	  if (argv[i] == NULL) return -1;
+	  p = argv[i];
+	}
+	x = atoi(p);
+	x = x < 0 ? 0 : (x > 9 ? 9 : x);
+	*px = x;
+	break;
+      }
+#endif
       default: return -1;  /* invalid option */
     }
   }
@@ -342,6 +364,9 @@ static int pmain (lua_State *L) {
   char **argv = s->argv;
   int script;
   int has_i = 0, has_v = 0, has_e = 0;
+#if LUA_PROFILE
+  int x = -1;
+#endif
   globalL = L;
   if (argv[0] && argv[0][0]) progname = argv[0];
   lua_gc(L, LUA_GCSTOP, 0);  /* stop collector during initialization */
@@ -349,12 +374,19 @@ static int pmain (lua_State *L) {
   lua_gc(L, LUA_GCRESTART, 0);
   s->status = handle_luainit(L);
   if (s->status != 0) return 0;
+#if LUA_PROFILE
+  script = collectargs(argv, &has_i, &has_v, &has_e, &x);
+#else
   script = collectargs(argv, &has_i, &has_v, &has_e);
+#endif
   if (script < 0) {  /* invalid args? */
     print_usage();
     s->status = 1;
     return 0;
   }
+#if LUA_PROFILE
+  if (x >= 0 && x <= 9) lua_enablelog(L, x);
+#endif
   if (has_v) print_version();
   s->status = runargs(L, argv, (script > 0) ? script : s->argc);
   if (s->status != 0) return 0;

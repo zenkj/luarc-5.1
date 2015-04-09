@@ -194,6 +194,23 @@ static int prof_nanosecond (lua_State *L) {
   return 1;
 }
 
+static int prof_enablelog (lua_State *L) {
+  int level;
+  int n = lua_gettop(L);
+  if (n == 0)
+    level = 1;
+  else if (lua_type(L, 1) == LUA_TNUMBER)
+    level = (int)lua_tointeger(L, 1);
+  else level = -1;
+  lua_enablelog(L, level);
+  return 0;
+}
+
+static int prof_disablelog (lua_State *L) {
+  lua_disablelog(L);
+  return 0;
+}
+
 static int prof_help (lua_State *L) {
   lua_pushliteral(L, ""
     "stackresizecount(thread): resize count of stack array in the thread.\n"
@@ -228,6 +245,8 @@ static int prof_help (lua_State *L) {
     "stringinfo():             string number/total string object size.\n"
     "nanosecond():             nanoseconds from clock_gettime(POSIX) or \n"
     "                          QueryPerformanceCounter(Windows).\n"
+    "enablelog(level):         enable log with level `level'(1-9, default 1).\n"
+    "disablelog():             disable log.\n"
     "help():                   display this help message.\n");
 
   return 1;
@@ -253,6 +272,8 @@ static const luaL_Reg proflib[] = {
   {"userdatainfo",       prof_userdatainfo},
   {"stringinfo",         prof_stringinfo},
   {"nanosecond",         prof_nanosecond},
+  {"enablelog",          prof_enablelog},
+  {"disablelog",         prof_disablelog},
   {"help",               prof_help},
   {NULL, NULL}
 };
