@@ -761,7 +761,9 @@ union luai_Cast { double l_d; long l_l; };
 #define LUA_REFCOUNT 1
 #endif
 
-
+#ifndef LUA_PROFILE
+#define LUA_PROFILE 1
 #endif
 
+#endif
 

@@ -637,6 +637,9 @@ typedef struct Table {
   GCObject *gclist;
 #endif
   int sizearray;  /* size of `array' array */
+#if LUA_PROFILE
+  lua_Integer resizecount;
+#endif
 } Table;
 
 
@@ -648,7 +651,7 @@ typedef struct Table {
 	(check_exp((size&(size-1))==0, (cast(int, (s) & ((size)-1)))))
 
 
-#define twoto(x)	(1<<(x))
+#define twoto(x)	((l_mem)1<<(x))
 #define sizenode(t)	(twoto((t)->lsizenode))
 
 

@@ -458,11 +458,19 @@ static void freeobj (lua_State *L, GCObject *o) {
       break;
     }
     case LUA_TSTRING: {
+#if LUA_PROFILE
+      G(L)->stringcount--;
+      G(L)->stringbytes -= sizestring(gco2ts(o));
+#endif
       G(L)->strt.nuse--;
       luaM_freemem(L, o, sizestring(gco2ts(o)));
       break;
     }
     case LUA_TUSERDATA: {
+#if LUA_PROFILE
+      G(L)->udatacount--;
+      G(L)->udatabytes -= sizeudata(gco2u(o));
+#endif
       luaM_freemem(L, o, sizeudata(gco2u(o)));
       break;
     }
@@ -639,41 +647,71 @@ static void atomic (lua_State *L) {
 
 static l_mem singlestep (lua_State *L) {
   global_State *g = G(L);
+#if LUA_PROFILE
+  statacc(&g->gcsteps);
+#endif
   /*lua_checkmemory(L);*/
   switch (g->gcstate) {
     case GCSpause: {
+#if LUA_PROFILE
+      lua_Number t = lua_nanosecond(L);
+      statloop1(&g->nogcperiod, t);
+      statacc1(&g->gcperiod, t);
+#endif
       markroot(L);  /* start a new collection */
       return 0;
     }
     case GCSpropagate: {
+#if LUA_PROFILE
+      statacc(&g->marksteps);
+#endif
       if (g->gray)
         return propagatemark(g);
       else {  /* no more `gray' objects */
         atomic(L);  /* finish mark phase */
+#if LUA_PROFILE
+	statloop(&g->marksteps);
+#endif
         return 0;
       }
     }
     case GCSsweepstring: {
       lu_mem old = g->totalbytes;
+#if LUA_PROFILE
+      statacc(&g->sweepstringsteps);
+#endif
       sweepwholelist(L, &g->strt.hash[g->sweepstrgc++]);
-      if (g->sweepstrgc >= g->strt.size)  /* nothing more to sweep? */
+      if (g->sweepstrgc >= g->strt.size) { /* nothing more to sweep? */
         g->gcstate = GCSsweep;  /* end sweep-string phase */
+#if LUA_PROFILE
+	statloop(&g->sweepstringsteps);
+#endif
+      }
       lua_assert(old >= g->totalbytes);
       g->estimate -= old - g->totalbytes;
       return GCSWEEPCOST;
     }
     case GCSsweep: {
       lu_mem old = g->totalbytes;
+#if LUA_PROFILE
+      statacc(&g->sweepsteps);
+#endif
       g->sweepgc = sweeplist(L, g->sweepgc, GCSWEEPMAX);
       if (*g->sweepgc == NULL) {  /* nothing more to sweep? */
         checkSizes(L);
         g->gcstate = GCSfinalize;  /* end sweep phase */
+#if LUA_PROFILE
+	statloop(&g->sweepsteps);
+#endif
       }
       lua_assert(old >= g->totalbytes);
       g->estimate -= old - g->totalbytes;
       return GCSWEEPMAX*GCSWEEPCOST;
     }
     case GCSfinalize: {
+#if LUA_PROFILE
+      statacc(&g->finalizesteps);
+#endif
       if (g->tmudata) {
         GCTM(L);
         if (g->estimate > GCFINALIZECOST)
@@ -681,6 +719,13 @@ static l_mem singlestep (lua_State *L) {
         return GCFINALIZECOST;
       }
       else {
+#if LUA_PROFILE
+	lua_Number t = lua_nanosecond(L);
+	statacc1(&g->nogcperiod, t);
+	statloop1(&g->gcperiod, t);
+	statloop(&g->gcsteps);
+	statloop(&g->finalizesteps);
+#endif
         g->gcstate = GCSpause;  /* end collection */
         g->gcdept = 0;
         return 0;

@@ -766,6 +766,236 @@ LUA_API void lua_getfenv (lua_State *L, int idx) {
 }
 
 
+#if LUA_PROFILE
+LUA_API lua_Integer lua_stackresizecount (lua_State *L, int idx) {
+  StkId p;
+  lua_State *th;
+  lua_lock(L);
+  p = index2adr(L, idx);
+  api_check(ttisthread(p), "thread expected");
+  th = thvalue(p);
+  lua_unlock(L);
+  return th->stackresizecount;
+}
+
+
+LUA_API lua_Integer lua_ciresizecount (lua_State *L, int idx) {
+  StkId p;
+  lua_State *th;
+  lua_lock(L);
+  p = index2adr(L, idx);
+  api_check(ttisthread(p), "thread expected");
+  th = thvalue(p);
+  lua_unlock(L);
+  return th->ciresizecount;
+}
+
+
+LUA_API lua_Integer lua_tableresizecount (lua_State *L, int idx) {
+  StkId p;
+  Table *t;
+  lua_lock(L);
+  p = index2adr(L, idx);
+  api_check(ttistable(p), "table expected");
+  t = hvalue(p);
+  lua_unlock(L);
+  return t->resizecount;
+}
+
+
+LUA_API void lua_gcsteps (lua_State *L, lua_Statdata *sd) {
+  statdata *isd;
+  if (sd == NULL) return;
+  isd = &G(L)->gcsteps;
+  sd->max = isd->max;
+  sd->min = isd->min;
+  sd->avg = isd->avg;
+  sd->cnt = isd->cnt;
+}
+
+
+LUA_API void lua_marksteps (lua_State *L, lua_Statdata *sd) {
+  statdata *isd;
+  if (sd == NULL) return;
+  isd = &G(L)->marksteps;
+  sd->max = isd->max;
+  sd->min = isd->min;
+  sd->avg = isd->avg;
+  sd->cnt = isd->cnt;
+}
+
+
+LUA_API void lua_sweepstringsteps (lua_State *L, lua_Statdata *sd) {
+  statdata *isd;
+  if (sd == NULL) return;
+  isd = &G(L)->sweepstringsteps;
+  sd->max = isd->max;
+  sd->min = isd->min;
+  sd->avg = isd->avg;
+  sd->cnt = isd->cnt;
+}
+
+
+LUA_API void lua_sweepsteps (lua_State *L, lua_Statdata *sd) {
+  statdata *isd;
+  if (sd == NULL) return;
+  isd = &G(L)->sweepsteps;
+  sd->max = isd->max;
+  sd->min = isd->min;
+  sd->avg = isd->avg;
+  sd->cnt = isd->cnt;
+}
+
+
+LUA_API void lua_finalizesteps (lua_State *L, lua_Statdata *sd) {
+  statdata *isd;
+  if (sd == NULL) return;
+  isd = &G(L)->finalizesteps;
+  sd->max = isd->max;
+  sd->min = isd->min;
+  sd->avg = isd->avg;
+  sd->cnt = isd->cnt;
+}
+
+
+LUA_API void lua_gcperiod (lua_State *L, lua_Statdata *sd) {
+  statdata *isd;
+  if (sd == NULL) return;
+  isd = &G(L)->gcperiod;
+  sd->max = isd->max;
+  sd->min = isd->min;
+  sd->avg = isd->avg;
+  sd->cnt = isd->cnt;
+}
+
+
+LUA_API void lua_nogcperiod (lua_State *L, lua_Statdata *sd) {
+  statdata *isd;
+  if (sd == NULL) return;
+  isd = &G(L)->nogcperiod;
+  sd->max = isd->max;
+  sd->min = isd->min;
+  sd->avg = isd->avg;
+  sd->cnt = isd->cnt;
+}
+
+
+LUA_API void lua_heapinfo (lua_State *L, lua_Heapinfo *hi) {
+  global_State *g;
+  if (hi == NULL) return;
+  g = G(L);
+  hi->allocbytes = (lua_Number)g->allocbytes;
+  hi->freebytes = (lua_Number)g->freebytes;
+  hi->totalbytes = (lua_Number)g->totalbytes;
+  hi->totalcount = g->tablecount + g->protocount + g->lclosurecount
+		  + g->cclosurecount + g->threadcount + g->openupvalcount
+		  + g->closeupvalcount + g->udatacount + g->stringcount;
+}
+
+
+LUA_API void lua_tableinfo (lua_State *L, lua_Objectinfo *oi) {
+  if (oi == NULL) return;
+  oi->count = G(L)->tablecount;
+  oi->bytes = (lua_Number)G(L)->tablebytes;
+}
+
+
+LUA_API void lua_protoinfo (lua_State *L, lua_Objectinfo *oi) {
+  if (oi == NULL) return;
+  oi->count = G(L)->protocount;
+  oi->bytes = (lua_Number)G(L)->protobytes;
+}
+
+
+LUA_API void lua_lclosureinfo (lua_State *L, lua_Objectinfo *oi) {
+  if (oi == NULL) return;
+  oi->count = G(L)->lclosurecount;
+  oi->bytes = (lua_Number)G(L)->lclosurebytes;
+}
+
+
+LUA_API void lua_cclosureinfo (lua_State *L, lua_Objectinfo *oi) {
+  if (oi == NULL) return;
+  oi->count = G(L)->cclosurecount;
+  oi->bytes = (lua_Number)G(L)->cclosurebytes;
+}
+
+
+LUA_API void lua_closureinfo (lua_State *L, lua_Objectinfo *oi) {
+  if (oi == NULL) return;
+  oi->count = G(L)->cclosurecount + G(L)->lclosurecount;
+  oi->bytes = (lua_Number)(G(L)->cclosurebytes + G(L)->lclosurebytes);
+}
+
+
+LUA_API void lua_threadinfo (lua_State *L, lua_Objectinfo *oi) {
+  if (oi == NULL) return;
+  oi->count = G(L)->threadcount;
+  oi->bytes = (lua_Number)G(L)->threadbytes;
+}
+
+
+LUA_API void lua_openupvalinfo (lua_State *L, lua_Objectinfo *oi) {
+  if (oi == NULL) return;
+  oi->count = G(L)->openupvalcount;
+  oi->bytes = (lua_Number)(G(L)->openupvalcount * sizeof(UpVal));
+}
+
+
+LUA_API void lua_closeupvalinfo (lua_State *L, lua_Objectinfo *oi) {
+  if (oi == NULL) return;
+  oi->count = G(L)->closeupvalcount;
+  oi->bytes = (lua_Number)(G(L)->closeupvalcount * sizeof(UpVal));
+}
+
+
+LUA_API void lua_upvalinfo (lua_State *L, lua_Objectinfo *oi) {
+  global_State *g;
+  if (oi == NULL) return;
+  g = G(L);
+  oi->count = g->closeupvalcount + g->openupvalcount;
+  oi->bytes = (lua_Number)(oi->count * sizeof(UpVal));
+  api_check(L, oi->count*sizeof(UpVal) == g->upvalbytes);
+}
+
+
+LUA_API void lua_userdatainfo (lua_State *L, lua_Objectinfo *oi) {
+  if (oi == NULL) return;
+  oi->count = G(L)->udatacount;
+  oi->bytes = (lua_Number)G(L)->udatabytes;
+}
+
+
+LUA_API void lua_stringinfo (lua_State *L, lua_Objectinfo *oi) {
+  if (oi == NULL) return;
+  oi->count = G(L)->stringcount;
+  oi->bytes = (lua_Number)G(L)->stringbytes;
+}
+
+
+#if defined(LUA_WIN)
+#include <windows.h>
+LUA_API lua_Number lua_nanosecond (lua_State *L) {
+  LARGE_INTEGER counter;
+  if (QueryPerformanceCounter(&counter))
+    return (lua_Number)counter.QuadPart/G(L)->clockfreq;
+  return (lua_Number)0;
+}
+#endif
+
+
+#if defined(LUA_USE_POSIX)
+#include <time.h>
+LUA_API lua_Number lua_nanosecond (lua_State *L) {
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
+  return ((lua_Number)ts.tv_sec*1000*1000*1000+ts.tv_nsec);
+}
+#endif /* defined(LUA_USE_POSIX) */
+
+#endif /* LUA_PROFILE */
+
+
 /*
 ** set functions (stack -> Lua)
 */

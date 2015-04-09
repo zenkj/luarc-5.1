@@ -30,6 +30,10 @@ Closure *luaF_newCclosure (lua_State *L, int nelems, Table *e) {
   c->c.ref = 0;
   if (e) luarc_addtableref(e);
 #endif /* LUA_REFCOUNT */
+#if LUA_PROFILE
+  G(L)->cclosurecount++;
+  G(L)->cclosurebytes += sizeCclosure(nelems); 
+#endif
   return c;
 }
 
@@ -45,6 +49,10 @@ Closure *luaF_newLclosure (lua_State *L, int nelems, Table *e) {
   c->l.ref = 0;
   if (e) luarc_addtableref(e);
 #endif /* LUA_REFCOUNT */
+#if LUA_PROFILE
+  G(L)->lclosurecount++;
+  G(L)->lclosurebytes += sizeLclosure(nelems);
+#endif
   return c;
 }
 
@@ -56,6 +64,10 @@ UpVal *luaF_newupval (lua_State *L) {
   setnilvalue2n(uv->v);
 #if LUA_REFCOUNT
   uv->ref = 0;
+#endif
+#if LUA_PROFILE
+  G(L)->closeupvalcount++;
+  G(L)->upvalbytes += sizeof(UpVal);
 #endif
   return uv;
 }
@@ -89,6 +101,10 @@ UpVal *luaF_findupval (lua_State *L, StkId level) {
   uv->u.l.next->u.l.prev = uv;
   g->uvhead.u.l.next = uv;
   lua_assert(uv->u.l.next->u.l.prev == uv && uv->u.l.prev->u.l.next == uv);
+#if LUA_PROFILE
+  G(L)->openupvalcount++;
+  G(L)->upvalbytes += sizeof(UpVal);
+#endif
   return uv;
 }
 
@@ -101,6 +117,11 @@ static void unlinkupval (UpVal *uv) {
 
 
 void luaF_freeupval (lua_State *L, UpVal *uv) {
+#if LUA_PROFILE
+  if (uv->v != &uv->u.value) G(L)->openupvalcount--;
+  else G(L)->closeupvalcount--;
+  G(L)->upvalbytes -= sizeof(UpVal);
+#endif
   if (uv->v != &uv->u.value)  /* is it open? */
     unlinkupval(uv);  /* remove from open list */
   luaM_free(L, uv);  /* free upvalue */
@@ -121,6 +142,10 @@ void luaF_close (lua_State *L, StkId level) {
       setobj2n(L, &uv->u.value, uv->v);
       uv->v = &uv->u.value;  /* now current value lives here */
       luaC_linkupval(L, uv);  /* link upvalue into `gcroot' list */
+#if LUA_PROFILE
+      G(L)->openupvalcount--;
+      G(L)->closeupvalcount++;
+#endif
     }
   }
 }
@@ -151,11 +176,25 @@ Proto *luaF_newproto (lua_State *L) {
   f->linedefined = 0;
   f->lastlinedefined = 0;
   f->source = NULL;
+#if LUA_PROFILE
+  G(L)->protocount++;
+#endif
   return f;
 }
 
 
 void luaF_freeproto (lua_State *L, Proto *f) {
+#if LUA_PROFILE
+  G(L)->protocount--;
+  G(L)->protobytes -= f->sizecode * sizeof(Instruction) \
+		    + f->sizep * sizeof(Proto *) \
+		    + f->sizek * sizeof(TValue) \
+		    + f->sizelineinfo * sizeof(int) \
+		    + f->sizelocvars * sizeof(struct LocVar) \
+		    + f->sizeupvalues * sizeof(TString *) \
+		    + sizeof(Proto);
+
+#endif
   luaM_freearray(L, f->code, f->sizecode, Instruction);
   luaM_freearray(L, f->p, f->sizep, Proto *);
   luaM_freearray(L, f->k, f->sizek, TValue);
@@ -169,6 +208,16 @@ void luaF_freeproto (lua_State *L, Proto *f) {
 void luaF_freeclosure (lua_State *L, Closure *c) {
   int size = (c->c.isC) ? sizeCclosure(c->c.nupvalues) :
                           sizeLclosure(c->l.nupvalues);
+#if LUA_PROFILE
+  if (c->c.isC) {
+    G(L)->cclosurecount--;
+    G(L)->cclosurebytes -= size;
+  }
+  else {
+    G(L)->lclosurecount--;
+    G(L)->lclosurebytes -= size;
+  }
+#endif
   luaM_freemem(L, c, size);
 }
 

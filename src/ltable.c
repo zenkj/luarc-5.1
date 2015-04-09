@@ -337,6 +337,11 @@ static void resize (lua_State *L, Table *t, int nasize, int nhsize) {
 #endif /* LUA_REFCOUNT */
     luaM_freearray(L, nold, twoto(oldhsize), Node);  /* free old array */
   }
+#if LUA_PROFILE
+  t->resizecount++;
+  G(L)->tablebytes += (nasize-oldasize)*sizeof(TValue) \
+		  + (sizenode(t)-(nold!=dummynode?twoto(oldhsize):0))*sizeof(Node);
+#endif
 }
 
 
@@ -386,11 +391,25 @@ Table *luaH_new (lua_State *L, int narray, int nhash) {
   t->node = cast(Node *, dummynode);
   setarrayvector(L, t, narray);
   setnodevector(L, t, nhash);
+#if LUA_PROFILE
+  t->resizecount = 0;
+  G(L)->tablecount++;
+  if (t->node != dummynode)
+    G(L)->tablebytes += sizenode(t) * sizeof(Node);
+  G(L)->tablebytes += sizeof(Table) + t->sizearray * sizeof(TValue);
+#endif
   return t;
 }
 
 
 void luaH_free (lua_State *L, Table *t) {
+#if LUA_PROFILE
+  G(L)->tablecount--;
+  if (t->node != dummynode)
+    G(L)->tablebytes -= sizenode(t) * sizeof(Node);
+  G(L)->tablebytes -= t->sizearray * sizeof(TValue);
+  G(L)->tablebytes -= sizeof(Table);
+#endif
   if (t->node != dummynode)
     luaM_freearray(L, t->node, sizenode(t), Node);
   luaM_freearray(L, t->array, t->sizearray, TValue);

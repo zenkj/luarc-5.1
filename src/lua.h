@@ -16,8 +16,8 @@
 #include "luaconf.h"
 
 
-#define LUA_VERSION	"Lua 5.1"
-#define LUA_RELEASE	"Lua 5.1.4"
+#define LUA_VERSION	"Luarc 5.1"
+#define LUA_RELEASE	"Luarc 5.1.4"
 #define LUA_VERSION_NUM	501
 #define LUA_COPYRIGHT	"Copyright (C) 1994-2008 Lua.org, PUC-Rio"
 #define LUA_AUTHORS 	"R. Ierusalimschy, L. H. de Figueiredo & W. Celes"
@@ -182,6 +182,52 @@ LUA_API void  (lua_createtable) (lua_State *L, int narr, int nrec);
 LUA_API void *(lua_newuserdata) (lua_State *L, size_t sz);
 LUA_API int   (lua_getmetatable) (lua_State *L, int objindex);
 LUA_API void  (lua_getfenv) (lua_State *L, int idx);
+
+#if LUA_PROFILE
+typedef struct lua_Statdata {
+  lua_Number max;
+  lua_Number min;
+  lua_Number avg;
+  lua_Integer cnt;
+} lua_Statdata;
+
+typedef struct lua_Objectinfo {
+  lua_Integer count; /* object count */
+  lua_Number bytes; /* total size of all object */
+} lua_Objectinfo;
+
+typedef struct lua_Heapinfo {
+  lua_Number allocbytes; /* allocated heap object bytes */
+  lua_Number freebytes; /* freed heap object bytes */
+  lua_Number totalbytes; /* current heap object bytes */
+  lua_Integer totalcount; /* current heap object number */
+} lua_Heapinfo;
+
+LUA_API lua_Integer (lua_stackresizecount) (lua_State *L, int idx);
+LUA_API lua_Integer (lua_ciresizecount) (lua_State *L, int idx);
+LUA_API lua_Integer (lua_tableresizecount) (lua_State *L, int idx);
+LUA_API void (lua_gcsteps) (lua_State *L, lua_Statdata *sd);
+LUA_API void (lua_marksteps) (lua_State *L, lua_Statdata *sd);
+LUA_API void (lua_sweepstringsteps) (lua_State *L, lua_Statdata *sd);
+LUA_API void (lua_sweepsteps) (lua_State *L, lua_Statdata *sd);
+LUA_API void (lua_finalizesteps) (lua_State *L, lua_Statdata *sd);
+LUA_API void (lua_gcperiod) (lua_State *L, lua_Statdata *sd);
+LUA_API void (lua_nogcperiod) (lua_State *L, lua_Statdata *sd);
+LUA_API void (lua_heapinfo) (lua_State *L, lua_Heapinfo *hi);
+LUA_API void (lua_tableinfo) (lua_State *L, lua_Objectinfo *oi);
+LUA_API void (lua_protoinfo) (lua_State *L, lua_Objectinfo *oi);
+LUA_API void (lua_lclosureinfo) (lua_State *L, lua_Objectinfo *oi);
+LUA_API void (lua_cclosureinfo) (lua_State *L, lua_Objectinfo *oi);
+LUA_API void (lua_closureinfo) (lua_State *L, lua_Objectinfo *oi);
+LUA_API void (lua_threadinfo) (lua_State *L, lua_Objectinfo *oi);
+LUA_API void (lua_openupvalinfo) (lua_State *L, lua_Objectinfo *oi);
+LUA_API void (lua_closeupvalinfo) (lua_State *L, lua_Objectinfo *oi);
+LUA_API void (lua_upvalinfo) (lua_State *L, lua_Objectinfo *oi);
+LUA_API void (lua_userdatainfo) (lua_State *L, lua_Objectinfo *oi);
+LUA_API void (lua_stringinfo) (lua_State *L, lua_Objectinfo *oi);
+LUA_API lua_Number (lua_nanosecond) (lua_State *L);
+
+#endif 
 
 
 /*

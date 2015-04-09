@@ -62,12 +62,20 @@ static void stack_init (lua_State *L1, lua_State *L) {
   setnilvalue2n(L1->top++);  /* `function' entry for this `ci' */
   L1->base = L1->ci->base = L1->top;
   L1->ci->top = L1->top + LUA_MINSTACK;
+#if LUA_PROFILE
+  G(L)->threadbytes += L1->stacksize*sizeof(TValue) \
+			+ L1->size_ci*sizeof(CallInfo);
+#endif
 }
 
 
 static void freestack (lua_State *L, lua_State *L1) {
   luaM_freearray(L, L1->base_ci, L1->size_ci, CallInfo);
   luaM_freearray(L, L1->stack, L1->stacksize, TValue);
+#if LUA_PROFILE
+  G(L)->threadbytes -= L1->stacksize*sizeof(TValue) \
+			+ L1->size_ci*sizeof(CallInfo);
+#endif
 }
 
 
@@ -109,6 +117,10 @@ static void preinit_state (lua_State *L, global_State *g) {
 #if LUA_REFCOUNT
   setnilvalue2n(&L->env);
 #endif
+#if LUA_PROFILE
+  L->stackresizecount = 0;
+  L->ciresizecount = 0;
+#endif
 }
 
 
@@ -140,6 +152,10 @@ lua_State *luaE_newthread (lua_State *L) {
   L1->hook = L->hook;
   resethookcount(L1);
   lua_assert(iswhite(obj2gco(L1)));
+#if LUA_PROFILE
+  G(L)->threadcount++;
+  G(L)->threadbytes += state_size(lua_State);
+#endif
   return L1;
 }
 
@@ -149,8 +165,24 @@ void luaE_freethread (lua_State *L, lua_State *L1) {
   lua_assert(L1->openupval == NULL);
   luai_userstatefree(L1);
   freestack(L, L1);
+#if LUA_PROFILE
+  G(L)->threadcount--;
+  G(L)->threadbytes -= state_size(lua_State);
+#endif
   luaM_freemem(L, fromstate(L1), state_size(lua_State));
 }
+
+#if LUA_PROFILE
+#if defined(LUA_WIN)
+#include <windows.h>
+static lua_Number clockfreq () {
+  LARGE_INTEGER freq;
+  if (QueryPerformanceFrequency(&freq))
+    return (lua_Number)freq.QuadPart/(1000*1000*1000);
+  return (lua_Number)0;
+}
+#endif
+#endif
 
 
 LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
@@ -191,6 +223,41 @@ LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
   g->gcpause = LUAI_GCPAUSE;
   g->gcstepmul = LUAI_GCMUL;
   g->gcdept = 0;
+#if LUA_PROFILE
+  statinit(&g->gcsteps);
+  statinit(&g->marksteps);
+  statinit(&g->sweepstringsteps);
+  statinit(&g->sweepsteps);
+  statinit(&g->finalizesteps);
+  statinit(&g->gcperiod);
+  statinit(&g->nogcperiod);
+  g->allocbytes = state_size(LG);
+  g->freebytes = 0;
+  g->tablebytes = 0;
+  g->protobytes = 0;
+  g->lclosurebytes = 0;
+  g->cclosurebytes = 0;
+  g->threadbytes = state_size(LG);
+  g->upvalbytes = 0;
+  g->udatabytes = 0;
+  g->stringbytes = 0;
+  g->tablecount = 0;
+  g->protocount = 0;
+  g->lclosurecount = 0;
+  g->cclosurecount = 0;
+  g->threadcount = 1;
+  g->openupvalcount = 0;
+  g->closeupvalcount = 0;
+  g->udatacount = 0;
+  g->stringcount = 0;
+#if defined(LUA_WIN)
+  g->clockfreq = clockfreq();
+#else
+  g->clockfreq = (lua_Number)0;
+#endif
+  /* on Windows, lua_nanosecond needs g->clockfreq */
+  statacc1(&g->nogcperiod, lua_nanosecond(L));
+#endif
   for (i=0; i<NUM_TAGS; i++) g->mt[i] = NULL;
   if (luaD_rawrunprotected(L, f_luaopen, NULL) != 0) {
     /* memory allocation error: free partial state */

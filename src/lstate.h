@@ -61,6 +61,33 @@ typedef struct CallInfo {
 #define f_isLua(ci)	(!ci_func(ci)->c.isC)
 #define isLua(ci)	(ttisfunction((ci)->func) && f_isLua(ci))
 
+#if LUA_PROFILE
+/* statistic data */
+typedef struct statdata {
+  lua_Number acc; /* temporary accumulator */
+  lua_Number max; /* maximum value */
+  lua_Number min; /* minimum value */
+  lua_Number avg; /* average value */
+  lua_Integer cnt; /* count */
+} statdata;
+
+#define statinit(sd) \
+  { statdata *p=(sd); p->acc=p->max=p->min=p->avg=0.0; p->cnt=0;}
+#define statacc(sd) { (sd)->acc++; }
+#define statacc1(sd, v) { (sd)->acc = (v); }
+#define statloop(sd) \
+  { statdata *p=(sd); lua_Number acc=p->acc; \
+    p->max = p->max < acc ? acc : p->max; \
+    p->min = p->min > acc ? acc : p->min; \
+    p->avg = (p->avg*p->cnt+acc)/(p->cnt+1); \
+    p->cnt++; p->acc = 0.0; }
+#define statloop1(sd,v) \
+  { statdata *p=(sd); lua_Number v1=(v); lua_Number acc=v1-p->acc; \
+    p->max = p->max < acc ? acc : p->max; \
+    p->min = p->min > acc ? acc : p->min; \
+    p->avg = (p->avg*p->cnt+acc)/(p->cnt+1); \
+    p->cnt++; p->acc = v1; }
+#endif
 
 /*
 ** `global state', shared by all threads of this state
@@ -91,6 +118,36 @@ typedef struct global_State {
   UpVal uvhead;  /* head of double-linked list of all open upvalues */
   struct Table *mt[NUM_TAGS];  /* metatables for basic types */
   TString *tmname[TM_N];  /* array with tag-method names */
+#if LUA_PROFILE
+  /* GC related profiling data */
+  statdata gcsteps;
+  statdata marksteps;
+  statdata sweepstringsteps;
+  statdata sweepsteps;
+  statdata finalizesteps;
+  statdata gcperiod;
+  statdata nogcperiod;
+  lu_mem allocbytes;
+  lu_mem freebytes;
+  lu_mem tablebytes;
+  lu_mem protobytes;
+  lu_mem lclosurebytes;
+  lu_mem cclosurebytes;
+  lu_mem threadbytes;
+  lu_mem upvalbytes;
+  lu_mem udatabytes;
+  lu_mem stringbytes;
+  lua_Integer tablecount;
+  lua_Integer protocount;
+  lua_Integer lclosurecount;
+  lua_Integer cclosurecount;
+  lua_Integer threadcount;
+  lua_Integer openupvalcount;
+  lua_Integer closeupvalcount;
+  lua_Integer udatacount;
+  lua_Integer stringcount;
+  lua_Number clockfreq; /* cycle per nanosecond */
+#endif
 } global_State;
 
 
@@ -130,6 +187,10 @@ struct lua_State {
 #endif
   struct lua_longjmp *errorJmp;  /* current error recover point */
   ptrdiff_t errfunc;  /* current error handling function (stack index) */
+#if LUA_PROFILE
+  lua_Integer stackresizecount;
+  lua_Integer ciresizecount;
+#endif
 };
 
 
