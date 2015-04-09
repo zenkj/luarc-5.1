@@ -1,6 +1,6 @@
 #!/bin/sh
 
-LOGFILE=valgrind.result
+LOGFILE=result/memcheck.result
 
 output() {
   echo $*

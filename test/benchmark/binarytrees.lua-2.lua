@@ -2,6 +2,8 @@
 -- http://benchmarksgame.alioth.debian.org/
 -- contributed by Mike Pall
 
+local profile = profile and profile or setmetatable({},{__index=function()return function()return 0 end end})
+
 local function BottomUpTree(item, depth)
   if depth > 0 then
     local i = item + item
@@ -48,3 +50,7 @@ end
 
 io.write(string.format("long lived tree of depth %d\t check: %d\n",
   maxdepth, ItemCheck(longlivedtree)))
+
+print("gcsteps", profile.gcsteps())
+print("gcperiod", profile.gcperiod())
+print("nogcperiod", profile.nogcperiod())

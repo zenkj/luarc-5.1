@@ -1,0 +1,32 @@
+global lasttime
+global nogcstat
+global gcstat
+
+function mark() {
+  curr = gettimeofday_us()
+  delta = curr - lasttime
+  lasttime = curr
+  return delta
+}
+
+function printstat(msg, stat) {
+  printf("%s: max %d, min %d, avg %d, cnt %d\n", msg, @max(stat),
+	  @min(stat), @avg(stat), @count(stat));
+}
+
+probe process.statement(0x409e14) {
+  /* markroot, begin gc period */
+  delta = mark()
+  nogcstat <<< delta
+}
+
+probe process.statement(0x409e58) {
+  /* g->gcstate = GCSpause, end gc period */
+  delta = mark()
+  gcstat <<< delta
+}
+
+probe process.end {
+  printstat("gc", gcstat)
+  printstat("nogc", nogcstat)
+}

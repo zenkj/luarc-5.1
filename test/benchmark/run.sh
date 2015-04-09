@@ -1,8 +1,11 @@
 #!/bin/sh
 
+LOGFILE=result/test.result
+OUTPUT=result/test.output
+
 output() {
   echo $*
-  echo $* >>test.output
+  echo $* >>$OUTPUT
 }
 
 realrun() {
@@ -11,7 +14,7 @@ realrun() {
   output
   output begin to test $*
   output ==================================
-  /usr/bin/time $* >>test.output&
+  /usr/bin/time $* >>$OUTPUT&
   i=0
   pid=
   while [ "x$pid" = "x" ]; do
@@ -32,13 +35,13 @@ realrun() {
   done
 }
 
-rm -f test.result
-rm -f test.output
+rm -f $LOGFILE
+rm -f $OUTPUT
 
 runone() {
   echo -n $* ' ... '
   t1=`date +%s`
-  realrun $* >>test.result 2>&1
+  realrun $* >>$LOGFILE 2>&1
   t2=`date +%s`
   dt=$(expr $t2 - $t1)
   echo $dt seconds
@@ -47,6 +50,8 @@ runone() {
 run() {
   echo ======================================
   runone lua51 $* 
+  runone lua4g51 $* 
+  runone lua4g51t $* 
   runone luarc51 $*
 }
 
@@ -65,12 +70,12 @@ run binarytrees.lua-2.lua 16
 #run binarytrees.lua-3.lua 14
 #9s/8s
 #run binarytrees.lua-3.lua 15
-run binarytrees.lua-3.lua 16
+#run binarytrees.lua-3.lua 16
 #40s/49s
 #run binarytrees.lua-3.lua 17
 #run binarytrees.lua-3.lua 18
 #10s/12s
-run fannkuchredux.lua 10
+#run fannkuchredux.lua 10
 #125s/143s
 #run fannkuchredux.lua 11
 #1s/1s
@@ -80,11 +85,11 @@ run fannkuchredux.lua 10
 #8s/9s
 #run mandelbrot.lua 1500
 #13s/15s
-run mandelbrot.lua 2000
+#run mandelbrot.lua 2000
 #15s/16s
-run mandelbrot.lua-2.lua 2000
+#run mandelbrot.lua-2.lua 2000
 #15s/16s (double-free -- ok)
-run mandelbrot.lua-6.lua 2000
+#run mandelbrot.lua-6.lua 2000
 #1s/1s (double-free coredump -- ok)
 #run meteor.lua
 #1s/2s (double-free coredump -- ok)
@@ -114,7 +119,7 @@ run mandelbrot.lua-6.lua 2000
 #run revcomp.lua
 #run revcomp.lua-3.lua
 #10s/11s
-run spectralnorm.lua 1000
+#run spectralnorm.lua 1000
 #34s/41s
 #run spectralnorm.lua 2000
 #0/0

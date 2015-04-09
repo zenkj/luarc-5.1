@@ -1,4 +1,8 @@
 test:
 	./run.sh
-valgrind:
-	./valgrindrun.sh
+memcheck:
+	./memcheck.sh
+
+cachegrind:
+	./cachegrind.sh
+
