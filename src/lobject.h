@@ -399,6 +399,9 @@ void luarc_releaseobj (lua_State *L, GCObject *obj);
     i_o->value.gc=cast(GCObject *, (x)); i_o->tt=LUA_TPROTO; \
     checkliveness(G(L),i_o); }
 
+
+
+
 #define setobj(L,obj1,obj2) \
   { const TValue *o2=(obj2); TValue *o1=(obj1); \
     o1->value = o2->value; o1->tt=o2->tt; \
