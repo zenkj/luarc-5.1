@@ -35,9 +35,6 @@ realrun() {
   done
 }
 
-rm -f $LOGFILE
-rm -f $OUTPUT
-
 runone() {
   echo -n $* ' ... '
   t1=`date +%s`
@@ -51,10 +48,16 @@ run() {
   echo ======================================
   runone lua51 $* 
   runone lua4g51 $* 
-  runone lua4g51t $* 
+  runone lua4g51t -x0 $* 
+  runone lua4g51t -x1 $* 
+  runone lua4g51t -x2 $* 
   runone luarc51 $*
 }
 
+
+rm -f $LOGFILE
+rm -f $OUTPUT
+mkdir -p result
 
 #2.67s/1.53s
 #run binarytrees.lua-2.lua 13
@@ -70,7 +73,7 @@ run binarytrees.lua-2.lua 16
 #run binarytrees.lua-3.lua 14
 #9s/8s
 #run binarytrees.lua-3.lua 15
-#run binarytrees.lua-3.lua 16
+run binarytrees.lua-3.lua 16
 #40s/49s
 #run binarytrees.lua-3.lua 17
 #run binarytrees.lua-3.lua 18

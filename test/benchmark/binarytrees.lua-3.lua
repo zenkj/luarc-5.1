@@ -3,6 +3,8 @@
 -- contributed by Mike Pall
 -- modified by Sokolov yura
 
+local profile = profile and profile or setmetatable({},{__index=function()return function()return 0 end end})
+
 collectgarbage("setstepmul", 0) -- sometimes it helps much. For this benchmark ~ 10%
 
 local function BottomUpTree(item, depth)
@@ -52,3 +54,6 @@ end
 io.write(string.format("long lived tree of depth %d\t check: %d\n",
   maxdepth, ItemCheck(longlivedtree)))
 
+print("gcsteps", profile.gcsteps())
+print("gcperiod", profile.gcperiod())
+print("nogcperiod", profile.nogcperiod())

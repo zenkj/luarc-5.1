@@ -19,6 +19,7 @@ run() {
 }
 
 rm -f $LOGFILE
+mkdir -p result
 run binarytrees.lua-2.lua 
 run binarytrees.lua-3.lua
 run fannkuchredux.lua 5

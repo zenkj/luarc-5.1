@@ -17,6 +17,7 @@ run() {
   realrun lua51 $*
   realrun lua4g51 $*
   realrun lua4g51t $*
+  realrun lua4g51t -x3 $*
   realrun luarc51 $*
 }
 
@@ -31,6 +32,7 @@ cg() {
 }
 
 rm -f result/cachegrind.out.* $LOGFILE
+mkdir -p result
 run binarytrees.lua-2.lua 5
 run binarytrees.lua-3.lua 5
 #run fannkuchredux.lua 8

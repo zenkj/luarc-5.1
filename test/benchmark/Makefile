@@ -1,4 +1,4 @@
-test:
+run:
 	./run.sh
 memcheck:
 	./memcheck.sh
