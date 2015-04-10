@@ -1039,6 +1039,7 @@ LUA_API void lua_enablelog (lua_State *L, int loglevel) {
   if (loglevel >= 0 && loglevel <= 9) {
     lua_lock(L);
     G(L)->loglevel = loglevel;
+    lualog(L, 1, "enable log(level = %d)", loglevel);
     lua_unlock(L);
   }
 }
@@ -1046,6 +1047,7 @@ LUA_API void lua_enablelog (lua_State *L, int loglevel) {
 
 LUA_API void lua_disablelog (lua_State *L) {
   lua_lock(L);
+  lualog(L, 1, "disable log");
   G(L)->loglevel = 0;
   lua_unlock(L);
 }
