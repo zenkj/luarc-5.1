@@ -28,6 +28,15 @@ if not srow then
    
    local workunit = math.floor(width / (children + 1))
    local handles = { }
+   local cmd
+   for i=-1,-10,-1 do
+      if type(arg[i]) == 'string' and (arg[i]):sub(1,1) ~= '-' then
+	 cmd = arg[i]
+         break
+      end
+   end
+
+   if cmd == nil then write("error\n"); os.exit(1) end
    
    write("P4\n", width, " ", height, "\n")
    
@@ -48,7 +57,7 @@ if not srow then
       end
       
       handles[i + 1] = io.popen(("%s %s %d %d %d %d"):format(
-         arg[-1], arg[0], width, children + 1, cs, ce))
+         cmd, arg[0], width, children + 1, cs, ce))
    end
    
    -- collect answers, and emit

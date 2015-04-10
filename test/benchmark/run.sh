@@ -29,7 +29,7 @@ realrun() {
   done
   echo Got! $prog pid= $pid
 
-  while kill -0 $pid; do
+  while kill -0 $pid 2>/dev/null; do
     ps -o pid,pcpu,pmem,rss,vsize -p $pid
     sleep 1
   done
@@ -48,10 +48,9 @@ run() {
   echo ======================================
   runone lua51 $* 
   runone lua4g51 $* 
-  runone lua4g51t -x0 $* 
-  runone lua4g51t -x1 $* 
-  runone lua4g51t -x2 $* 
+  runone lua4g51 -x1 $* 
   runone luarc51 $*
+  runone luarc51 -x1 $*
 }
 
 
@@ -80,7 +79,7 @@ run binarytrees.lua-3.lua 16
 #10s/12s
 #run fannkuchredux.lua 10
 #125s/143s
-#run fannkuchredux.lua 11
+run fannkuchredux.lua 11
 #1s/1s
 #run fasta.lua 10000
 #0s/0s
@@ -92,7 +91,7 @@ run binarytrees.lua-3.lua 16
 #15s/16s
 #run mandelbrot.lua-2.lua 2000
 #15s/16s (double-free -- ok)
-#run mandelbrot.lua-6.lua 2000
+run mandelbrot.lua-6.lua 2000
 #1s/1s (double-free coredump -- ok)
 #run meteor.lua
 #1s/2s (double-free coredump -- ok)
@@ -124,6 +123,6 @@ run binarytrees.lua-3.lua 16
 #10s/11s
 #run spectralnorm.lua 1000
 #34s/41s
-#run spectralnorm.lua 2000
+run spectralnorm.lua 2000
 #0/0
 #run threadring.lua-3.lua 1000

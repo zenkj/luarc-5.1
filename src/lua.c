@@ -386,6 +386,7 @@ static int pmain (lua_State *L) {
   }
 #if LUA_PROFILE
   if (x >= 0 && x <= 9) lua_enablelog(L, x);
+  lualog(L, 1, "lua start");
 #endif
   if (has_v) print_version();
   s->status = runargs(L, argv, (script > 0) ? script : s->argc);
