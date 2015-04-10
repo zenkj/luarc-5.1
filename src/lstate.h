@@ -101,6 +101,8 @@ typedef struct statdata {
  * 0 - no log
  * 1 - lua begin
  *     lua end
+ *     enable log
+ *     disable log
  *     gc begin
  *     gc end
  * 2 - gc atomic begin
