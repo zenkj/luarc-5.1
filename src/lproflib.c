@@ -243,9 +243,9 @@ static int prof_help (lua_State *L) {
     "                          closed upval number/closed upval size.\n"
     "userdatainfo():           userdata number/total userdata object size.\n"
     "stringinfo():             string number/total string object size.\n"
-    "nanosecond():             nanoseconds from clock_gettime(POSIX) or \n"
-    "                          QueryPerformanceCounter(Windows).\n"
-    "enablelog(level):         enable log with level `level'(1-9, default 1).\n"
+    "nanosecond():             nanoseconds from the time lua VM starts.\n"
+    "enablelog(level):         enable log with level `level'(1-9, default 1,\n"
+    "                          bigger level means more verbose).\n"
     "disablelog():             disable log.\n"
     "help():                   display this help message.\n");
 

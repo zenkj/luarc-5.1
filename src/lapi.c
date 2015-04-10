@@ -806,83 +806,98 @@ LUA_API lua_Integer lua_tableresizecount (lua_State *L, int idx) {
 LUA_API void lua_gcsteps (lua_State *L, lua_Statdata *sd) {
   statdata *isd;
   if (sd == NULL) return;
+  lua_lock(L);
   isd = &G(L)->gcsteps;
   sd->max = isd->max;
   sd->min = isd->min;
   sd->avg = isd->avg;
   sd->cnt = isd->cnt;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_marksteps (lua_State *L, lua_Statdata *sd) {
   statdata *isd;
   if (sd == NULL) return;
+  lua_lock(L);
   isd = &G(L)->marksteps;
   sd->max = isd->max;
   sd->min = isd->min;
   sd->avg = isd->avg;
   sd->cnt = isd->cnt;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_sweepstringsteps (lua_State *L, lua_Statdata *sd) {
   statdata *isd;
   if (sd == NULL) return;
+  lua_lock(L);
   isd = &G(L)->sweepstringsteps;
   sd->max = isd->max;
   sd->min = isd->min;
   sd->avg = isd->avg;
   sd->cnt = isd->cnt;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_sweepsteps (lua_State *L, lua_Statdata *sd) {
   statdata *isd;
   if (sd == NULL) return;
+  lua_lock(L);
   isd = &G(L)->sweepsteps;
   sd->max = isd->max;
   sd->min = isd->min;
   sd->avg = isd->avg;
   sd->cnt = isd->cnt;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_finalizesteps (lua_State *L, lua_Statdata *sd) {
   statdata *isd;
   if (sd == NULL) return;
+  lua_lock(L);
   isd = &G(L)->finalizesteps;
   sd->max = isd->max;
   sd->min = isd->min;
   sd->avg = isd->avg;
   sd->cnt = isd->cnt;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_gcperiod (lua_State *L, lua_Statdata *sd) {
   statdata *isd;
   if (sd == NULL) return;
+  lua_lock(L);
   isd = &G(L)->gcperiod;
   sd->max = isd->max;
   sd->min = isd->min;
   sd->avg = isd->avg;
   sd->cnt = isd->cnt;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_nogcperiod (lua_State *L, lua_Statdata *sd) {
   statdata *isd;
   if (sd == NULL) return;
+  lua_lock(L);
   isd = &G(L)->nogcperiod;
   sd->max = isd->max;
   sd->min = isd->min;
   sd->avg = isd->avg;
   sd->cnt = isd->cnt;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_heapinfo (lua_State *L, lua_Heapinfo *hi) {
   global_State *g;
   if (hi == NULL) return;
+  lua_lock(L);
   g = G(L);
   hi->allocbytes = (lua_Number)g->allocbytes;
   hi->freebytes = (lua_Number)g->freebytes;
@@ -890,86 +905,109 @@ LUA_API void lua_heapinfo (lua_State *L, lua_Heapinfo *hi) {
   hi->totalcount = g->tablecount + g->protocount + g->lclosurecount
 		  + g->cclosurecount + g->threadcount + g->openupvalcount
 		  + g->closeupvalcount + g->udatacount + g->stringcount;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_tableinfo (lua_State *L, lua_Objectinfo *oi) {
   if (oi == NULL) return;
+  lua_lock(L);
   oi->count = G(L)->tablecount;
   oi->bytes = (lua_Number)G(L)->tablebytes;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_protoinfo (lua_State *L, lua_Objectinfo *oi) {
   if (oi == NULL) return;
+  lua_lock(L);
   oi->count = G(L)->protocount;
   oi->bytes = (lua_Number)G(L)->protobytes;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_lclosureinfo (lua_State *L, lua_Objectinfo *oi) {
   if (oi == NULL) return;
+  lua_lock(L);
   oi->count = G(L)->lclosurecount;
   oi->bytes = (lua_Number)G(L)->lclosurebytes;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_cclosureinfo (lua_State *L, lua_Objectinfo *oi) {
   if (oi == NULL) return;
+  lua_lock(L);
   oi->count = G(L)->cclosurecount;
   oi->bytes = (lua_Number)G(L)->cclosurebytes;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_closureinfo (lua_State *L, lua_Objectinfo *oi) {
   if (oi == NULL) return;
+  lua_lock(L);
   oi->count = G(L)->cclosurecount + G(L)->lclosurecount;
   oi->bytes = (lua_Number)(G(L)->cclosurebytes + G(L)->lclosurebytes);
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_threadinfo (lua_State *L, lua_Objectinfo *oi) {
   if (oi == NULL) return;
+  lua_lock(L);
   oi->count = G(L)->threadcount;
   oi->bytes = (lua_Number)G(L)->threadbytes;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_openupvalinfo (lua_State *L, lua_Objectinfo *oi) {
   if (oi == NULL) return;
+  lua_lock(L);
   oi->count = G(L)->openupvalcount;
   oi->bytes = (lua_Number)(G(L)->openupvalcount * sizeof(UpVal));
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_closeupvalinfo (lua_State *L, lua_Objectinfo *oi) {
   if (oi == NULL) return;
+  lua_lock(L);
   oi->count = G(L)->closeupvalcount;
   oi->bytes = (lua_Number)(G(L)->closeupvalcount * sizeof(UpVal));
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_upvalinfo (lua_State *L, lua_Objectinfo *oi) {
   global_State *g;
   if (oi == NULL) return;
+  lua_lock(L);
   g = G(L);
   oi->count = g->closeupvalcount + g->openupvalcount;
   oi->bytes = (lua_Number)(oi->count * sizeof(UpVal));
   api_check(L, oi->count*sizeof(UpVal) == g->upvalbytes);
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_userdatainfo (lua_State *L, lua_Objectinfo *oi) {
   if (oi == NULL) return;
+  lua_lock(L);
   oi->count = G(L)->udatacount;
   oi->bytes = (lua_Number)G(L)->udatabytes;
+  lua_unlock(L);
 }
 
 
 LUA_API void lua_stringinfo (lua_State *L, lua_Objectinfo *oi) {
   if (oi == NULL) return;
+  lua_lock(L);
   oi->count = G(L)->stringcount;
   oi->bytes = (lua_Number)G(L)->stringbytes;
+  lua_unlock(L);
 }
 
 
@@ -977,9 +1015,10 @@ LUA_API void lua_stringinfo (lua_State *L, lua_Objectinfo *oi) {
 #include <windows.h>
 LUA_API lua_Number lua_nanosecond (lua_State *L) {
   LARGE_INTEGER counter;
+  lua_Number n = 0;
   if (QueryPerformanceCounter(&counter))
-    return (lua_Number)counter.QuadPart/G(L)->clockfreq;
-  return (lua_Number)0;
+    n = counter.QuadPart/G(L)->clockfreq - G(L)->starttime;
+  return n;
 }
 #endif
 
@@ -988,20 +1027,27 @@ LUA_API lua_Number lua_nanosecond (lua_State *L) {
 #include <time.h>
 LUA_API lua_Number lua_nanosecond (lua_State *L) {
   struct timespec ts;
+  lua_Number n;
   clock_gettime(CLOCK_MONOTONIC_RAW, &ts);
-  return ((lua_Number)ts.tv_sec*1000*1000*1000+ts.tv_nsec);
+  n = (lua_Number)ts.tv_sec*1000*1000*1000 + ts.tv_nsec;
+  return n - G(L)->starttime;
 }
 #endif /* defined(LUA_USE_POSIX) */
 
 
 LUA_API void lua_enablelog (lua_State *L, int loglevel) {
-  if (loglevel >= 0 && loglevel <= 9)
+  if (loglevel >= 0 && loglevel <= 9) {
+    lua_lock(L);
     G(L)->loglevel = loglevel;
+    lua_unlock(L);
+  }
 }
 
 
 LUA_API void lua_disablelog (lua_State *L) {
+  lua_lock(L);
   G(L)->loglevel = 0;
+  lua_unlock(L);
 }
 
 #endif /* LUA_PROFILE */

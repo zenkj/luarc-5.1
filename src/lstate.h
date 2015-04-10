@@ -71,30 +71,31 @@ typedef struct statdata {
   lua_Integer cnt; /* count */
 } statdata;
 
+/* Initialize the statistics structure */
 #define statinit(sd) \
   { statdata *p=(sd); p->acc=p->max=p->min=p->avg=0.0; p->cnt=0;}
+
+/* Statistics period to count the occurrence of actions */
 #define statacc(sd) { (sd)->acc++; }
-#define statacc1(sd, v) { (sd)->acc = (v); }
 #define statloop(sd) \
   { statdata *p=(sd); lua_Number acc=p->acc; \
     p->max = p->max < acc ? acc : p->max; \
     p->min = p->min > acc ? acc : p->min; \
     p->avg = (p->avg*p->cnt+acc)/(p->cnt+1); \
     p->cnt++; p->acc = 0.0; }
+
+/* Statistics period to count delta value of begin and end */
+#define statacc1(sd, v) { (sd)->acc = (v); }
 #define statloop1(sd,v) \
   { statdata *p=(sd); lua_Number v1=(v); lua_Number acc=v1-p->acc; \
     p->max = p->max < acc ? acc : p->max; \
     p->min = p->min > acc ? acc : p->min; \
     p->avg = (p->avg*p->cnt+acc)/(p->cnt+1); \
     p->cnt++; p->acc = v1; }
+
+
+/* performance log facilities */
 #include <stdio.h>
-#define lualog(L, level, msg, ...) \
-  { if ((level) <= G(L)->loglevel) \
-      fprintf(stderr, "%15.0lf ns - " msg "\n", \
-	(lua_nanosecond(L)-G(L)->starttime), ##__VA_ARGS__); }
-
-#else
-
 /*
  * log level:
  * 0 - no log
@@ -109,6 +110,13 @@ typedef struct statdata {
  *     gc finalize begin
  *     barrier back
  */
+#define lualog(L, level, msg, ...) \
+  { if ((level) <= G(L)->loglevel) \
+      fprintf(stderr, "[lualog] %14.0lf ns - " msg "\n", \
+	lua_nanosecond(L), ##__VA_ARGS__); }
+
+#else
+
 #define lualog(L, level, msg, ...) (void)
 
 #endif

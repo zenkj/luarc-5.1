@@ -234,6 +234,7 @@ LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
   statinit(&g->finalizesteps);
   statinit(&g->gcperiod);
   statinit(&g->nogcperiod);
+  statacc1(&g->nogcperiod, 0);
   g->allocbytes = state_size(LG);
   g->freebytes = 0;
   g->tablebytes = 0;
@@ -258,12 +259,17 @@ LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
 #else
   g->clockfreq = (lua_Number)0;
 #endif
-  /* on Windows, lua_nanosecond needs g->clockfreq */
-  g->starttime = lua_nanosecond(L);
+  g->starttime = (lua_Number)0;
   g->loglevel = 0;
-  statacc1(&g->nogcperiod, lua_nanosecond(L));
-#endif
+  
+  /* on Windows, lua_nanosecond needs g->clockfreq */
+  /* the first invocation of lua_nanosecond() should be used to
+   * initialize g->starttime which should be 0 then */
+  g->starttime = lua_nanosecond(L);
+
   lualog(L, 1, "lua created");
+#endif
+
   for (i=0; i<NUM_TAGS; i++) g->mt[i] = NULL;
   if (luaD_rawrunprotected(L, f_luaopen, NULL) != 0) {
     /* memory allocation error: free partial state */
