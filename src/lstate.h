@@ -103,13 +103,13 @@ typedef struct statdata {
  *     lua end
  *     enable log
  *     disable log
- *     gc begin
- *     gc end
  * 2 - gc atomic begin
  *     gc atomic end
- * 3 - gc sweepstring begin
+ * 3 - gc begin
+ *     gc sweepstring begin
  *     gc sweep begin
  *     gc finalize begin
+ *     gc end
  *     barrier back
  */
 #define lualog(L, level, msg, ...) \

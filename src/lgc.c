@@ -659,7 +659,7 @@ static l_mem singlestep (lua_State *L) {
       lua_Number t = lua_nanosecond(L);
       statloop1(&g->nogcperiod, t);
       statacc1(&g->gcperiod, t);
-      lualog(L, 1, "gc begin");
+      lualog(L, 3, "gc begin");
 #endif
       markroot(L);  /* start a new collection */
       return 0;
@@ -731,7 +731,7 @@ static l_mem singlestep (lua_State *L) {
 	statloop1(&g->gcperiod, t);
 	statloop(&g->gcsteps);
 	statloop(&g->finalizesteps);
-	lualog(L, 1, "gc end");
+	lualog(L, 3, "gc end");
 #endif
         g->gcstate = GCSpause;  /* end collection */
         g->gcdept = 0;
