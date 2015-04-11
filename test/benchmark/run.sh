@@ -46,11 +46,16 @@ runone() {
 
 run() {
   echo ======================================
-  runone lua51 $* 
-  runone lua4g51 $* 
-  runone lua4g51 -x1 $* 
-  runone luarc51 $*
-  runone luarc51 -x1 $*
+  runone ./lua5164 $* 
+  runone ./lua4g5164 $* 
+  runone ./lua4g5164 -x2 $* 
+  runone ./luarc5164 $*
+  runone ./luarc5164 -x2 $*
+  runone ./lua5132 $* 
+  runone ./lua4g5132 $* 
+  runone ./lua4g5132 -x2 $* 
+  runone ./luarc5132 $*
+  runone ./luarc5132 -x2 $*
 }
 
 
@@ -59,70 +64,70 @@ rm -f $OUTPUT
 mkdir -p result
 
 #2.67s/1.53s
-#run binarytrees.lua-2.lua 13
-#run binarytrees.lua-2.lua 14
+#run lua/binarytrees.lua-2.lua 13
+#run lua/binarytrees.lua-2.lua 14
 #13s/8s
-#run binarytrees.lua-2.lua 15
-run binarytrees.lua-2.lua 16
+#run lua/binarytrees.lua-2.lua 15
+run lua/binarytrees.lua-2.lua 16
 #63s/42s
-#run binarytrees.lua-2.lua 17
-#run binarytrees.lua-2.lua 18
+#run lua/binarytrees.lua-2.lua 17
+#run lua/binarytrees.lua-2.lua 18
 #1.54s/1.44s
-#run binarytrees.lua-3.lua 13
-#run binarytrees.lua-3.lua 14
+#run lua/binarytrees.lua-3.lua 13
+#run lua/binarytrees.lua-3.lua 14
 #9s/8s
-#run binarytrees.lua-3.lua 15
-run binarytrees.lua-3.lua 16
+#run lua/binarytrees.lua-3.lua 15
+run lua/binarytrees.lua-3.lua 16
 #40s/49s
-#run binarytrees.lua-3.lua 17
-#run binarytrees.lua-3.lua 18
+#run lua/binarytrees.lua-3.lua 17
+#run lua/binarytrees.lua-3.lua 18
 #10s/12s
-#run fannkuchredux.lua 10
+#run lua/fannkuchredux.lua 10
 #125s/143s
-run fannkuchredux.lua 11
+run lua/fannkuchredux.lua 11
 #1s/1s
-#run fasta.lua 10000
+#run lua/fasta.lua 10000
 #0s/0s
-#run knucleotide.lua-2.lua
+#run lua/knucleotide.lua-2.lua
 #8s/9s
-#run mandelbrot.lua 1500
+#run lua/mandelbrot.lua 1500
 #13s/15s
-#run mandelbrot.lua 2000
+#run lua/mandelbrot.lua 2000
 #15s/16s
-#run mandelbrot.lua-2.lua 2000
+#run lua/mandelbrot.lua-2.lua 2000
 #15s/16s (double-free -- ok)
-run mandelbrot.lua-6.lua 2000
+run lua/mandelbrot.lua-6.lua 2000
 #1s/1s (double-free coredump -- ok)
-#run meteor.lua
+#run lua/meteor.lua
 #1s/2s (double-free coredump -- ok)
-#run meteor.lua-2.lua
+#run lua/meteor.lua-2.lua
 #1s/2s (double-free coredump -- ok)
-#run meteor.lua-3.lua
+#run lua/meteor.lua-3.lua
 #1s/1s
-#run meteor.lua-4.lua
+#run lua/meteor.lua-4.lua
 #1s/1s
-#run nbody.lua 100000
-#run nbody.lua-2.lua
-#run nbody.lua-4.lua
+#run lua/nbody.lua 100000
+#run lua/nbody.lua-2.lua
+#run lua/nbody.lua-4.lua
 #0/0 (no required module c-gmp)
-#run pidigits.lua 10000
+#run lua/pidigits.lua 10000
 #0/0
-#run pidigits.lua-2.lua
-#run pidigits.lua-3.lua
-#run pidigits.lua-4.lua
-#run pidigits.lua-5.lua
-#run pidigits.lua-7.lua
-#run pidigits.lua-8.lua
+#run lua/pidigits.lua-2.lua
+#run lua/pidigits.lua-3.lua
+#run lua/pidigits.lua-4.lua
+#run lua/pidigits.lua-5.lua
+#run lua/pidigits.lua-7.lua
+#run lua/pidigits.lua-8.lua
 #0/0
-#run regexdna.lua 100000
-#run regexdna.lua-2.lua
-#run regexdna.lua-3.lua
+#run lua/regexdna.lua 100000
+#run lua/regexdna.lua-2.lua
+#run lua/regexdna.lua-3.lua
 #0/0
-#run revcomp.lua
-#run revcomp.lua-3.lua
+#run lua/revcomp.lua
+#run lua/revcomp.lua-3.lua
 #10s/11s
-#run spectralnorm.lua 1000
+#run lua/spectralnorm.lua 1000
 #34s/41s
-run spectralnorm.lua 2000
+run lua/spectralnorm.lua 2000
 #0/0
-#run threadring.lua-3.lua 1000
+#run lua/threadring.lua-3.lua 1000

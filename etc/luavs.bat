@@ -14,8 +14,11 @@ del lua.obj luac.obj
 %MYLINK% /DLL /out:lua51.dll l*.obj
 if exist lua51.dll.manifest^
   %MYMT% -manifest lua51.dll.manifest -outputresource:lua51.dll;2
-%MYCOMPILE% /DLUA_BUILD_AS_DLL lua.c
-%MYLINK% /out:lua.exe lua.obj lua51.lib
+@REM %MYCOMPILE% /DLUA_BUILD_AS_DLL lua.c
+@REM %MYLINK% /out:lua.exe lua.obj lua51.lib
+%MYCOMPILE% l*.c
+del luac.obj
+%MYLINK% /out:lua.exe *.obj
 if exist lua.exe.manifest^
   %MYMT% -manifest lua.exe.manifest -outputresource:lua.exe
 %MYCOMPILE% l*.c print.c

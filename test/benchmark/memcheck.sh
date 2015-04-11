@@ -15,39 +15,40 @@ realrun() {
 
 run() {
   output =======================================
-  realrun luarc51 $*
+  realrun ./luarc5164 $*
+  realrun ./luarc5132 $*
 }
 
 rm -f $LOGFILE
 mkdir -p result
-run binarytrees.lua-2.lua 
-run binarytrees.lua-3.lua
-run fannkuchredux.lua 5
-run fasta.lua
-run knucleotide.lua-2.lua <knucleotide.lua-2.lua
-run mandelbrot.lua
-run mandelbrot.lua-2.lua
-run mandelbrot.lua-6.lua
-run meteor.lua
-run meteor.lua-2.lua
-run meteor.lua-3.lua
-run meteor.lua-4.lua
-run nbody.lua
-run nbody.lua-2.lua
-run nbody.lua-4.lua
+run lua/binarytrees.lua-2.lua 
+run lua/binarytrees.lua-3.lua
+run lua/fannkuchredux.lua 5
+run lua/fasta.lua
+run lua/knucleotide.lua-2.lua <lua/knucleotide.lua-2.lua
+run lua/mandelbrot.lua
+run lua/mandelbrot.lua-2.lua
+run lua/mandelbrot.lua-6.lua
+run lua/meteor.lua
+run lua/meteor.lua-2.lua
+run lua/meteor.lua-3.lua
+run lua/meteor.lua-4.lua
+run lua/nbody.lua
+run lua/nbody.lua-2.lua
+run lua/nbody.lua-4.lua
 #need c-gmp module
-#run pidigits.lua
-#run pidigits.lua-2.lua
-#run pidigits.lua-3.lua
-#run pidigits.lua-4.lua
-#run pidigits.lua-5.lua
-#run pidigits.lua-7.lua
-#run pidigits.lua-8.lua
-run regexdna.lua <regexdna.lua
-run regexdna.lua-2.lua <regexdna.lua-2.lua
+#run lua/pidigits.lua
+#run lua/pidigits.lua-2.lua
+#run lua/pidigits.lua-3.lua
+#run lua/pidigits.lua-4.lua
+#run lua/pidigits.lua-5.lua
+#run lua/pidigits.lua-7.lua
+#run lua/pidigits.lua-8.lua
+run lua/regexdna.lua <lua/regexdna.lua
+run lua/regexdna.lua-2.lua <lua/regexdna.lua-2.lua
 #need 're' module
-#run regexdna.lua-3.lua <regexdna.lua-3.lua
-#run revcomp.lua <revcomp.lua
-#run revcomp.lua-3.lua <revcomp.lua-3.lua
-run spectralnorm.lua
-run threadring.lua-3.lua 1
+#run lua/regexdna.lua-3.lua <lua/regexdna.lua-3.lua
+#run lua/revcomp.lua <lua/revcomp.lua
+#run lua/revcomp.lua-3.lua <lua/revcomp.lua-3.lua
+run lua/spectralnorm.lua
+run lua/threadring.lua-3.lua 1

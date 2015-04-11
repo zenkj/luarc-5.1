@@ -14,11 +14,9 @@ realrun() {
 }
 
 run() {
-  realrun lua51 $*
-  realrun lua4g51 $*
-  realrun lua4g51 -x3 $*
-  realrun luarc51 $*
-  realrun luarc51 -x3 $*
+  realrun ./lua5164 $*
+  realrun ./lua4g5164 $*
+  realrun ./luarc5164 $*
 }
 
 cg() {
@@ -33,9 +31,9 @@ cg() {
 
 rm -f result/cachegrind.out.* $LOGFILE
 mkdir -p result
-run binarytrees.lua-2.lua 5
-run binarytrees.lua-3.lua 5
-run fannkuchredux.lua 8
-run spectralnorm.lua 5
+run lua/binarytrees.lua-2.lua 5
+run lua/binarytrees.lua-3.lua 5
+run lua/fannkuchredux.lua 8
+run lua/spectralnorm.lua 5
 
 cg
