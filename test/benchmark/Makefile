@@ -6,3 +6,5 @@ memcheck:
 cachegrind:
 	./cachegrind.sh
 
+clean:
+	rm -rf result

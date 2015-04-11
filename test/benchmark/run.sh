@@ -10,6 +10,7 @@ output() {
 
 realrun() {
   prog=$1
+  cookedprog=`echo $1 | tr '/' '.'`
   
   output
   output begin to test $*
@@ -19,7 +20,7 @@ realrun() {
   pid=
   while [ "x$pid" = "x" ]; do
     echo try to get the pid of $prog process...
-    pid=$(ps -u $USER -o pid,cmd | awk '/^ *[0-9][0-9]* '$prog'/ {print $1}')
+    pid=$(ps -u $USER -o pid,cmd | awk '/^ *[0-9][0-9]* '$cookedprog'/ {print $1}')
     i=$(expr $i + 1)
     if [ $i -ge 5 ]; then
       echo "no process created"
@@ -77,14 +78,14 @@ run lua/binarytrees.lua-2.lua 16
 #run lua/binarytrees.lua-3.lua 14
 #9s/8s
 #run lua/binarytrees.lua-3.lua 15
-run lua/binarytrees.lua-3.lua 16
+###run lua/binarytrees.lua-3.lua 16
 #40s/49s
 #run lua/binarytrees.lua-3.lua 17
 #run lua/binarytrees.lua-3.lua 18
 #10s/12s
 #run lua/fannkuchredux.lua 10
 #125s/143s
-run lua/fannkuchredux.lua 11
+###run lua/fannkuchredux.lua 11
 #1s/1s
 #run lua/fasta.lua 10000
 #0s/0s
@@ -96,7 +97,7 @@ run lua/fannkuchredux.lua 11
 #15s/16s
 #run lua/mandelbrot.lua-2.lua 2000
 #15s/16s (double-free -- ok)
-run lua/mandelbrot.lua-6.lua 2000
+###run lua/mandelbrot.lua-6.lua 2000
 #1s/1s (double-free coredump -- ok)
 #run lua/meteor.lua
 #1s/2s (double-free coredump -- ok)
@@ -128,6 +129,6 @@ run lua/mandelbrot.lua-6.lua 2000
 #10s/11s
 #run lua/spectralnorm.lua 1000
 #34s/41s
-run lua/spectralnorm.lua 2000
+###run lua/spectralnorm.lua 2000
 #0/0
 #run lua/threadring.lua-3.lua 1000
