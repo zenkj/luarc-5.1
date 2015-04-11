@@ -1,7 +1,10 @@
 @echo off
 mkdir result 2>nul
+del result\run.result
+del result\run.output
+del result\run.memory
 
-call :run lua\binarytrees.lua-2.lua 16
+call :run lua\binarytrees.lua-2.lua 15
 exit /b 0
 
 :run
@@ -15,13 +18,27 @@ exit /b 0
 
 
 :runone
-echo ====================================
-echo %* ...
+call :logblank
+call :log  ====================================
+call :log  %* ...
 set command=%1
-start timer.bat %* 
+start runwrapper.bat %* 
+echo %time%
 :again
-timeout /t 1
-tasklist | findstr %command% 
+timeout /t 1 >nul
+tasklist | findstr %command% >>result\run.memory
+echo %time%
 if errorlevel 1 exit /b 0
 goto :again
 
+:log
+echo %*
+echo %* >>result\run.memory
+exit /b 0
+
+:logblank
+rem any unused specila char append to echo to echo blank line
+rem ( is the recommanded always-compatible char
+echo(
+echo( >>result\run.memory
+exit /b 0
