@@ -4,7 +4,7 @@ call :log =======================================
 call :log %*
 call :log %time%
 %* 1>>result\run.output 2>>result\run.result
-call :log echo %time%
+call :log %time%
 exit
 
 :log

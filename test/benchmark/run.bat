@@ -1,16 +1,16 @@
 @echo off
 mkdir result 2>nul
-del result\run.result
-del result\run.output
-del result\run.memory
+del result\run.result 2>nul
+del result\run.output 2>nul
+del result\run.memory 2>nul
 
-call :run lua\binarytrees.lua-2.lua 15
+call :run lua\binarytrees.lua-2.lua 16
 exit /b 0
 
 :run
-call :runone lua5132.exe %*
-call :runone lua4g5132.exe -x1 %*
-call :runone luarc5132.exe -x1 %*
+rem call :runone lua5132.exe %*
+rem call :runone lua4g5132.exe -x1 %*
+rem call :runone luarc5132.exe -x1 %*
 call :runone lua5164.exe %*
 call :runone lua4g5164.exe -x1 %*
 call :runone luarc5164.exe -x1 %*

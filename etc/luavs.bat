@@ -4,8 +4,8 @@
 @rem (contributed by David Manura and Mike Pall)
 
 @setlocal
-@set MYCOMPILE=cl /nologo /MD /O2 /W3 /c /D_CRT_SECURE_NO_DEPRECATE
-@set MYLINK=link /nologo
+@set MYCOMPILE=cl /nologo /MD /O2 /W3 /c /D_CRT_SECURE_NO_DEPRECATE /GL /Gy /Oi /Zi /Fd"vc110.pdb"
+@set MYLINK=link /nologo /LTCG /OPT:ICF /OPT:REF /DEBUG /PDB:"lua.pdb"
 @set MYMT=mt /nologo
 
 cd src
