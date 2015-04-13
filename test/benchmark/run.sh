@@ -15,7 +15,7 @@ realrun() {
   output
   output begin to test $*
   output ==================================
-  /usr/bin/time $* >>$OUTPUT&
+  time $* >>$OUTPUT&
   i=0
   pid=
   while [ "x$pid" = "x" ]; do
