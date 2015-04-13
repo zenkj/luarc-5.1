@@ -1,3 +1,10 @@
+README for Luarc 5.1
+
+* v1.1  reference counting and profilinge.
+* v1.0  reference counting.
+
+
+--------------------------------------------------------------------
 README for Lua 5.1
 
 See INSTALL for installation instructions.
