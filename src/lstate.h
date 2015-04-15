@@ -119,7 +119,7 @@ typedef struct statdata {
 
 #else
 
-#define lualog(L, level, msg, ...) (void)
+#define lualog(L, level, msg, ...) ((void)0)
 
 #endif
 
