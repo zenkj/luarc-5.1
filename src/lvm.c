@@ -771,14 +771,18 @@ void luaV_execute (lua_State *L, int nexeccalls) {
       }
       case OP_RETURN: {
         int b = GETARG_B(i);
-        if (b != 0) {
 #if LUA_REFCOUNT
+	/* close open-upval first, then set local value to nil */
+        if (L->openupval) luaF_close(L, base);
+        if (b != 0) {
 	  while (L->top > ra+b-1)
 	    setnilvalue(L, --L->top);
-#endif
 	  L->top = ra+b-1;
 	}
+#else /* !LUA_REFCOUNT */
+        if (b != 0) L->top = ra+b-1;
         if (L->openupval) luaF_close(L, base);
+#endif
         L->savedpc = pc;
         b = luaD_poscall(L, ra);
         if (--nexeccalls == 0)  /* was previous function running `here'? */
