@@ -388,14 +388,20 @@ static void close_func (LexState *ls) {
   lua_assert(fs->bl == NULL);
   ls->fs = fs->prev;
 #if LUA_REFCOUNT
+  /* anchor_token should be invoken before setnilvalue(h), otherwise the
+   * last name/string to anchor will be freed before anchor */
+  /* last token read was anchored in defunct function; must reanchor it */
+  if (fs) anchor_token(ls);
   luarc_addprotoref(f); /* To avoid f->ref = 0 and proto deleted */
   setnilvalue(L, L->top-2);
   setnilvalue(L, L->top-1);
   /* now h->ref == 0 and f->ref == 1 */
-#endif /* LUA_REFCOUNT */
+  L->top -= 2;  /* remove table and prototype from the stack */
+#else /* !LUA_REFCOUNT */
   L->top -= 2;  /* remove table and prototype from the stack */
   /* last token read was anchored in defunct function; must reanchor it */
   if (fs) anchor_token(ls);
+#endif /* LUA_REFCOUNT */
 }
 
 
