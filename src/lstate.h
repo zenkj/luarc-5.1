@@ -114,8 +114,8 @@ typedef struct statdata {
  */
 #define lualog(L, level, msg, ...) \
   { if ((level) <= G(L)->loglevel) \
-      fprintf(stderr, "[lualog] %14.0lf ns - " msg "\n", \
-	lua_nanosecond(L), ##__VA_ARGS__); }
+      fprintf(stderr, "[lua %p] %14.0lf ns - " msg "\n", \
+	G(L), lua_nanosecond(L), ##__VA_ARGS__); }
 
 #else
 
