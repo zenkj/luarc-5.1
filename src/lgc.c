@@ -292,7 +292,9 @@ static void traversestack (global_State *g, lua_State *l) {
   for (o = l->stack; o < l->top; o++)
     markvalue(g, o);
 #if LUA_REFCOUNT
-  checkrangeisnil(o, lim);
+  /* Here it's very important to free temperary values */
+  for (; o <= lim; o++)
+    setnilvalue(l, o);
 #else /* !LUA_REFCOUNT */
   for (; o <= lim; o++)
     setnilvalue(o);
