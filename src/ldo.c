@@ -343,11 +343,9 @@ int luaD_precall (lua_State *L, StkId func, int nresults) {
     ci->tailcalls = 0;
     ci->nresults = nresults;
 #if LUA_REFCOUNT
-#if 0
     checkrangeisnil(L->top, ci->top);
     for (st=ci->top; st<L->top; st++)
       setnilvalue(L, st);
-#endif
 #else /* !LUA_REFCOUNT */
     for (st = L->top; st < ci->top; st++) {
       setnilvalue(st);

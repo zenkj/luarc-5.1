@@ -694,12 +694,10 @@ void luaV_execute (lua_State *L, int nexeccalls) {
         int nresults = GETARG_C(i) - 1;
         if (b != 0) {  /* else previous instruction set top */
 #if LUA_REFCOUNT
-#if 0
         /* [ra+b, L->top] may not be nil, should be freed */
 	  StkId p;
 	  for (p=ra+b; p<L->top; p++)
 	    setnilvalue(L, p);
-#endif
 #endif
 	  L->top = ra+b;
 	}
@@ -731,12 +729,10 @@ void luaV_execute (lua_State *L, int nexeccalls) {
         int b = GETARG_B(i);
         if (b != 0) {  /* else previous instruction set top */
 #if LUA_REFCOUNT
-#if 0
         /* [ra+b, L->top] may not be nil, should be freed */
 	  StkId p;
 	  for (p=ra+b; p<L->top; p++)
 	    setnilvalue(L, p);
-#endif
 #endif
 	  L->top = ra+b;
 	}
@@ -857,10 +853,8 @@ void luaV_execute (lua_State *L, int nexeccalls) {
         setobjs2s(L, cb+1, ra+1);
         setobjs2s(L, cb, ra);
 #if LUA_REFCOUNT
-#if 0
 	while (L->top > cb+3)
 	  setnilvalue(L, --L->top);
-#endif
 #endif
         L->top = cb+3;  /* func. + 2 args (state and index) */
         Protect(luaD_call(L, cb, GETARG_C(i)));
@@ -951,13 +945,11 @@ void luaV_execute (lua_State *L, int nexeccalls) {
           b = n;
 #if LUA_REFCOUNT
 	  checkrangeisnil(L->top, ra+n);
-#if 0
 	  /* value between ra+n and L->top may be not nil and 
            * should be free immediately, otherwise GC has chance
            * to free too (double free) */
 	  while (L->top > ra+n)
 	    setnilvalue(L, --L->top);
-#endif
 #endif
           L->top = ra + n;
         }
