@@ -597,9 +597,9 @@ static void logmemstat (lua_State *L) {
     n = (long long)(g->tablecount + g->protocount + g->lclosurecount
       + g->cclosurecount + g->threadcount + g->openupvalcount
       + g->closeupvalcount + g->udatacount + g->stringcount);
-    s = g->totalbytes;
+    s = (long long)g->totalbytes;
     lualog(L, 2, "heapinfo: count %lld, bytes %lld", n, s);
-    lualog(L, 2, "gcperiod: max %.0lf, min %.0lf, avg %.1lf, cnt %llu",
+    lualog(L, 2, "gcperiod: max %.0lf, min %.0lf, avg %.1lf, cnt %lld",
            g->gcperiod.max, g->gcperiod.min,
            g->gcperiod.avg, (long long)g->gcperiod.cnt);
     lualog(L, 2, "nogcperiod: max %.0lf, min %.0lf, avg %.1lf, cnt %lld",
