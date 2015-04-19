@@ -586,6 +586,41 @@ static void markmt (global_State *g) {
     if (g->mt[i]) markobject(g, g->mt[i]);
 }
 
+#if LUA_PROFILE
+static void logmemstat (lua_State *L) {
+  lua_Number now;
+  global_State *g = G(L);
+  now = lua_nanosecond(L);
+  if (now - g->prevtime > 10.0*1000*1000*1000) {
+    long long n, s;
+    g->prevtime = now;
+    n = (long long)(g->tablecount + g->protocount + g->lclosurecount
+      + g->cclosurecount + g->threadcount + g->openupvalcount
+      + g->closeupvalcount + g->udatacount + g->stringcount);
+    s = g->totalbytes;
+    lualog(L, 2, "heapinfo: count %lld, bytes %lld", n, s);
+    lualog(L, 2, "gcperiod: max %.0lf, min %.0lf, avg %.1lf, cnt %llu",
+           g->gcperiod.max, g->gcperiod.min,
+           g->gcperiod.avg, (long long)g->gcperiod.cnt);
+    lualog(L, 2, "nogcperiod: max %.0lf, min %.0lf, avg %.1lf, cnt %lld",
+           g->nogcperiod.max, g->nogcperiod.min,
+           g->nogcperiod.avg, (long long)g->nogcperiod.cnt);
+    lualog(L, 2, "tableinfo: count %lld, bytes %lld",
+           (long long)g->tablecount, (long long)g->tablebytes);
+    lualog(L, 2, "protoinfo: count %lld, bytes %lld",
+           (long long)g->protocount, (long long)g->protobytes);
+    lualog(L, 2, "closureinfo: count %lld, bytes %lld",
+           (long long)(g->cclosurecount + g->lclosurecount),
+           (long long)(g->cclosurebytes + g->lclosurebytes));
+    lualog(L, 2, "threadinfo: count %lld, bytes %lld",
+           (long long)g->threadcount, (long long)g->threadbytes);
+    lualog(L, 2, "udatainfo: count %lld, bytes %lld",
+           (long long)g->udatacount, (long long)g->udatabytes);
+    lualog(L, 2, "stringinfo: count %lld, bytes %lld",
+           (long long)g->stringcount, (long long)g->stringbytes);
+  }
+}
+#endif
 
 /* mark root set */
 static void markroot (lua_State *L) {
@@ -599,6 +634,10 @@ static void markroot (lua_State *L) {
   markvalue(g, registry(L));
   markmt(g);
   g->gcstate = GCSpropagate;
+#if LUA_PROFILE
+  if (g->loglevel >= 2)
+    logmemstat(L);
+#endif
 }
 
 

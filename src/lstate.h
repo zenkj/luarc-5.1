@@ -105,6 +105,7 @@ typedef struct statdata {
  *     disable log
  * 2 - gc atomic begin
  *     gc atomic end
+ *     memory statistics (log every 10 seconds)
  * 3 - gc begin
  *     gc sweepstring begin
  *     gc sweep begin
@@ -182,6 +183,7 @@ typedef struct global_State {
   lua_Integer stringcount;
   lua_Number clockfreq; /* Cycles per nanosecond */
   lua_Number starttime; /* start time in nanosecond */
+  lua_Number prevtime; /* previous time used for memstat log */
   int loglevel; /* profiling log level, 0: no log, 1-9: verbose level */
 #endif
 } global_State;
