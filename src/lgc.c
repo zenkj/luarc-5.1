@@ -654,7 +654,7 @@ static void remarkupvals (global_State *g) {
 static void atomic (lua_State *L) {
   global_State *g = G(L);
   size_t udsize;  /* total size of userdata to be finalized */
-  lualog(L, 2, "gc atomic begin");
+  logperiodbegin(L, 2);
   /* remark occasional upvalues of (maybe) dead threads */
   remarkupvals(g);
   /* traverse objects cautch by write barrier and by 'remarkupvals' */
@@ -684,7 +684,7 @@ static void atomic (lua_State *L) {
   g->sweepgc = &g->rootgc;
   g->gcstate = GCSsweepstring;
   g->estimate = g->totalbytes - udsize;  /* first estimate */
-  lualog(L, 2, "gc atomic end");
+  logperiod(L, 2, "gc atomic period");
 }
 
 

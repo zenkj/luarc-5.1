@@ -261,6 +261,7 @@ LUA_API lua_State *lua_newstate (lua_Alloc f, void *ud) {
 #endif
   g->starttime = (lua_Number)0;
   g->prevtime = (lua_Number)0;
+  g->periodbegin = (lua_Number)0;
   g->loglevel = 0;
   
   /* on Windows, lua_nanosecond needs g->clockfreq */

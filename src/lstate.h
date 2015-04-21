@@ -118,9 +118,20 @@ typedef struct statdata {
       fprintf(stderr, "[lua %p] %14.0lf ns - " msg "\n", \
 	G(L), lua_nanosecond(L), ##__VA_ARGS__); }
 
+#define logperiodbegin(L, level) \
+  { if ((level) <= G(L)->loglevel) \
+      G(L)->periodbegin = lua_nanosecond(L); }
+
+#define logperiod(L, level, msg, ...) \
+  { if ((level) <= G(L)->loglevel) \
+      fprintf(stderr, "[lua %p] period %14.0lf ns - " msg "\n", \
+	G(L), lua_nanosecond(L)-G(L)->periodbegin, ##__VA_ARGS__); }
+
 #else
 
 #define lualog(L, level, msg, ...) ((void)0)
+#define logperiodbegin(L, level) ((void)0)
+#define logperiod(L, level, msg, ...) ((void)0)
 
 #endif
 
@@ -184,6 +195,7 @@ typedef struct global_State {
   lua_Number clockfreq; /* Cycles per nanosecond */
   lua_Number starttime; /* start time in nanosecond */
   lua_Number prevtime; /* previous time used for memstat log */
+  lua_Number periodbegin; /* begin time used for measure time period */
   int loglevel; /* profiling log level, 0: no log, 1-9: verbose level */
 #endif
 } global_State;
