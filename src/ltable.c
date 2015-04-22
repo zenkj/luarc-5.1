@@ -467,7 +467,8 @@ static TValue *newkey (lua_State *L, Table *t, const TValue *key) {
   }
 #if LUA_REFCOUNT
   luarc_addref(key);
-  luarc_subref(L, key2tval(mp));
+  if (ttype(gkey(mp)) != LUA_TDEADKEY)
+    luarc_subref(L, key2tval(mp));
 #endif /* LUA_REFCOUNT */
   gkey(mp)->value = key->value; gkey(mp)->tt = key->tt;
   luaC_barriert(L, t, key);

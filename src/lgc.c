@@ -59,10 +59,18 @@
 #define setthreshold(g)  (g->GCthreshold = (g->estimate/100) * g->gcpause)
 
 
+#if LUA_REFCOUNT
+static void removeentry (lua_State *L, Node *n) {
+#else
 static void removeentry (Node *n) {
+#endif
   lua_assert(ttisnil(gval(n)));
-  if (iscollectable(gkey(n)))
+  if (iscollectable(gkey(n))) {
+#if LUA_REFCOUNT
+    luarc_subref(L, key2tval(n));
+#endif
     setttype(gkey(n), LUA_TDEADKEY);  /* dead key; remove it */
+  }
 }
 
 
@@ -211,8 +219,13 @@ static int traversetable (global_State *g, Table *h) {
   while (i--) {
     Node *n = gnode(h, i);
     lua_assert(ttype(gkey(n)) != LUA_TDEADKEY || ttisnil(gval(n)));
-    if (ttisnil(gval(n)))
+    if (ttisnil(gval(n))) {
+#if LUA_REFCOUNT
+      removeentry(g->mainthread, n);  /* remove empty entries */
+#else
       removeentry(n);  /* remove empty entries */
+#endif
+    }
     else {
       lua_assert(!ttisnil(gkey(n)));
       if (!weakkey) markvalue(g, gkey(n));
@@ -433,10 +446,11 @@ static void cleartable (GCObject *l) {
           (iscleared(key2tval(n), 1) || iscleared(gval(n), 0))) {
 #if LUA_REFCOUNT
         setnilvalue(L, gval(n));  /* remove value ... */
+        removeentry(L, n);  /* remove entry from table */
 #else
         setnilvalue(gval(n));  /* remove value ... */
-#endif
         removeentry(n);  /* remove entry from table */
+#endif
       }
     }
 #if LUA_REFCOUNT
@@ -1151,7 +1165,7 @@ static void luarc_freetable (lua_State *L, Table *t) {
   while (i--) {
     Node *n = gnode(t, i);
     lua_assert(ttype(gkey(n)) != LUA_TDEADKEY || ttisnil(gval(n)));
-    if (ttisnil(gval(n))) removeentry(n);
+    if (ttisnil(gval(n))) removeentry(L, n);
     else {
       lua_assert(!ttisnil(gkey(n)));
       luarc_subref(L, key2tval(n));
