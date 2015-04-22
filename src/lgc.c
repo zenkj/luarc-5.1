@@ -67,7 +67,8 @@ static void removeentry (Node *n) {
   lua_assert(ttisnil(gval(n)));
   if (iscollectable(gkey(n))) {
 #if LUA_REFCOUNT
-    luarc_subref(L, key2tval(n));
+    if (ttype(gkey(n)) != LUA_TDEADKEY)
+        luarc_subref(L, key2tval(n));
 #endif
     setttype(gkey(n), LUA_TDEADKEY);  /* dead key; remove it */
   }

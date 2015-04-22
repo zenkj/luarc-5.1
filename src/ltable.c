@@ -331,8 +331,10 @@ static void resize (lua_State *L, Table *t, int nasize, int nhsize) {
 #if LUA_REFCOUNT
     for (i=twoto(oldhsize)-1; i>=0; i--) {
       Node *old = nold+i;
-      setnilvalue(L, key2tval(old));
-      setnilvalue(L, gval(old));
+      if (!ttisnil(gval(old))) {
+        setnilvalue(L, key2tval(old));
+        setnilvalue(L, gval(old));
+      }
     }
 #endif /* LUA_REFCOUNT */
     luaM_freearray(L, nold, twoto(oldhsize), Node);  /* free old array */
