@@ -22,7 +22,7 @@ ANDROID_X86_CC= $(NDK_DIR)/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-lin
 ANDROID_X64_CC= $(NDK_DIR)/toolchains/x86_64-4.9/prebuilt/linux-x86_64/bin/x86_64-linux-android-gcc --sysroot=$(NDK_DIR)/platforms/android-21/arch-x86_64
 
 # normal linux
-#CC= gcc
+CC= gcc
 CFLAGS= -g -O2 -Wall $(MYCFLAGS)
 AR= ar rcu
 RANLIB= ranlib
