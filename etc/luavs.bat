@@ -4,18 +4,16 @@
 @rem (contributed by David Manura and Mike Pall)
 
 @setlocal
-@set MYCOMPILE=cl /nologo /MD /O2 /W3 /c /D_CRT_SECURE_NO_DEPRECATE /GL /Gy /Oi /Zi /Fd"vc110.pdb"
+@set MYCOMPILE=cl /nologo /MD /O2 /W3 /c /D_CRT_SECURE_NO_DEPRECATE /D_WINDOWS /GL /Gy /Oi /Zi /Fd"vc110.pdb"
 @set MYLINK=link /nologo /LTCG /OPT:ICF /OPT:REF /DEBUG /PDB:"lua.pdb"
 @set MYMT=mt /nologo
 
 cd src
-%MYCOMPILE% /DLUA_BUILD_AS_DLL l*.c
+%MYCOMPILE% /DLUA_BUILD_AS_DLL l*.c slua.c
 del lua.obj luac.obj
-%MYLINK% /DLL /out:lua51.dll l*.obj
-if exist lua51.dll.manifest^
-  %MYMT% -manifest lua51.dll.manifest -outputresource:lua51.dll;2
-@REM %MYCOMPILE% /DLUA_BUILD_AS_DLL lua.c
-@REM %MYLINK% /out:lua.exe lua.obj lua51.lib
+%MYLINK% /DLL /out:slua.dll l*.obj slua.obj
+if exist slua.dll.manifest^
+  %MYMT% -manifest slua.dll.manifest -outputresource:slua.dll;2
 %MYCOMPILE% l*.c
 del luac.obj
 %MYLINK% /out:lua.exe *.obj
