@@ -7,7 +7,22 @@
 # Your platform. See PLATS for possible values.
 PLAT= none
 
-CC= gcc
+NDK_DIR= $(HOME)/android/android-ndk-r10c
+
+# android GCC for arm
+ANDROID_ARM_CC= $(NDK_DIR)/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64/bin/arm-linux-androideabi-gcc --sysroot=$(NDK_DIR)/platforms/android-21/arch-arm
+
+# android GCC for arm64
+ANDROID_ARM64_CC= $(NDK_DIR)/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64/bin/aarch64-linux-android-gcc --sysroot=$(NDK_DIR)/platforms/android-21/arch-arm64
+
+# android GCC for x86
+ANDROID_X86_CC= $(NDK_DIR)/toolchains/x86-4.9/prebuilt/linux-x86_64/bin/i686-linux-android-gcc --sysroot=$(NDK_DIR)/platforms/android-21/arch-x86
+
+# android GCC for x86_64
+ANDROID_X64_CC= $(NDK_DIR)/toolchains/x86_64-4.9/prebuilt/linux-x86_64/bin/x86_64-linux-android-gcc --sysroot=$(NDK_DIR)/platforms/android-21/arch-x86_64
+
+# normal linux
+#CC= gcc
 CFLAGS= -g -O2 -Wall $(MYCFLAGS)
 AR= ar rcu
 RANLIB= ranlib
@@ -58,7 +73,7 @@ $(LUAC_T): $(LUAC_O) $(LUA_A)
 	$(CC) -o $@ $(MYLDFLAGS) $(LUAC_O) $(LUA_A) $(LIBS)
 
 clean:
-	$(RM) $(ALL_T) $(ALL_O)
+	$(RM) $(ALL_T) $(ALL_O) slua.o libslua.so
 
 depend:
 	@$(CC) $(CFLAGS) -MM l*.c print.c
@@ -97,6 +112,17 @@ generic:
 
 linux:
 	$(MAKE) all MYCFLAGS=-DLUA_USE_LINUX MYLIBS="-Wl,-E -ldl -lrt -lreadline -lhistory -lncurses"
+
+androidslua: $(CORE_O) $(LIB_O) slua.o
+	$(CC) -shared -fPIC -DLUA_USE_LINUX -o libslua.so $^ -lm -Wl,-E -ldl
+androidslua32:
+	$(MAKE) androidslua CC="$(ANDROID_ARM_CC)"
+androidslua64:
+	$(MAKE) androidslua CC="$(ANDROID_ARM64_CC)"
+androidsluax86:
+	$(MAKE) androidslua CC="$(ANDROID_X86_CC)"
+androidsluax64:
+	$(MAKE) androidslua CC="$(ANDROID_X64_CC)"
 
 macosx:
 	$(MAKE) all MYCFLAGS=-DLUA_USE_LINUX MYLIBS="-lreadline"
@@ -179,5 +205,6 @@ lzio.o: lzio.c lua.h luaconf.h llimits.h lmem.h lstate.h lobject.h ltm.h \
   lzio.h
 print.o: print.c ldebug.h lstate.h lua.h luaconf.h lobject.h llimits.h \
   ltm.h lzio.h lmem.h lopcodes.h lundump.h
+slua.o: slua.c lua.h lauxlib.h luaconf.h
 
 # (end of Makefile)
