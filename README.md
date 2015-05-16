@@ -14,7 +14,7 @@ But the benefit is great too, any memory block will be released as soon as
 it is not used, no "garbage memory bubble" exists, the memory footprint is
 very small, and less GC overhead occurs. In some of tests, almost no GC is 
 triggered when the application is running. This is extremely suitable for
-devices with small memory capacity and many temporary heap objects are used.
+devices with small memory capacity and many temporary heap objects.
 
 The Mark/Sweep GC is used to reclaim garbage heap objects that have
 circular reference, which can't be reclaimed by reference counting.
