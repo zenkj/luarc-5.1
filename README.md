@@ -28,7 +28,8 @@ of ps command.
 ###Execution Time
 ![execution time](https://raw.github.com/zenkj/luarc-5.1/master/doc/cpu.png)
 
-In most test cases, vanilla Lua is faster than Luarc. But for the binary-tree-2
+In most test cases, vanilla Lua is faster than Luarc. This is true because
+most test cases do not test memory usage. But for the binary-tree-2
 test case, Luarc is much faster than vanilla lua (almost 37% improvement).
 In the binary-tree-3 test case, gcstepmul is set to 0, this means incremental
 feature of the Lua GC is disabled. The overall GC throughput is improved, but
